@@ -1,0 +1,4 @@
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS newsletter_opt_in BOOLEAN NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS welcome_email_sent_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS reminder_sent_at TIMESTAMPTZ;
