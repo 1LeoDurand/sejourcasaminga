@@ -30,3 +30,6 @@ dist-ssr
 
 # Lovable (inutile hors plateforme)
 .lovable
+
+# Bun (on utilise npm)
+bun.lockb
