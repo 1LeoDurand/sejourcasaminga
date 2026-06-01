@@ -14,12 +14,34 @@ sejour.casaminga.com
 
 ---
 
+## Infos hébergement Infomaniak
+
+| | |
+|---|---|
+| **Chemin racine** | `/home/clients/b72015a608f1e292f74e1add2f0686b1/` |
+| **IPv4** | `83.166.133.30` |
+| **IPv6** | `2001:1600:4:11::75` |
+| **SFTP** | `sftp.infomaniak.com` port 22 |
+| **Chemin sejour** | `/home/clients/b72015a608f1e292f74e1add2f0686b1/web/sejour.casaminga.com/` |
+
+---
+
 ## Étape 1 — Créer le sous-domaine dans Infomaniak (5 min)
 
-1. **manager.infomaniak.com** → Hébergement Web → ton hébergement → Sous-domaines
-2. Créer `sejour.casaminga.com` → il créera automatiquement un dossier cible
-3. Activer **SSL Let's Encrypt** depuis le manager (gratuit, 1 clic)
-4. Noter le chemin serveur (ex : `/sites/sejour.casaminga.com/` ou `/home/<user>/web/sejour.casaminga.com/public_html/`)
+1. **manager.infomaniak.com** → Hébergement Web → Sous-domaines
+2. Créer `sejour.casaminga.com`
+3. Activer **SSL Let's Encrypt** (gratuit, 1 clic)
+4. Le dossier web sera créé automatiquement :
+   ```
+   /home/clients/b72015a608f1e292f74e1add2f0686b1/web/sejour.casaminga.com/
+   ```
+
+### DNS (si pas créé automatiquement par le sous-domaine)
+Dans manager → Zone DNS :
+```
+sejour.casaminga.com  A     83.166.133.30
+sejour.casaminga.com  AAAA  2001:1600:4:11::75
+```
 
 ---
 
