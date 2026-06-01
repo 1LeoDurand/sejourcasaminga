@@ -1,101 +1,168 @@
-# Déploiement sejour.casaminga.com
+# Déploiement sejour.casaminga.com — Infomaniak
 
-## 1. GitHub — pousser le repo
+## Architecture
+
+```
+sejour.casaminga.com
+  │
+  ├── Front : SPA Vite → dist/ uploadé sur Infomaniak (SFTP)
+  └── Back  : Supabase giekhaohqksirsadkfnt (EU)
+               ├── 35 tables + RLS
+               ├── Edge functions (Deno)
+               └── Auth + Storage
+```
+
+---
+
+## Étape 1 — Créer le sous-domaine dans Infomaniak (5 min)
+
+1. **manager.infomaniak.com** → Hébergement Web → ton hébergement → Sous-domaines
+2. Créer `sejour.casaminga.com` → il créera automatiquement un dossier cible
+3. Activer **SSL Let's Encrypt** depuis le manager (gratuit, 1 clic)
+4. Noter le chemin serveur (ex : `/sites/sejour.casaminga.com/` ou `/home/<user>/web/sejour.casaminga.com/public_html/`)
+
+---
+
+## Étape 2 — Créer le .htaccess (SPA routing obligatoire)
+
+Créer le fichier `public/.htaccess` dans le projet :
+
+```apache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/* "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
+```
+
+> Vite copie automatiquement `public/` dans `dist/` au build.
+
+---
+
+## Étape 3 — Build local (1 min)
 
 ```bash
-# Créer un repo privé sur github.com/new → "casa-minga-sejour"
 cd "D:\0 - Sync cloud Kdrive\01 Casaminga\01 Dev\casa-minga-sejour"
-git remote add origin https://github.com/<TON-COMPTE>/casa-minga-sejour.git
-git push -u origin master
+npm run build
+# → génère dist/ (index.html + assets/ + .htaccess)
 ```
 
-## 2. Vercel — connecter et déployer
+---
 
-1. https://vercel.com → Add New Project → Import `casa-minga-sejour`
-2. Framework : **Vite** (auto-détecté)
-3. Build command : `npm run build`
-4. Output directory : `dist`
-5. **Environment Variables** → ajouter :
-   ```
-   VITE_SUPABASE_URL         = https://giekhaohqksirsadkfnt.supabase.co
-   VITE_SUPABASE_PUBLISHABLE_KEY = sb_publishable_4_7gK7EZzjmxd2bmxx7vsQ_pW444z8W
-   VITE_SUPABASE_PROJECT_ID  = giekhaohqksirsadkfnt
-   ```
-6. Deploy → récupérer l'URL `xxx.vercel.app`
+## Étape 4 — Upload SFTP vers Infomaniak (5 min)
 
-## 3. DNS — subdomain sejour.casaminga.com
+**Option A : FileZilla (recommandé)**
+- Hôte : `ftp.infomaniak.com` ou `sftp.infomaniak.com` (SFTP port 22)
+- Identifiants : dans manager.infomaniak.com → FTP/SFTP
+- Source : tout le contenu de `dist/` (pas le dossier dist lui-même)
+- Destination : `/sites/sejour.casaminga.com/` (dossier racine du sous-domaine)
 
-Chez ton registrar, ajouter :
+**Option B : script PowerShell (à adapter)**
+```powershell
+# Installer WinSCP CLI ou utiliser la lib SFTP PowerShell
+# Ou déposer via manager.infomaniak.com → Gestionnaire de fichiers
 ```
-sejour.casaminga.com  CNAME  cname.vercel-dns.com
-```
-Vercel génère HTTPS automatiquement.
 
-## 4. Supabase Auth — URLs de redirection
+---
+
+## Étape 5 — Supabase Auth — URLs de redirection (2 min)
 
 Dashboard → https://supabase.com/dashboard/project/giekhaohqksirsadkfnt/auth/url-configuration
 
 ```
 Site URL       : https://sejour.casaminga.com
-Redirect URLs  : https://sejour.casaminga.com/**
-                 http://localhost:8080/**
+Redirect URLs  :
+  https://sejour.casaminga.com/**
+  http://localhost:8080/**
 ```
 
-## 5. Supabase Auth — Hook "Send Email"
+---
+
+## Étape 6 — Supabase Auth Hook "Send Email" (2 min)
 
 Dashboard → Authentication → Hooks → Enable "Send Email Hook"
+
 ```
 URL : https://giekhaohqksirsadkfnt.supabase.co/functions/v1/auth-email-hook
 ```
 
-## 6. Edge Functions — déploiement Supabase CLI
+---
+
+## Étape 7 — Edge Functions (Supabase CLI)
 
 ```bash
 # Installer Supabase CLI
 npm install -g supabase
 
-# Authentification (ouvre le navigateur)
+# Authentification
 supabase login
 
 # Lier le projet
-cd "D:\0 - Sync cloud Kdrive\01 Casaminga\01 Dev\casa-minga-sejour"
 supabase link --project-ref giekhaohqksirsadkfnt
 
-# Configurer les secrets
-supabase secrets set RESEND_API_KEY=re_xxxxxxxx   # ta clé Resend
-# Les autres (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY) sont auto-injectés
+# Configurer les secrets (RESEND_API_KEY obligatoire pour les emails)
+supabase secrets set RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
 
 # Déployer toutes les fonctions
 supabase functions deploy
 ```
 
-## 7. Resend — configurer le domaine expéditeur
+---
 
-1. https://resend.com → Domains → Add Domain → `sejour.casaminga.com`
-2. Ajouter les enregistrements DNS fournis par Resend (TXT SPF/DKIM)
-3. Vérifier → les emails partiront de `noreply@sejour.casaminga.com`
+## Étape 8 — Resend — domaine expéditeur (10 min)
 
-## 8. Supabase — cron job emails (process-email-queue)
+1. Créer un compte sur [resend.com](https://resend.com) (gratuit jusqu'à 3 000 emails/mois)
+2. **Domains** → Add Domain → `sejour.casaminga.com`
+3. Resend fournit des enregistrements DNS à ajouter dans Infomaniak :
+   - TXT `@` → SPF : `v=spf1 include:amazonses.com ~all`
+   - TXT `resend._domainkey` → DKIM
+   - TXT `_dmarc` → DMARC (optionnel mais recommandé)
+4. Cliquer "Verify" → statut passe en "Verified"
+5. Les emails partiront de `noreply@sejour.casaminga.com`
 
-Une fois les edge functions déployées, le cron `weekly-digest-monday-10` tourne déjà
-(configuré en migration). Pour le cron process-email-queue (toutes les 5s) :
+---
 
-Dashboard → SQL Editor → exécuter :
-```sql
-SELECT cron.schedule(
-  'process-email-queue',
-  '*/5 * * * * *',  -- toutes les 5s (pg_cron syntax)
-  $$
-  select net.http_post(
-    url := 'https://giekhaohqksirsadkfnt.supabase.co/functions/v1/process-email-queue',
-    headers := jsonb_build_object(
-      'Content-Type', 'application/json',
-      'Authorization', 'Bearer ' || (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'service_role_key' LIMIT 1)
-    ),
-    body := '{}'::jsonb
-  );
-  $$
-);
+## Checklist de mise en ligne
+
+- [x] Code source clean (zéro dépendance Lovable)
+- [x] Supabase `giekhaohqksirsadkfnt` — 35 tables + RLS
+- [x] Données migrées (13 lieux, 8 profils, 2 listings...)
+- [x] Emails → Resend (process-email-queue réécrit)
+- [x] Repo GitHub : https://github.com/1LeoDurand/sejourcasaminga
+- [ ] Sous-domaine `sejour.casaminga.com` créé dans Infomaniak
+- [ ] SSL activé
+- [ ] `public/.htaccess` créé + `npm run build`
+- [ ] Upload SFTP `dist/*` vers Infomaniak
+- [ ] Test : https://sejour.casaminga.com charge, navigation SPA fonctionne
+- [ ] Supabase Auth → Redirect URLs mis à jour
+- [ ] Supabase Auth → Hook "Send Email" configuré
+- [ ] `supabase functions deploy` exécuté
+- [ ] Resend → domaine `sejour.casaminga.com` vérifié (SPF/DKIM)
+- [ ] Test email : inscription → email de confirmation reçu
+
+---
+
+## Mise à jour du site (workflow continu)
+
+```bash
+# Après chaque modification :
+npm run build
+# Puis re-upload dist/* sur Infomaniak via SFTP
 ```
 
-> Ou configurer le service_role_key dans vault et utiliser dans le cron.
+> 💡 À terme : automatiser avec un script PowerShell + WinSCP CLI
+> pour éviter le drag & drop manuel à chaque mise à jour.
