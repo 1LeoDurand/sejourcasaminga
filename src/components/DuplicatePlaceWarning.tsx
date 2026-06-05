@@ -18,6 +18,8 @@ interface Props {
   city?: string;
   /** Called when the user explicitly confirms it's NOT one of the suggested places. */
   onDismiss?: () => void;
+  /** Emits true while unresolved similar places exist (used to block submission). */
+  onBlockingChange?: (blocking: boolean) => void;
 }
 
 /**
@@ -39,9 +41,13 @@ function tokens(s: string): string[] {
   return normalize(s).split(" ").filter((t) => t.length >= 3);
 }
 
-export default function DuplicatePlaceWarning({ name, city, onDismiss }: Props) {
+export default function DuplicatePlaceWarning({ name, city, onDismiss, onBlockingChange }: Props) {
   const [matches, setMatches] = useState<Match[]>([]);
   const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    onBlockingChange?.(matches.length > 0 && !dismissed);
+  }, [matches, dismissed, onBlockingChange]);
 
   useEffect(() => {
     setDismissed(false);

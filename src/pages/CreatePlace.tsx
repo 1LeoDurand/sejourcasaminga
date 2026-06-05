@@ -71,6 +71,7 @@ const CreatePlace = () => {
   const [loading, setLoading] = useState(false);
   const [newAmenity, setNewAmenity] = useState("");
   const [tempPlaceId] = useState(() => crypto.randomUUID());
+  const [dupBlocking, setDupBlocking] = useState(false);
 
   const set = (key: string, value: any) => setForm((f) => ({ ...f, [key]: value }));
 
@@ -101,6 +102,14 @@ const CreatePlace = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return navigate("/auth");
+    if (dupBlocking) {
+      toast({
+        title: "Un lieu similaire existe peut-être",
+        description: "Vérifiez les suggestions ci-dessus, puis confirmez qu'il s'agit bien d'un nouveau lieu.",
+        variant: "destructive",
+      });
+      return;
+    }
     setLoading(true);
 
     try {
@@ -182,7 +191,7 @@ const CreatePlace = () => {
               <Input id="name" placeholder="ex: Le Lavoir du Buisson Saint-Louis" value={form.name} onChange={(e) => set("name", e.target.value)} required />
             </div>
 
-            <DuplicatePlaceWarning name={form.name} city={form.city} />
+            <DuplicatePlaceWarning name={form.name} city={form.city} onBlockingChange={setDupBlocking} />
 
             <div>
               <Label>Type de lieu *</Label>
@@ -453,10 +462,15 @@ const CreatePlace = () => {
             </div>
           </section>
 
-          <Button type="submit" className="w-full" size="lg" disabled={loading || !form.name || !form.type}>
+          <Button type="submit" className="w-full" size="lg" disabled={loading || !form.name || !form.type || dupBlocking}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Créer le lieu
           </Button>
+          {dupBlocking && (
+            <p className="text-xs text-center text-soleil-foreground/80 -mt-3">
+              Confirmez d'abord qu'il ne s'agit pas d'un lieu déjà listé (encadré orange ci-dessus).
+            </p>
+          )}
         </form>
 
           <aside className="lg:sticky lg:top-20">
