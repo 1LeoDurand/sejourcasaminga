@@ -467,7 +467,7 @@ function ProfileTab({
               <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
             </Link>
           )}
-          <Link to="/settings" className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors">
+          <Link to="/edit-profile" className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors">
             <Settings className="h-4 w-4 text-muted-foreground" /><span className="text-sm text-foreground flex-1">Paramètres</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
           </Link>

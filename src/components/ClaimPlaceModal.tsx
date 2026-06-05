@@ -185,7 +185,7 @@ export default function ClaimPlaceModal({
                 >
                   Je confirme habiter ce lieu et accepte les{" "}
                   <a
-                    href="/conditions"
+                    href="/charte"
                     target="_blank"
                     rel="noreferrer"
                     className="text-primary hover:underline"
