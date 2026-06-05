@@ -150,7 +150,7 @@ function MenuContent({ close }: { close: () => void }) {
 
   const discoveryItems: MenuAction[] = [
     { icon: Heart, label: "Maisons favorites", to: "/favorites", badge: favorites?.length || null },
-    { icon: ClipboardList, label: "Mes demandes de séjour", to: "/exchanges", badge: pendingRequests || null },
+    { icon: ClipboardList, label: "Mes demandes de séjour", to: "/stay-requests", badge: pendingRequests || null },
     {
       icon: MessageCircle,
       label: "Mes messages",
@@ -216,7 +216,7 @@ function MenuContent({ close }: { close: () => void }) {
       {placeGroups.length === 0 ? (
         <button
           onClick={() => {
-            navigate("/places/new");
+            navigate("/create-place");
             close();
           }}
           className="w-full text-left px-4 py-2.5 text-xs text-muted-foreground italic hover:bg-muted/60 min-h-[44px] md:min-h-0"
@@ -234,14 +234,14 @@ function MenuContent({ close }: { close: () => void }) {
             </div>
             <MenuRow
               indent
-              item={{ icon: Eye, label: "Voir le lieu", to: `/places/${place.slug || place.id}` }}
+              item={{ icon: Eye, label: "Voir le lieu", to: `/habitat/${place.slug || place.id}` }}
               onSelect={close}
             />
             {listings.slice(0, 2).map((l: any) => (
               <MenuRow
                 key={l.id}
                 indent
-                item={{ icon: Pencil, label: `Éditer · ${l.title}`, to: `/listings/${l.id}/edit` }}
+                item={{ icon: Pencil, label: `Éditer · ${l.title}`, to: `/edit-listing/${l.id}` }}
                 onSelect={close}
               />
             ))}
@@ -255,7 +255,7 @@ function MenuContent({ close }: { close: () => void }) {
               item={{
                 icon: Users,
                 label: "Demandes d'accueil",
-                to: "/exchanges",
+                to: "/stay-requests",
                 badge: pendingRequests || null,
               }}
               onSelect={close}
@@ -264,7 +264,7 @@ function MenuContent({ close }: { close: () => void }) {
         ))
       )}
       <MenuRow
-        item={{ icon: Plus, label: "Ajouter un logement", to: "/listings/new" }}
+        item={{ icon: Plus, label: "Ajouter un logement", to: "/create-listing" }}
         onSelect={close}
       />
 
