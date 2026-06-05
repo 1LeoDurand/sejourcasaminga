@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import placePlaceholder from "@/assets/place-placeholder.webp";
 import { useAuth } from "@/contexts/AuthContext";
 import PlaceClaimRequestForm from "@/components/PlaceClaimRequestForm";
 import ClaimPlaceModal from "@/components/ClaimPlaceModal";
@@ -15,6 +16,8 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import ReportButton from "@/components/ReportButton";
+import TrustBadges from "@/components/TrustBadges";
 import { usePlace } from "@/hooks/use-places";
 import { usePlaceListings } from "@/hooks/use-listings";
 import { useEffect, useState } from "react";
@@ -133,7 +136,7 @@ const HabitatDetail = () => {
   }
 
   const p = place as any;
-  const images = place.images && place.images.length > 0 ? place.images : [place.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop"];
+  const images = place.images && place.images.length > 0 ? place.images : [place.image || placePlaceholder];
   const values = place.values || [];
   const amenities = place.shared_amenities || [];
   const rules = place.house_rules || [];
@@ -167,6 +170,22 @@ const HabitatDetail = () => {
     (place.description && place.description.replace(/\s+/g, " ").trim().slice(0, 155)) ||
     `Découvrez ${place.name}, ${placeTypeLabel.toLowerCase()}${place.city ? ` à ${place.city}` : ""}. Échangez votre logement et vivez une expérience collective sincère.`;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    "name": place.name,
+    "description": seoDesc,
+    "image": images[0] || undefined,
+    "url": `https://sejour.casaminga.com/habitat/${place.id}`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": place.city || undefined,
+      "addressRegion": place.region || undefined,
+      "addressCountry": place.country || "FR",
+    },
+    ...(place.website ? { "sameAs": place.website } : {}),
+  };
+
   return (
     <div className="min-h-screen">
       <SEO
@@ -174,6 +193,7 @@ const HabitatDetail = () => {
         description={seoDesc}
         canonical={`/habitat/${place.id}`}
         image={images[0]}
+        jsonLd={jsonLd}
       />
       <Navbar />
       <div className="container py-8">
@@ -693,6 +713,30 @@ const HabitatDetail = () => {
           </div>
         </div>
       </div>
+      {/* Signalement */}
+      <div className="container px-5 py-4 flex justify-center">
+        <ReportButton targetType="place" targetId={p.id} variant="text" />
+      </div>
+
+      {/* Barre d'action fixe — mobile */}
+      {(hasListings || p.contact_enabled) && (
+        <>
+          <div className="h-20 lg:hidden" />
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 backdrop-blur px-4 py-3 lg:hidden">
+            <div className="mx-auto flex max-w-6xl items-center gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-foreground">{place.name}</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {[place.city, place.region].filter(Boolean).join(", ")}
+                </p>
+              </div>
+              <Button onClick={scrollToListings}>
+                <Home className="mr-1.5 h-4 w-4" /> {hasListings ? "Voir les séjours" : "Contacter"}
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
       <Footer />
     </div>
   );

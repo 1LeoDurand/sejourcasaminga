@@ -29,7 +29,7 @@ const Auth = () => {
   const [forgotMode, setForgotMode] = useState(false);
   const [forgotLoading, setForgotLoading] = useState(false);
   const [forgotSent, setForgotSent] = useState(false);
-  const [newsletterOptIn, setNewsletterOptIn] = useState(true);
+  const [newsletterOptIn, setNewsletterOptIn] = useState(false);
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();

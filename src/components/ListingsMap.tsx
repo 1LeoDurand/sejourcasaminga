@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -145,7 +146,7 @@ const ListingsMap = ({ listings }: Props) => {
           const img =
             (Array.isArray(l.images) && l.images[0]) ||
             l.image ||
-            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop";
+            listingPlaceholder;
           return (
             <Marker key={p.id} position={[p.lat, p.lon]}>
               <Popup>

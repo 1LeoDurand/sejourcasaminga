@@ -24,11 +24,9 @@ export function usePlace(id: string | undefined) {
     queryKey: ["place", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("places")
-        .select("*")
-        .eq("id", id!)
-        .single();
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id!);
+      const query = supabase.from("places").select("*");
+      const { data, error } = await (isUuid ? query.eq("id", id!) : query.eq("slug", id!)).single();
       if (error) throw error;
       return data as Place;
     },

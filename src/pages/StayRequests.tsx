@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { Link, Navigate } from "react-router-dom";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -122,7 +123,7 @@ const StayRequests = () => {
                   <li key={r.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 px-5 py-4 items-center">
                     <div className="sm:col-span-4 flex items-center gap-3 min-w-0">
                       <img
-                        src={listing?.image || "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=120&h=120&fit=crop"}
+                        src={listing?.image || listingPlaceholder}
                         alt=""
                         className="h-12 w-12 rounded-lg object-cover ring-1 ring-border shrink-0"
                       />

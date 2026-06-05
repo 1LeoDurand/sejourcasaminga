@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Users, Home, Compass, Search, MapPin, ArrowRight } from "lucide-react";
+import { Loader2, Users, Home, Compass, Search, MapPin, ArrowRight, Check } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlaces, useJoinPlace } from "@/hooks/use-places";
@@ -12,6 +12,58 @@ import SEO from "@/components/SEO";
 const ONBOARDING_DONE_KEY = "cm_onboarding_done";
 
 type Step = "intro" | "join" | "explore-confirm";
+
+// ─── Barre de progression ──────────────────────────────────────────────────
+
+const STEPS_CONFIG = [
+  { key: "intro", label: "Bienvenue" },
+  { key: "join", label: "Mon lieu" },
+  { key: "explore-confirm", label: "C'est parti" },
+];
+
+function ProgressBar({ current }: { current: Step }) {
+  const idx = STEPS_CONFIG.findIndex((s) => s.key === current);
+  const total = STEPS_CONFIG.length;
+
+  return (
+    <div className="mb-8">
+      {/* Étape X / Y */}
+      <p className="text-xs text-muted-foreground text-center mb-3">
+        Étape {idx + 1} sur {total}
+      </p>
+
+      {/* Barre + points */}
+      <div className="flex items-center gap-2">
+        {STEPS_CONFIG.map((s, i) => (
+          <div key={s.key} className="flex items-center gap-2 flex-1 last:flex-none">
+            {/* Pastille */}
+            <div className={`h-7 w-7 rounded-full flex items-center justify-center shrink-0 text-xs font-semibold border-2 transition-all ${
+              i < idx
+                ? "bg-primary border-primary text-primary-foreground"
+                : i === idx
+                ? "bg-background border-primary text-primary"
+                : "bg-background border-border text-muted-foreground"
+            }`}>
+              {i < idx ? <Check className="h-3.5 w-3.5" /> : i + 1}
+            </div>
+            {/* Label (masqué sur mobile) */}
+            <span className={`hidden sm:block text-xs font-medium transition-colors ${
+              i === idx ? "text-foreground" : "text-muted-foreground"
+            }`}>
+              {s.label}
+            </span>
+            {/* Trait de connexion */}
+            {i < total - 1 && (
+              <div className={`h-0.5 flex-1 rounded-full transition-colors ${i < idx ? "bg-primary" : "bg-border"}`} />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Page principale ───────────────────────────────────────────────────────
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -40,31 +92,22 @@ const Onboarding = () => {
   }, [places, search]);
 
   const finishOnboarding = () => {
-    try {
-      localStorage.setItem(ONBOARDING_DONE_KEY, "1");
-    } catch {}
+    try { localStorage.setItem(ONBOARDING_DONE_KEY, "1"); } catch {}
   };
 
   const handleSelectPlace = async (place: any) => {
     if (!user) return;
-    // Imported & unclaimed → claim flow on the place page
     if (place.is_imported && place.claim_status !== "claimed") {
       finishOnboarding();
       navigate(`/habitat/${place.id}?claim=1`);
       return;
     }
-    // Otherwise → instant join via place_members
     try {
-      await joinPlace.mutateAsync({
-        place_id: place.id,
-        user_id: user.id,
-        relationship_to_place: "Membre",
-      });
+      await joinPlace.mutateAsync({ place_id: place.id, user_id: user.id, relationship_to_place: "Membre" });
       finishOnboarding();
       toast({ title: "Vous avez rejoint le lieu", description: place.name });
       navigate(`/dashboard?proposeStay=${place.id}`);
     } catch (e: any) {
-      // Likely already a member
       if (e.message?.includes("duplicate")) {
         finishOnboarding();
         navigate(`/dashboard?proposeStay=${place.id}`);
@@ -88,12 +131,17 @@ const Onboarding = () => {
       <Navbar />
 
       <div className="max-w-2xl mx-auto px-4 py-10 sm:py-16">
+
+        {/* Barre de progression */}
+        <ProgressBar current={step} />
+
+        {/* ── Étape 1 : Intro ── */}
         {step === "intro" && (
           <div className="space-y-6">
             <div className="text-center space-y-3">
-              <h1 className="text-3xl sm:text-4xl font-serif text-foreground">Bienvenue sur Casa Minga</h1>
+              <h1 className="text-3xl sm:text-4xl font-serif text-foreground">Bienvenue sur Casa Minga 👋</h1>
               <p className="text-muted-foreground text-base sm:text-lg">
-                Que souhaitez-vous faire ?
+                Que souhaitez-vous faire en premier ?
               </p>
             </div>
 
@@ -109,20 +157,14 @@ const Onboarding = () => {
                 icon={Home}
                 title="Je veux créer ma fiche lieu"
                 description="Présentez votre habitat collectif sur Casa Minga en quelques minutes."
-                onClick={() => {
-                  finishOnboarding();
-                  navigate("/create-place/quick?from=onboarding");
-                }}
+                onClick={() => { finishOnboarding(); navigate("/create-place/quick?from=onboarding"); }}
                 accent="soleil"
               />
               <ChoiceCard
                 icon={Compass}
                 title="Je découvre pour le moment"
                 description="Explorez les lieux et inspirez-vous avant de vous engager."
-                onClick={() => {
-                  finishOnboarding();
-                  navigate("/discover");
-                }}
+                onClick={() => { finishOnboarding(); navigate("/discover"); }}
                 accent="muted"
               />
             </div>
@@ -133,18 +175,15 @@ const Onboarding = () => {
           </div>
         )}
 
+        {/* ── Étape 2 : Rejoindre un lieu ── */}
         {step === "join" && (
           <div className="space-y-6">
-            <button
-              onClick={() => setStep("intro")}
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
+            <button onClick={() => setStep("intro")} className="text-sm text-muted-foreground hover:text-foreground">
               ← Retour
             </button>
+
             <div className="space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-serif text-foreground">
-                Trouvez votre lieu
-              </h1>
+              <h1 className="text-2xl sm:text-3xl font-serif text-foreground">Trouvez votre lieu</h1>
               <p className="text-sm text-muted-foreground">
                 Cherchez par nom ou par ville. S'il a été pré-importé, vous pourrez le revendiquer ; sinon, vous le rejoindrez directement.
               </p>
@@ -169,10 +208,7 @@ const Onboarding = () => {
               ) : filtered.length === 0 ? (
                 <div className="rounded-xl border border-dashed bg-card p-6 text-center text-sm text-muted-foreground">
                   Aucun lieu ne correspond. Vous pouvez{" "}
-                  <Link to="/create-place/quick?from=onboarding" className="text-primary underline">
-                    créer la fiche
-                  </Link>
-                  .
+                  <Link to="/create-place/quick?from=onboarding" className="text-primary underline">créer la fiche</Link>.
                 </div>
               ) : (
                 filtered.map((p: any) => (
@@ -203,7 +239,10 @@ const Onboarding = () => {
                         </span>
                       )}
                     </div>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                    {joinPlace.isPending
+                      ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground shrink-0" />
+                      : <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                    }
                   </button>
                 ))
               )}
@@ -212,9 +251,7 @@ const Onboarding = () => {
             <div className="pt-4 border-t text-center">
               <p className="text-sm text-muted-foreground mb-2">Vous ne trouvez pas votre lieu ?</p>
               <Link to="/create-place/quick?from=onboarding">
-                <Button variant="outline" size="sm">
-                  Créer la fiche du lieu
-                </Button>
+                <Button variant="outline" size="sm">Créer la fiche du lieu</Button>
               </Link>
             </div>
           </div>
@@ -225,23 +262,11 @@ const Onboarding = () => {
 };
 
 function ChoiceCard({
-  icon: Icon,
-  title,
-  description,
-  onClick,
-  accent,
+  icon: Icon, title, description, onClick, accent,
 }: {
-  icon: any;
-  title: string;
-  description: string;
-  onClick: () => void;
-  accent: "primary" | "soleil" | "muted";
+  icon: any; title: string; description: string; onClick: () => void; accent: "primary" | "soleil" | "muted";
 }) {
-  const colors = {
-    primary: "bg-primary/10 text-primary",
-    soleil: "bg-soleil/15 text-soleil",
-    muted: "bg-muted text-muted-foreground",
-  }[accent];
+  const colors = { primary: "bg-primary/10 text-primary", soleil: "bg-soleil/15 text-soleil", muted: "bg-muted text-muted-foreground" }[accent];
   return (
     <button
       onClick={onClick}

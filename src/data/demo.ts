@@ -1,4 +1,7 @@
 /* ─── Casa Minga — Shared constants & static content ─── */
+import avatar1 from "@/assets/avatar-1.webp";
+import avatar2 from "@/assets/avatar-2.webp";
+import avatar3 from "@/assets/avatar-3.webp";
 
 export type ListingType = "home_exchange" | "private_room" | "guest_room" | "immersion_stay" | "hosted_stay";
 export type CollectiveRelationship = "personal" | "known_by_collective" | "collective_supported" | "collective_run";
@@ -72,18 +75,18 @@ export const DEMO_TESTIMONIALS = [
     text: "On est arrivés chez Jean-Marc au Plessis avec nos enfants. Dès le premier soir, on était à table avec le collectif. Les gamins ont nourri les poules, fait du pain, dormi sous les étoiles.",
     author: "Marine & Romain",
     habitat: "Chez Jean-Marc, Écohameau du Plessis",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face",
+    avatar: avatar1,
   },
   {
     text: "J'ai passé une semaine dans la chambre d'amis du Village Vertical. Éric m'a fait découvrir la sociocratie, j'en suis reparti avec des amis et une vision du possible.",
     author: "Thomas",
     habitat: "Chambre d'amis du Village Vertical",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face",
+    avatar: avatar2,
   },
   {
     text: "Chez Thierry à Verfeil, c'est l'autoconstruction, la musique, les repas dehors. On a dormi dans une maison bâtie à la main. Ce n'est pas du tourisme, c'est de l'hospitalité.",
     author: "Amina",
     habitat: "Chez Thierry, Écohameau de Verfeil",
-    avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face",
+    avatar: avatar3,
   },
 ];

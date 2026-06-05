@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Plus, Trash2, GripVertical } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { compressImage } from "@/lib/compress-image";
 
 interface PhotoManagerProps {
   photos: string[];
@@ -22,13 +23,15 @@ const PhotoManager = ({ photos, onChange, folder, maxPhotos = 10 }: PhotoManager
     setUploading(true);
     const newPhotos = [...photos];
 
-    for (const file of Array.from(files)) {
+    for (const original of Array.from(files)) {
       if (newPhotos.length >= maxPhotos) {
         toast({ title: `Maximum ${maxPhotos} photos`, variant: "destructive" });
         break;
       }
 
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      // Compress/resize on the client before upload (heavy phone photos → light WebP).
+      const file = await compressImage(original);
+      const ext = file.type === "image/webp" ? "webp" : file.name.split(".").pop()?.toLowerCase() || "jpg";
       const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
       const { error } = await supabase.storage

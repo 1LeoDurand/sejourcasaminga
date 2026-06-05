@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ['"Inter"', 'system-ui', 'sans-serif'],
+        serif: ['"Poppins"', 'system-ui', 'sans-serif'],
         sans: ['"Inter"', 'system-ui', 'sans-serif'],
       },
       colors: {
@@ -116,5 +116,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

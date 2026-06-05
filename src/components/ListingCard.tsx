@@ -3,8 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { MapPin, Users, Heart } from "lucide-react";
 import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
+import { listingUrl } from "@/hooks/use-listings";
 import { useEffect, useState } from "react";
 import type { Tables } from "@/integrations/supabase/types";
+import listingPlaceholder from "@/assets/listing-placeholder.webp";
 
 type ListingWithPlace = Tables<"listings"> & {
   places: Tables<"places"> | null;
@@ -15,7 +17,7 @@ interface Props {
   listing: ListingWithPlace;
 }
 
-const FALLBACK_IMG = "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop";
+const FALLBACK_IMG = listingPlaceholder;
 
 const ListingCard = ({ listing }: Props) => {
   const [liked, setLiked] = useState(false);
@@ -51,7 +53,7 @@ const ListingCard = ({ listing }: Props) => {
           <CarouselContent>
             {photos.map((src, i) => (
               <CarouselItem key={i}>
-                <Link to={`/listing/${listing.id}`} className="block">
+                <Link to={listingUrl(listing.id, listing.slug)} className="block">
                   <div className="aspect-[4/3] overflow-hidden">
                     <img
                       src={src}
@@ -99,7 +101,7 @@ const ListingCard = ({ listing }: Props) => {
         </button>
       </div>
 
-      <Link to={`/listing/${listing.id}`} className="block p-4">
+      <Link to={listingUrl(listing.id, listing.slug)} className="block p-4">
         <div className="flex items-center gap-1.5 text-[0.7rem] text-muted-foreground">
           <Badge variant="outline" className="rounded-full px-2 py-0 text-[0.6rem] font-normal">
             {typeLabel}

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Home, BedDouble, Users, ShieldCheck, FileText, Library, Loader2 } from "lucide-react";
+import { Home, BedDouble, Users, ShieldCheck, Library, Loader2 } from "lucide-react";
 
 function useCount(label: string, queryFn: () => Promise<number>) {
   return useQuery({ queryKey: ["admin-count", label], queryFn });
@@ -28,13 +28,6 @@ export default function AdminDashboard() {
       .eq("status", "pending");
     return count ?? 0;
   });
-  const posts = useCount("posts", async () => {
-    const { count } = await supabase
-      .from("blog_posts")
-      .select("*", { count: "exact", head: true })
-      .eq("is_published", true);
-    return count ?? 0;
-  });
   const resources = useCount("resources", async () => {
     const { count } = await supabase
       .from("resources")
@@ -48,7 +41,6 @@ export default function AdminDashboard() {
     { label: "Séjours", value: listings.data, icon: BedDouble },
     { label: "Utilisateurs", value: users.data, icon: Users },
     { label: "Revendications en attente", value: claims.data, icon: ShieldCheck, accent: true },
-    { label: "Articles publiés", value: posts.data, icon: FileText },
     { label: "Ressources publiées", value: resources.data, icon: Library },
   ];
 

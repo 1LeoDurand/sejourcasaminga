@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -136,285 +136,30 @@
   h4 {
     @apply text-base md:text-lg leading-snug;
   }
-}
 
-/* ========================================================================
-   Editorial article — Casa Minga blog
-   Warm, generous, magazine-like layout for long-form posts.
-   ======================================================================== */
-@layer components {
-  .editorial-article {
-    @apply text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 1.0625rem;
-    line-height: 1.75;
-    color: hsl(20 15% 18%);
-  }
-
-  @media (min-width: 768px) {
-    .editorial-article { font-size: 1.125rem; }
+  /* Accessibility: always-visible keyboard focus indicator (safety net) */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 3px;
   }
 
-  .editorial-article > * + * { margin-top: 1.25em; }
-
-  .editorial-article p {
-    color: hsl(20 12% 22%);
-    margin: 0;
-  }
-
-  .editorial-article strong { color: hsl(20 15% 14%); font-weight: 600; }
-  .editorial-article em { color: hsl(20 12% 30%); }
-
-  /* ---- Headings ---------------------------------------------------------- */
-  .editorial-article h1 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(2.25rem, 4.5vw, 3.25rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    color: hsl(20 18% 12%);
-    margin: 0 0 0.75em;
-  }
-
-  .editorial-article h2 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(1.5rem, 2.6vw, 1.95rem);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: hsl(20 18% 14%);
-    margin: 3.25rem 0 1.25rem;
-    position: relative;
-    padding-top: 1.25rem;
-  }
-
-  .editorial-article h2::before {
-    content: "";
-    display: block;
-    width: 42px;
-    height: 3px;
-    border-radius: 999px;
-    background: hsl(var(--terracotta));
-    margin-bottom: 1rem;
-  }
-
-  .editorial-article h3 {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-weight: 600;
-    font-size: 1.25rem;
-    line-height: 1.3;
-    color: hsl(85 22% 30%);
-    margin: 2rem 0 0.6rem;
-    letter-spacing: -0.005em;
-  }
-
-  /* ---- Lists ------------------------------------------------------------- */
-  .editorial-article ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .editorial-article ul li {
-    position: relative;
-    padding-left: 1.5rem;
-    color: hsl(20 12% 24%);
-  }
-
-  .editorial-article ul li::before {
-    content: "";
-    position: absolute;
-    left: 0.1rem;
-    top: 0.7em;
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 999px;
-    background: hsl(var(--terracotta));
-  }
-
-  /* ---- Lead / chapô ------------------------------------------------------ */
-  .editorial-lead {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
-    line-height: 1.5;
-    color: hsl(20 12% 30%);
-    margin: 0 0 2.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid hsl(30 30% 85%);
-  }
-
-  /* ---- "À retenir" callout ---------------------------------------------- */
-  .editorial-callout {
-    margin: 2.5rem 0;
-    padding: 1.5rem 1.75rem;
-    background: hsl(36 45% 94%);
-    border-left: 4px solid hsl(var(--terracotta));
-    border-radius: 0 1rem 1rem 0;
-  }
-  .editorial-callout-title {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: hsl(var(--terracotta));
-    margin: 0 0 0.5rem;
-  }
-  .editorial-callout-body {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: hsl(20 18% 18%);
-    margin: 0;
-  }
-
-  /* ---- Family cards (H3 sections styled as cards) ------------------------ */
-  .editorial-family-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin: 1.5rem 0;
-  }
-  @media (min-width: 700px) {
-    .editorial-family-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  .editorial-family-card {
-    background: hsl(36 50% 98%);
-    border: 1px solid hsl(30 35% 88%);
-    border-radius: 1.25rem;
-    padding: 1.5rem 1.5rem 1.4rem;
-    box-shadow: 0 1px 2px hsl(20 15% 15% / 0.04), 0 8px 24px -16px hsl(20 15% 15% / 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .editorial-family-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 1px 2px hsl(20 15% 15% / 0.06), 0 16px 32px -18px hsl(20 15% 15% / 0.12);
-  }
-  .editorial-family-card h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    color: hsl(85 25% 28%);
-    font-size: 1.15rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  .editorial-family-card h3::before {
-    content: "";
-    width: 8px; height: 8px; border-radius: 999px;
-    background: hsl(var(--terracotta));
-    flex-shrink: 0;
-  }
-  .editorial-family-card p { font-size: 0.975rem; line-height: 1.65; }
-  .editorial-family-card p + p { margin-top: 0.6rem; }
-
-  /* ---- CTA --------------------------------------------------------------- */
-  .editorial-cta {
-    margin: 4rem 0 1rem;
-    padding: 2.5rem 2rem;
-    background: hsl(20 18% 14%);
-    color: hsl(36 35% 94%);
-    border-radius: 1.75rem;
-    text-align: center;
-  }
-  @media (min-width: 768px) {
-    .editorial-cta { padding: 3rem 3rem; }
-  }
-  .editorial-cta h3 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    line-height: 1.2;
-    color: hsl(36 40% 95%);
-    margin: 0 0 0.75rem;
-  }
-  .editorial-cta p {
-    color: hsl(36 25% 80%);
-    max-width: 38ch;
-    margin: 0 auto 1.5rem;
-    line-height: 1.6;
-  }
-  .editorial-cta a {
-    display: inline-block;
-    background: hsl(var(--terracotta));
-    color: hsl(var(--terracotta-foreground));
-    padding: 0.85rem 1.75rem;
-    border-radius: 999px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    text-decoration: none;
-    transition: transform 0.15s ease, background 0.15s ease;
-  }
-  .editorial-cta a:hover {
-    background: hsl(14 70% 48%);
-    transform: translateY(-1px);
-  }
-}
-
-@layer components {
-  .editorial-article .editorial-block-image {
-    margin: 2.25rem 0;
-  }
-  .editorial-article .editorial-block-image img {
-    width: 100%;
-    border-radius: 14px;
-    display: block;
-  }
-  .editorial-article .editorial-block-image figcaption,
-  .editorial-article .editorial-block-embed figcaption {
-    font-size: 0.85rem;
-    color: hsl(20 10% 40%);
-    text-align: center;
-    margin-top: 0.6rem;
-    font-style: italic;
-  }
-  .editorial-article .editorial-block-quote {
-    margin: 2.25rem 0;
-    padding: 1.4rem 1.6rem;
-    border-left: 3px solid hsl(var(--terracotta));
-    background: hsl(36 45% 94%);
-    border-radius: 0 12px 12px 0;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    line-height: 1.5;
-    color: hsl(20 15% 18%);
-  }
-  .editorial-article .editorial-block-quote cite {
-    display: block;
-    margin-top: 0.75rem;
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-size: 0.85rem;
-    color: hsl(20 10% 40%);
-  }
-  .editorial-article .editorial-block-embed {
-    margin: 2.25rem 0;
-  }
-  .editorial-article .editorial-block-embed-frame {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 14px;
-    overflow: hidden;
-    background: hsl(20 10% 10%);
-  }
-  .editorial-article .editorial-block-embed-frame iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-  .editorial-article .editorial-block-fallback a {
-    color: hsl(var(--terracotta));
-    text-decoration: underline;
-    word-break: break-all;
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -137,7 +138,7 @@ const StayRequestDetail = () => {
         <div className="rounded-2xl border bg-card overflow-hidden">
           <div className="flex flex-col sm:flex-row">
             <img
-              src={listing?.image || "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop"}
+              src={listing?.image || listingPlaceholder}
               alt=""
               className="h-40 sm:h-auto sm:w-56 w-full object-cover"
             />

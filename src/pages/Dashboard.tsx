@@ -1,4 +1,5 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import placePlaceholder from "@/assets/place-placeholder.webp";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -420,7 +421,7 @@ function ProfileTab({
               >
                 <div className="h-28 overflow-hidden relative">
                   <img
-                    src={p.image || "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop"}
+                    src={p.image || placePlaceholder}
                     alt={p.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />

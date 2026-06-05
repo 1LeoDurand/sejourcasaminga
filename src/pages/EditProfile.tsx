@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { compressImage } from "@/lib/compress-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -110,11 +111,12 @@ const EditProfile = () => {
     if (!file || !user) return;
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop();
+      const compressed = await compressImage(file, { maxDim: 512 });
+      const ext = compressed.type === "image/webp" ? "webp" : file.name.split(".").pop();
       const path = `${user.id}/avatar.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(path, file, { upsert: true });
+        .upload(path, compressed, { upsert: true, contentType: compressed.type });
       if (uploadError) throw uploadError;
       const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
       const url = `${publicUrl}?t=${Date.now()}`;

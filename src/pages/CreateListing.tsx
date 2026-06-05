@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMyPlaces } from "@/hooks/use-places";
 import { useCreateListing } from "@/hooks/use-listings";
+import { useProfile } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
 import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
 import type { Database } from "@/integrations/supabase/types";
@@ -26,7 +27,11 @@ const CreateListing = () => {
   const [params] = useSearchParams();
   const { user } = useAuth();
   const { data: myPlaces } = useMyPlaces(user?.id);
+  const { data: profile } = useProfile(user?.id);
   const createListing = useCreateListing();
+
+  const profileIncomplete = !profile?.bio || profile.bio.trim().length < 20;
+  const missingAvatar = !profile?.avatar_url;
 
   const [placeId, setPlaceId] = useState(params.get("place") || "");
   const [title, setTitle] = useState("");
@@ -82,6 +87,31 @@ const CreateListing = () => {
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <Button onClick={() => navigate("/onboarding")}>Rejoindre ou créer un lieu</Button>
             <Button variant="outline" onClick={() => navigate("/discover")}>Explorer les lieux</Button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (profileIncomplete || missingAvatar) {
+    return (
+      <div className="min-h-screen">
+        <Navbar />
+        <div className="container max-w-xl py-16 px-4 text-center">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 mb-6">
+            <h2 className="text-lg font-medium text-amber-900 mb-2">Complétez votre profil d'abord</h2>
+            <p className="text-sm text-amber-800 mb-4">
+              Pour proposer un séjour, votre profil doit avoir :
+            </p>
+            <ul className="text-sm text-amber-800 text-left space-y-1 mb-4">
+              {missingAvatar && <li>• Une photo de profil</li>}
+              {profileIncomplete && <li>• Une présentation d'au moins 20 caractères</li>}
+            </ul>
+            <p className="text-xs text-amber-700 mb-4">
+              Cela rassure les hôtes et augmente vos chances d'être accepté.
+            </p>
+            <Button onClick={() => navigate("/edit-profile")}>Compléter mon profil</Button>
           </div>
         </div>
         <Footer />

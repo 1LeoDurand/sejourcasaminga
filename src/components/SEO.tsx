@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-const SITE_URL = "https://www.casaminga.com";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+const SITE_URL = "https://sejour.casaminga.com";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.png`;
 const SITE_NAME = "Casa Minga";
 
 type SEOProps = {

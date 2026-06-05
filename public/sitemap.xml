@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://sejour.casaminga.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://sejour.casaminga.com/discover</loc><priority>0.9</priority></url>
+  <url><loc>https://sejour.casaminga.com/comment-ca-marche</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources</loc><priority>0.8</priority></url>
+  <url><loc>https://sejour.casaminga.com/communaute</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/a-propos</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/hospitalite</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/charte</loc><priority>0.5</priority></url>
+  <url><loc>https://sejour.casaminga.com/contact</loc><priority>0.5</priority></url>
+
+  <!-- Ressources : Documentaires -->
+  <url><loc>https://sejour.casaminga.com/ressources/demain</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/qu-est-ce-qu-on-attend</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/en-quete-de-sens</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/eveil-de-la-permaculture</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/solutions-locales-pour-un-desordre-global</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/the-biggest-little-farm</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/a-simpler-way</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/within-reach</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/nul-homme-n-est-une-ile</loc><priority>0.6</priority></url>
+
+  <!-- Ressources : Films -->
+  <url><loc>https://sejour.casaminga.com/ressources/la-belle-verte</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/captain-fantastic</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/into-the-wild</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/woman-at-war</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/little-forest</loc><priority>0.6</priority></url>
+
+  <!-- Ressources : Livres -->
+  <url><loc>https://sejour.casaminga.com/ressources/la-sobriete-heureuse</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/l-entraide-autre-loi-de-la-jungle</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/comment-tout-peut-s-effondrer</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/l-age-des-low-tech</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/la-vie-secrete-des-arbres</loc><priority>0.6</priority></url>
+
+  <!-- Ressources : Podcasts -->
+  <url><loc>https://sejour.casaminga.com/ressources/podcast-sismique</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/podcast-presages</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/podcast-basilic</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/podcast-vlan</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/podcast-la-terre-au-carre</loc><priority>0.6</priority></url>
+
+  <!-- Ressources : Articles -->
+  <url><loc>https://sejour.casaminga.com/ressources/qu-est-ce-que-l-habitat-participatif</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/ecolieu-eco-hameau-habitat-groupe</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/decider-ensemble-sociocratie</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/financer-un-projet-d-habitat-collectif</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/reussir-son-premier-sejour</loc><priority>0.6</priority></url>
+
+  <!-- Ressources : Guides -->
+  <url><loc>https://sejour.casaminga.com/ressources/guide-creer-sa-fiche-de-lieu</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/guide-proposer-un-sejour</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/guide-accueillir-un-voyageur</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/guide-preparer-son-sejour</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/guide-organiser-une-reunion-collective</loc><priority>0.6</priority></url>
+</urlset>

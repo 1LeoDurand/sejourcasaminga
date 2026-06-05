@@ -24,15 +24,24 @@ export function useListing(id: string | undefined) {
     queryKey: ["listing", id],
     enabled: !!id,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("listings")
-        .select("*, places(*)")
-        .eq("id", id!)
-        .maybeSingle();
+      // Support both UUID and slug: UUID contains hyphens in UUID v4 format
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id!);
+      const query = supabase.from("listings").select("*, places(*)");
+      const { data, error } = await (isUuid ? query.eq("id", id!) : query.eq("slug", id!)).maybeSingle();
       if (error) throw error;
       return data;
     },
   });
+}
+
+/** Generate a SEO-friendly URL for a listing */
+export function listingUrl(id: string, slug?: string | null): string {
+  return slug ? `/listing/${slug}` : `/listing/${id}`;
+}
+
+/** Generate a SEO-friendly URL for a place/habitat */
+export function habitatUrl(id: string, slug?: string | null): string {
+  return slug ? `/habitat/${slug}` : `/habitat/${id}`;
 }
 
 export function useMyListings(userId: string | undefined) {

@@ -14,6 +14,7 @@ export interface Resource {
   slug: string;
   title: string;
   description: string | null;
+  content: string | null;
   type: ResourceType | string;
   author_or_director: string | null;
   year: number | null;
@@ -37,5 +38,21 @@ export const useResources = (type?: string) =>
       const { data, error } = await q;
       if (error) throw error;
       return data as Resource[];
+    },
+  });
+
+export const useResource = (slug?: string) =>
+  useQuery({
+    queryKey: ["resource", slug],
+    enabled: !!slug,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("resources")
+        .select("*")
+        .eq("slug", slug as string)
+        .eq("is_published", true)
+        .maybeSingle();
+      if (error) throw error;
+      return data as Resource | null;
     },
   });

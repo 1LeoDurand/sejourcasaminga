@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
@@ -46,8 +47,7 @@ import { toast } from "sonner";
 
 type SortKey = "recent" | "alpha";
 
-const FALLBACK_IMG =
-  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop";
+const FALLBACK_IMG = listingPlaceholder;
 
 const Favorites = () => {
   const { user, loading } = useAuth();

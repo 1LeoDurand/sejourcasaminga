@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
-import { MapPin, FileText, CalendarDays, Camera, Filter } from "lucide-react";
+import { MapPin, CalendarDays, Camera, Filter } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 
-type ActivityType = "new_habitat" | "blog" | "event" | "story";
+type ActivityType = "new_habitat" | "event" | "story";
 
 interface ActivityItem {
   id: string;
@@ -24,7 +24,6 @@ interface ActivityItem {
 
 const TYPE_META: Record<ActivityType, { label: string; icon: any; tone: string }> = {
   new_habitat: { label: "Nouveaux habitats", icon: MapPin, tone: "bg-primary/10 text-primary" },
-  blog:        { label: "Articles",          icon: FileText, tone: "bg-amber-500/10 text-amber-700" },
   event:       { label: "Événements",        icon: CalendarDays, tone: "bg-emerald-500/10 text-emerald-700" },
   story:       { label: "Stories",           icon: Camera, tone: "bg-rose-500/10 text-rose-700" },
 };
@@ -58,20 +57,6 @@ function useActivityFeed(types: ActivityType[], days: number) {
           .limit(40);
         (data ?? []).forEach((p: any) =>
           items.push({ id: `h-${p.id}`, type: "new_habitat", created_at: p.created_at, payload: p })
-        );
-      }
-
-      if (types.includes("blog")) {
-        const { data } = await supabase
-          .from("blog_posts")
-          .select("id, slug, title, excerpt, cover_image, category, published_at")
-          .eq("is_published", true)
-          .not("published_at", "is", null)
-          .gte("published_at", since)
-          .order("published_at", { ascending: false })
-          .limit(40);
-        (data ?? []).forEach((p: any) =>
-          items.push({ id: `b-${p.id}`, type: "blog", created_at: p.published_at, payload: p })
         );
       }
 
@@ -144,35 +129,6 @@ const FeedCard = ({ item }: { item: ActivityItem }) => {
           </p>
           <Button asChild variant="outline" size="sm" className="mt-2">
             <Link to={`/habitat/${payload.slug || payload.id}`}>Découvrir</Link>
-          </Button>
-        </div>
-      </article>
-    );
-  }
-
-  if (type === "blog") {
-    return (
-      <article className="overflow-hidden rounded-xl border bg-card">
-        {payload.cover_image && (
-          <Link to={`/blog/${payload.slug}`} className="block">
-            <img src={payload.cover_image} alt={payload.title} loading="lazy" className="h-56 w-full object-cover" />
-          </Link>
-        )}
-        <div className="space-y-2 p-5">
-          <div className="flex items-center justify-between gap-3">
-            <TypeBadge type={type} />
-            <span className="text-xs text-muted-foreground">{timeAgo(created_at)}</span>
-          </div>
-          <h3 className="font-serif text-lg text-foreground">
-            <Link to={`/blog/${payload.slug}`} className="hover:text-primary">📝 {payload.title}</Link>
-          </h3>
-          {payload.excerpt && (
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {payload.excerpt.slice(0, 150)}{payload.excerpt.length > 150 ? "…" : ""}
-            </p>
-          )}
-          <Button asChild variant="outline" size="sm" className="mt-2">
-            <Link to={`/blog/${payload.slug}`}>Lire l'article</Link>
           </Button>
         </div>
       </article>
@@ -299,7 +255,7 @@ const PAGE_SIZE = 10;
 
 const CommunityFeed = () => {
   const [selected, setSelected] = useState<Set<ActivityType>>(
-    new Set<ActivityType>(["new_habitat", "blog", "event", "story"])
+    new Set<ActivityType>(["new_habitat", "event", "story"])
   );
   const [days, setDays] = useState(30);
   const [visible, setVisible] = useState(PAGE_SIZE);
@@ -326,7 +282,7 @@ const CommunityFeed = () => {
           <p className="mb-2 text-xs font-medium uppercase tracking-wider text-primary">Actualités Casa Minga</p>
           <h1 className="font-serif text-3xl text-foreground sm:text-4xl">Le fil de la communauté</h1>
           <p className="mt-3 text-muted-foreground">
-            Habitats qui rejoignent l'aventure, nouvelles plumes, ateliers à venir et récits de séjour — tout ce qui anime Casa Minga, par ordre chronologique.
+            Habitats qui rejoignent l'aventure, ateliers à venir et récits de séjour — tout ce qui anime Casa Minga, par ordre chronologique.
           </p>
         </header>
 

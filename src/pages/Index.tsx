@@ -12,6 +12,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchModal from "@/components/SearchModal";
 import SEO from "@/components/SEO";
+import heroImage from "@/assets/hero-collective.webp";
+import placePlaceholder from "@/assets/place-placeholder.webp";
 import { useListings } from "@/hooks/use-listings";
 import { usePlaces } from "@/hooks/use-places";
 import { useTranslation } from "react-i18next";
@@ -46,8 +48,8 @@ const Index = () => {
       {/* ═══════════ HERO ═══════════ */}
       <section className="relative overflow-hidden bg-foreground">
         <img
-          src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&h=1000&fit=crop"
-          alt="Vie collective"
+          src={heroImage}
+          alt="Vie collective en habitat participatif"
           className="absolute inset-0 h-full w-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
@@ -84,12 +86,12 @@ const Index = () => {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/comment-ca-marche" className="text-xs text-white/50 hover:text-white/80 underline underline-offset-4 transition-colors">
+            <Link to="/comment-ca-marche" className="text-xs text-white/70 hover:text-white underline underline-offset-4 transition-colors">
               {t("home.howItWorksLink")}
             </Link>
           </div>
 
-          <p className="mt-6 text-xs text-white/50">
+          <p className="mt-6 text-xs text-white/70">
             {t("home.stayCount", { count: listingCount })} · {t("home.placeCount", { count: placeCount })}
           </p>
         </div>
@@ -170,7 +172,7 @@ const Index = () => {
               {places.slice(0, 6).map((p) => (
                 <Link key={p.id} to={`/habitat/${p.id}`} className="group rounded-xl border bg-background overflow-hidden transition-shadow hover:shadow-md">
                   <div className="aspect-[16/9] overflow-hidden">
-                    <img src={p.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop"} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                    <img src={p.image || placePlaceholder} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                   </div>
                   <div className="p-4">
                     <Badge variant="outline" className="text-[0.6rem] mb-1.5">{p.type}</Badge>
@@ -227,7 +229,7 @@ const Index = () => {
               { icon: HandHeart, title: t("home.pillar2Title"), body: t("home.pillar2Body"), category: t("home.pillar2Category"), accent: "text-azur/8" },
               { icon: Compass, title: t("home.pillar3Title"), body: t("home.pillar3Body"), category: t("home.pillar3Category"), accent: "text-olive/8" },
             ].map(({ icon: I, title, body, category, accent }) => (
-              <div key={title} className="group relative overflow-hidden rounded-xl border border-border/40 bg-white p-6 transition-all duration-300 hover:border-border/60 hover:shadow-sm">
+              <div key={title} className="group relative overflow-hidden rounded-xl border border-border/40 bg-card p-6 transition-all duration-300 hover:border-border/60 hover:shadow-sm">
                 <div className={`absolute -left-4 -top-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${accent}`}>
                   <I className="h-24 w-24" strokeWidth={1} />
                 </div>
@@ -318,7 +320,7 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/discover">
-              <Button size="lg" variant="outline" className="border-white/30 text-orange-400 hover:bg-white/10 hover:text-primary-foreground rounded-full">
+              <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/15 hover:text-white rounded-full">
                 {t("nav.exploreStays")}
               </Button>
             </Link>

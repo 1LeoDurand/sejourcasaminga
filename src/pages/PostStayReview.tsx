@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { compressImage } from "@/lib/compress-image";
 import { Loader2, Star, Upload, X as XIcon, ImagePlus, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -86,12 +87,13 @@ const PostStayReview = () => {
     if (!files || !files.length || !user) return;
     setUploading(true);
     const updated = [...photos];
-    for (const file of Array.from(files)) {
+    for (const original of Array.from(files)) {
       if (updated.length >= MAX_PHOTOS) {
         toast({ title: `Maximum ${MAX_PHOTOS} photos`, variant: "destructive" });
         break;
       }
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const file = await compressImage(original);
+      const ext = file.type === "image/webp" ? "webp" : file.name.split(".").pop()?.toLowerCase() || "jpg";
       const fileName = `stay-reviews/${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error } = await supabase.storage
         .from("place-photos")

@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -10,8 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const FALLBACK_IMG =
-  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop";
+const FALLBACK_IMG = listingPlaceholder;
 
 const SharedWishlist = () => {
   const { token } = useParams<{ token: string }>();

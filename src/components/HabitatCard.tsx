@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Users, Heart } from "lucide-react";
 import { useState } from "react";
 import type { Tables } from "@/integrations/supabase/types";
+import placePlaceholder from "@/assets/place-placeholder.webp";
 
 type Place = Tables<"places">;
 
@@ -19,7 +20,7 @@ const HabitatCard = ({ place }: Props) => {
       <Link to={`/habitat/${place.id}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
-            src={place.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop"}
+            src={place.image || placePlaceholder}
             alt={place.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"

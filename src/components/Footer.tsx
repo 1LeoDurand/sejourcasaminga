@@ -27,22 +27,23 @@ const Footer = () => {
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">{t("footer.casaMinga")}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link to="/a-propos" className="hover:text-foreground transition-colors">{t("footer.casaMinga")}</Link></li>
               <li><Link to="/comment-ca-marche" className="hover:text-foreground transition-colors">{t("footer.howItWorks")}</Link></li>
-              <li><Link to="/#trust" className="hover:text-foreground transition-colors">{t("footer.hospitality")}</Link></li>
-              <li><Link to="/auth" className="hover:text-foreground transition-colors">{t("footer.createAccount")}</Link></li>
+              <li><Link to="/hospitalite" className="hover:text-foreground transition-colors">{t("footer.hospitality")}</Link></li>
+              <li><Link to="/auth?tab=signup" className="hover:text-foreground transition-colors">{t("footer.createAccount")}</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">{t("footer.community")}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/blog" className="hover:text-foreground transition-colors">{t("footer.blog")}</Link></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">{t("footer.charter")}</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">{t("footer.contact")}</a></li>
+              <li><Link to="/communaute" className="hover:text-foreground transition-colors">{t("footer.community")}</Link></li>
+              <li><Link to="/charte" className="hover:text-foreground transition-colors">{t("footer.charter")}</Link></li>
+              <li><Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contact")}</Link></li>
             </ul>
           </div>
         </div>
         <div className="mt-8 border-t pt-6 text-center text-xs text-muted-foreground">
-          © 2026 Casa Minga — La plateforme d'échange entre habitats participatifs, écolieux et lieux de vie collective.
+          {t("footer.copyright")}
         </div>
       </div>
     </footer>
