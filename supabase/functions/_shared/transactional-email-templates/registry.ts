@@ -20,6 +20,7 @@ import { template as newMessage } from './new-message.tsx'
 import { template as weeklyDigest } from './weekly-digest.tsx'
 import { template as referralInvite } from './referral-invite.tsx'
 import { template as claimVerification } from './claim-verification.tsx'
+import { template as reportReceived } from './report-received.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'exchange-request-sent': exchangeRequestSent,
@@ -33,5 +34,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'weekly-digest': weeklyDigest,
   'referral-invite': referralInvite,
   'claim-verification': claimVerification,
+  'report-received': reportReceived,
 }
 

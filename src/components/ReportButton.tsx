@@ -33,6 +33,7 @@ export default function ReportButton({ targetType, targetId, variant = "text" }:
         target_id: targetId,
         reason,
         details: details.trim() || undefined,
+        reporter_name: (user.user_metadata as any)?.full_name || user.email || undefined,
       });
       toast({ title: "Signalement envoyé", description: "Merci, notre équipe va examiner ce contenu." });
       setOpen(false);
