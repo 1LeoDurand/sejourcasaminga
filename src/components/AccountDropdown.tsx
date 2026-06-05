@@ -159,26 +159,26 @@ function MenuContent({ close }: { close: () => void }) {
       badgeVariant: unreadMessages > 0 ? "destructive" : "default",
     },
     { icon: Sparkles, label: "Recommandations", to: "/discover" },
-    { icon: Star, label: "Mes préférences", to: "/profile/edit" },
+    { icon: Star, label: "Mes préférences", to: "/edit-profile" },
   ];
 
   const profileItems: MenuAction[] = [
     {
       icon: UserCircle,
       label: "Mon profil",
-      to: "/profile/edit",
+      to: "/edit-profile",
       badge: `${completion.pct}%`,
       badgeVariant: completion.pct >= 80 ? "success" : "default",
     },
     {
       icon: ShieldCheck,
       label: "Vérification",
-      to: "/profile/edit",
+      to: "/edit-profile",
       badge: completion.pct >= 80 ? "Vérifié" : "À compléter",
       badgeVariant: completion.pct >= 80 ? "success" : "default",
     },
     { icon: Gift, label: "Inviter des amis", to: "/referrals" },
-    { icon: Settings, label: "Paramètres", to: "/profile/edit" },
+    { icon: Settings, label: "Paramètres", to: "/edit-profile" },
     { icon: LogOut, label: "Déconnexion", onClick: handleSignOut },
   ];
 
