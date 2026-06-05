@@ -746,6 +746,7 @@
     "statusReciprocal": "Intercambio recíproco",
     "statusUnavailable": "No disponible",
     "noDates": "El anfitrión aún no ha indicado fechas concretas. Envía una solicitud con tus fechas preferidas y te responderá directamente.",
+    "moreMonths": "Ver los meses siguientes",
     "seeStays": "Ver las estancias",
     "contact": "Contactar"
   }

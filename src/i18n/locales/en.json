@@ -761,6 +761,7 @@
     "statusReciprocal": "Reciprocal exchange",
     "statusUnavailable": "Unavailable",
     "noDates": "The host hasn't set specific dates yet. Send a request with your preferred dates and they'll get back to you.",
+    "moreMonths": "See following months",
     "seeStays": "See stays",
     "contact": "Contact"
   }

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import {
   ArrowLeft, MapPin, Users, Home, Shield, Heart, Mail,
-  ChevronRight, Eye, Loader2, Calendar, Send, Pencil, Clock,
+  ChevronRight, Eye, Loader2, Send, Pencil, Clock,
   Star, X, ZoomIn, CheckCircle2, MessageSquare, Sparkles,
   ChevronDown, HelpCircle, ListChecks,
 } from "lucide-react";
@@ -34,6 +34,7 @@ import { formatDistanceToNow, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import TrustBadges from "@/components/TrustBadges";
 import ReportButton from "@/components/ReportButton";
+import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 
 // ─── Phase 1 : Galerie photos ────────────────────────────────────────────────
 
@@ -190,52 +191,17 @@ function HostCard({
 // ─── Phase 3 : Disponibilité visuelle ────────────────────────────────────────
 
 function AvailabilitySection({ listingId, notes }: { listingId: string; notes: string | null }) {
-  const { t } = useTranslation();
   const { data: avails = [], isLoading } = useListingAvailabilities(listingId);
-  const today = new Date().toISOString().split("T")[0];
-  const upcoming = (avails as any[]).filter((a) => a.end_date >= today).slice(0, 8);
-  const STATUS: Record<string, { label: string; cls: string }> = {
-    available: { label: t("listing.statusAvailable"), cls: "bg-olive/15 text-olive border-olive/30" },
-    reciprocal_only: { label: t("listing.statusReciprocal"), cls: "bg-soleil/20 text-soleil-foreground border-soleil/30" },
-    unavailable: { label: t("listing.statusUnavailable"), cls: "bg-muted text-muted-foreground border-border" },
-  };
 
-  return (
-    <div className="mt-8">
-      <h2 className="text-lg text-foreground mb-3 flex items-center gap-2">
-        <Calendar className="h-5 w-5 text-primary" />
-        {t("listing.availabilityTitle")}
-      </h2>
+  if (isLoading) {
+    return (
+      <div className="mt-8 flex justify-center py-4">
+        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
-      {notes && (
-        <div className="rounded-xl bg-crema border p-4 mb-4">
-          <p className="text-sm text-muted-foreground whitespace-pre-line">{notes}</p>
-        </div>
-      )}
-
-      {isLoading ? (
-        <div className="flex justify-center py-4">
-          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-        </div>
-      ) : upcoming.length > 0 ? (
-        <ul className="space-y-2">
-          {upcoming.map((a) => {
-            const meta = STATUS[a.status] || STATUS.available;
-            return (
-              <li key={a.id} className="flex items-center justify-between rounded-lg border bg-card px-3 py-2.5">
-                <span className="text-sm text-foreground">
-                  {format(new Date(a.start_date), "d MMM", { locale: fr })} – {format(new Date(a.end_date), "d MMM yyyy", { locale: fr })}
-                </span>
-                <span className={`text-xs rounded-full border px-2 py-0.5 ${meta.cls}`}>{meta.label}</span>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p className="text-sm text-muted-foreground">{t("listing.noDates")}</p>
-      )}
-    </div>
-  );
+  return <AvailabilityCalendar availabilities={avails as any[]} notes={notes} />;
 }
 
 // ─── Phase 4 : Avis ──────────────────────────────────────────────────────────
