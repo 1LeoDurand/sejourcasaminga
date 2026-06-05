@@ -11,6 +11,10 @@ import {
   Link2,
   Loader2,
   ArrowLeft,
+  Flag,
+  ArrowLeftRight,
+  Coins,
+  Mail,
 } from "lucide-react";
 import {
   Sidebar,
@@ -33,6 +37,10 @@ const items = [
   { title: "Lieux", url: "/admin/places", icon: Home },
   { title: "Séjours", url: "/admin/listings", icon: BedDouble },
   { title: "Revendications", url: "/admin/claims", icon: ShieldCheck },
+  { title: "Signalements", url: "/admin/reports", icon: Flag },
+  { title: "Échanges", url: "/admin/exchanges", icon: ArrowLeftRight },
+  { title: "Points", url: "/admin/points", icon: Coins },
+  { title: "E-mails", url: "/admin/emails", icon: Mail },
   { title: "Ressources", url: "/admin/resources", icon: Library },
   { title: "Utilisateurs", url: "/admin/users", icon: Users },
   { title: "Statistiques", url: "/admin/stats", icon: BarChart3 },

@@ -51,6 +51,10 @@ const CommunityFeed = lazy(() => import("./pages/CommunityFeed.tsx"));
 const PublicStats = lazy(() => import("./pages/PublicStats.tsx"));
 const AdminStats = lazy(() => import("./pages/admin/AdminStats.tsx"));
 const AdminLinkChecker = lazy(() => import("./pages/admin/AdminLinkChecker.tsx"));
+const AdminReports = lazy(() => import("./pages/admin/AdminReports.tsx"));
+const AdminExchanges = lazy(() => import("./pages/admin/AdminExchanges.tsx"));
+const AdminPoints = lazy(() => import("./pages/admin/AdminPoints.tsx"));
+const AdminEmails = lazy(() => import("./pages/admin/AdminEmails.tsx"));
 const Referrals = lazy(() => import("./pages/Referrals.tsx"));
 const VerifyClaim = lazy(() => import("./pages/VerifyClaim.tsx"));
 
@@ -117,6 +121,10 @@ const App = () => (
               <Route path="/statistiques" element={<PublicStats />} />
               <Route path="/admin/stats" element={<AdminStats />} />
               <Route path="/admin/link-checker" element={<AdminLinkChecker />} />
+              <Route path="/admin/reports" element={<AdminReports />} />
+              <Route path="/admin/exchanges" element={<AdminExchanges />} />
+              <Route path="/admin/points" element={<AdminPoints />} />
+              <Route path="/admin/emails" element={<AdminEmails />} />
               <Route path="/referrals" element={<Referrals />} />
               <Route path="/verify-claim" element={<VerifyClaim />} />
               <Route path="*" element={<NotFound />} />
