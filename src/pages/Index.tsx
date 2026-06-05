@@ -320,7 +320,7 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/discover">
-              <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/15 hover:text-white rounded-full">
+              <Button size="lg" className="bg-white/20 text-white border border-white/50 hover:bg-white/30 rounded-full font-medium px-8">
                 {t("nav.exploreStays")}
               </Button>
             </Link>
