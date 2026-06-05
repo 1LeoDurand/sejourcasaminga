@@ -779,9 +779,6 @@ const ListingDetail = () => {
         {/* Phase 5 — Séjours similaires */}
         {place?.id && <SimilarListings placeId={place.id} currentId={listing.id} />}
 
-        {/* Suggestions — également consulté */}
-        <AlsoViewedListings currentId={listing.id} placeId={place?.id} />
-
         {/* Signalement */}
         <div className="mt-6 flex justify-center">
           <ReportButton targetType="listing" targetId={listing.id} variant="text" />
@@ -818,6 +815,11 @@ const ListingDetail = () => {
           </div>
         </aside>
        </div>{/* /grille */}
+      </div>
+
+      {/* Suggestions pleine largeur — hors grid */}
+      <div className="container px-5 max-w-6xl pb-8">
+        <AlsoViewedListings currentId={listing.id} placeId={place?.id} />
       </div>
 
       {/* Barre d'action fixe — mobile */}
