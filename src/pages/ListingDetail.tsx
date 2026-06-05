@@ -35,6 +35,8 @@ import { fr } from "date-fns/locale";
 import TrustBadges from "@/components/TrustBadges";
 import ReportButton from "@/components/ReportButton";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
+import ListingLocationMap from "@/components/ListingLocationMap";
+import AlsoViewedListings from "@/components/AlsoViewedListings";
 
 // ─── Phase 1 : Galerie photos ────────────────────────────────────────────────
 
@@ -665,6 +667,16 @@ const ListingDetail = () => {
         {/* Phase 3 — Disponibilité visuelle */}
         <AvailabilitySection listingId={listing.id} notes={listing.availability_notes} />
 
+        {/* Carte — localisation approximative */}
+        {place && (
+          <ListingLocationMap
+            city={place.city}
+            region={place.region}
+            country={place.country}
+            label={place.region || place.city}
+          />
+        )}
+
         {/* Demande de séjour — modale partagée (déclenchée par l'aside desktop + la barre mobile) */}
         <Dialog
           open={showRequestForm}
@@ -766,6 +778,9 @@ const ListingDetail = () => {
 
         {/* Phase 5 — Séjours similaires */}
         {place?.id && <SimilarListings placeId={place.id} currentId={listing.id} />}
+
+        {/* Suggestions — également consulté */}
+        <AlsoViewedListings currentId={listing.id} placeId={place?.id} />
 
         {/* Signalement */}
         <div className="mt-6 flex justify-center">
