@@ -651,6 +651,8 @@ export type Database = {
           conditions: string | null
           created_at: string
           description: string | null
+          faq: Json | null
+          highlights: string[] | null
           host_id: string
           id: string
           image: string | null
@@ -675,6 +677,8 @@ export type Database = {
           conditions?: string | null
           created_at?: string
           description?: string | null
+          faq?: Json | null
+          highlights?: string[] | null
           host_id: string
           id?: string
           image?: string | null
@@ -699,6 +703,8 @@ export type Database = {
           conditions?: string | null
           created_at?: string
           description?: string | null
+          faq?: Json | null
+          highlights?: string[] | null
           host_id?: string
           id?: string
           image?: string | null

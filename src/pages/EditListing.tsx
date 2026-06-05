@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, ArrowLeft, Save } from "lucide-react";
+import { Loader2, ArrowLeft, Save, Plus, X } from "lucide-react";
 import PhotoManager from "@/components/PhotoManager";
 import VideoEmbedField from "@/components/VideoEmbedField";
 import Navbar from "@/components/Navbar";
@@ -45,6 +45,9 @@ const EditListing = () => {
     image: "",
     images: [] as string[],
     video_url: "",
+    highlights: [] as string[],
+    practical_rules: [] as string[],
+    faq: [] as { q: string; a: string }[],
   });
   const [saving, setSaving] = useState(false);
 
@@ -66,6 +69,9 @@ const EditListing = () => {
         image: listing.image || "",
         images: listing.images || [],
         video_url: (listing as any).video_url || "",
+        highlights: (listing as any).highlights || [],
+        practical_rules: listing.practical_rules || [],
+        faq: (Array.isArray((listing as any).faq) ? (listing as any).faq : []) as { q: string; a: string }[],
       });
     }
   }, [listing]);
@@ -172,6 +178,143 @@ const EditListing = () => {
               }}
               folder={`listings/${id}`}
             />
+          </section>
+
+          {/* Highlights */}
+          <section className="rounded-xl border bg-card p-5 space-y-4">
+            <div>
+              <h2 className="text-base font-serif text-foreground">Points forts</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Ce que les voyageurs vont adorer (max 6)</p>
+            </div>
+            <div className="space-y-2">
+              {form.highlights.map((h, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Input
+                    value={h}
+                    onChange={(e) => {
+                      const next = [...form.highlights];
+                      next[i] = e.target.value;
+                      set("highlights", next);
+                    }}
+                    placeholder={`Point fort ${i + 1}`}
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => set("highlights", form.highlights.filter((_, j) => j !== i))}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              {form.highlights.length < 6 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => set("highlights", [...form.highlights, ""])}
+                >
+                  <Plus className="h-4 w-4 mr-1" /> Ajouter un point fort
+                </Button>
+              )}
+            </div>
+          </section>
+
+          {/* House rules */}
+          <section className="rounded-xl border bg-card p-5 space-y-4">
+            <div>
+              <h2 className="text-base font-serif text-foreground">Règles de la maison</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Règles pratiques pour les voyageurs</p>
+            </div>
+            <div className="space-y-2">
+              {form.practical_rules.map((r, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Input
+                    value={r}
+                    onChange={(e) => {
+                      const next = [...form.practical_rules];
+                      next[i] = e.target.value;
+                      set("practical_rules", next);
+                    }}
+                    placeholder={`ex: Animaux bienvenus`}
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => set("practical_rules", form.practical_rules.filter((_, j) => j !== i))}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => set("practical_rules", [...form.practical_rules, ""])}
+              >
+                <Plus className="h-4 w-4 mr-1" /> Ajouter une règle
+              </Button>
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section className="rounded-xl border bg-card p-5 space-y-4">
+            <div>
+              <h2 className="text-base font-serif text-foreground">Questions fréquentes (FAQ)</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Répondez aux questions que les voyageurs posent souvent</p>
+            </div>
+            <div className="space-y-4">
+              {form.faq.map((item, i) => (
+                <div key={i} className="rounded-lg border bg-muted/30 p-3 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <Label className="text-xs">Question {i + 1}</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() => set("faq", form.faq.filter((_, j) => j !== i))}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                  <Input
+                    value={item.q}
+                    onChange={(e) => {
+                      const next = [...form.faq];
+                      next[i] = { ...next[i], q: e.target.value };
+                      set("faq", next);
+                    }}
+                    placeholder="ex: Y a-t-il un jardin ?"
+                  />
+                  <Textarea
+                    value={item.a}
+                    onChange={(e) => {
+                      const next = [...form.faq];
+                      next[i] = { ...next[i], a: e.target.value };
+                      set("faq", next);
+                    }}
+                    placeholder="Votre réponse..."
+                    rows={2}
+                  />
+                </div>
+              ))}
+              {form.faq.length < 8 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => set("faq", [...form.faq, { q: "", a: "" }])}
+                >
+                  <Plus className="h-4 w-4 mr-1" /> Ajouter une question
+                </Button>
+              )}
+            </div>
           </section>
 
           {/* Video */}

@@ -15,7 +15,8 @@ import {
 import {
   ArrowLeft, MapPin, Users, Home, Shield, Heart, Mail,
   ChevronRight, Eye, Loader2, Calendar, Send, Pencil, Clock,
-  Star, X, ZoomIn, CheckCircle2, MessageSquare,
+  Star, X, ZoomIn, CheckCircle2, MessageSquare, Sparkles,
+  ChevronDown, HelpCircle, ListChecks,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -347,6 +348,83 @@ function ReviewsSection({ placeId, listingTitle }: { placeId: string; listingTit
   );
 }
 
+// ─── Highlights ──────────────────────────────────────────────────────────────
+
+function HighlightsSection({ highlights }: { highlights: string[] | null }) {
+  if (!highlights || highlights.length === 0) return null;
+  return (
+    <div className="mt-8 rounded-2xl border bg-warm p-5">
+      <h2 className="text-lg text-foreground mb-4 flex items-center gap-2">
+        <Sparkles className="h-5 w-5 text-primary" />
+        Ce que vous allez adorer
+      </h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        {highlights.map((h, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-foreground">
+            <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+            <span>{h}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// ─── House Rules ─────────────────────────────────────────────────────────────
+
+function HouseRulesSection({ rules }: { rules: string[] | null }) {
+  if (!rules || rules.length === 0) return null;
+  return (
+    <div className="mt-8">
+      <h2 className="text-lg text-foreground mb-3 flex items-center gap-2">
+        <ListChecks className="h-5 w-5 text-primary" />
+        Règles de la maison
+      </h2>
+      <div className="rounded-xl border bg-card divide-y">
+        {rules.map((r, i) => (
+          <div key={i} className="flex items-center gap-3 px-4 py-3 text-sm text-foreground">
+            <span className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
+            {r}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+
+function FaqSection({ faq }: { faq: { q: string; a: string }[] | null }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  if (!faq || faq.length === 0) return null;
+  return (
+    <div className="mt-8">
+      <h2 className="text-lg text-foreground mb-3 flex items-center gap-2">
+        <HelpCircle className="h-5 w-5 text-primary" />
+        Questions fréquentes
+      </h2>
+      <div className="rounded-xl border bg-card divide-y">
+        {faq.map((item, i) => (
+          <div key={i}>
+            <button
+              className="w-full flex items-center justify-between gap-4 px-4 py-3.5 text-left text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
+              onClick={() => setOpenIdx(openIdx === i ? null : i)}
+            >
+              <span>{item.q}</span>
+              <ChevronDown className={`h-4 w-4 text-muted-foreground shrink-0 transition-transform ${openIdx === i ? "rotate-180" : ""}`} />
+            </button>
+            {openIdx === i && (
+              <div className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed">
+                {item.a}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Phase 5 : Séjours similaires ────────────────────────────────────────────
 
 function SimilarListings({ placeId, currentId }: { placeId: string; currentId: string }) {
@@ -579,6 +657,9 @@ const ListingDetail = () => {
           </Link>
         )}
 
+        {/* Highlights */}
+        <HighlightsSection highlights={(listing as any).highlights} />
+
         {/* Description */}
         {listing.description && (
           <div className="mt-8">
@@ -612,19 +693,8 @@ const ListingDetail = () => {
           {listing.collective_access && <DetailBlock icon={Home} label="Accès aux espaces communs" value={listing.collective_access} />}
         </div>
 
-        {/* Rules */}
-        {listing.practical_rules && listing.practical_rules.length > 0 && (
-          <div className="mt-6">
-            <h2 className="text-lg text-foreground mb-2">Règles pratiques</h2>
-            <ul className="space-y-1">
-              {listing.practical_rules.map((r) => (
-                <li key={r} className="text-sm text-muted-foreground flex items-start gap-2">
-                  <span className="text-primary mt-1">•</span> {r}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* House rules */}
+        <HouseRulesSection rules={listing.practical_rules} />
 
         {/* Phase 3 — Disponibilité visuelle */}
         <AvailabilitySection listingId={listing.id} notes={listing.availability_notes} />
@@ -721,6 +791,9 @@ const ListingDetail = () => {
             )}
           </DialogContent>
         </Dialog>
+
+        {/* FAQ */}
+        <FaqSection faq={Array.isArray((listing as any).faq) ? (listing as any).faq : null} />
 
         {/* Phase 4 — Avis */}
         {place?.id && <ReviewsSection placeId={place.id} listingTitle={listing.title} />}
