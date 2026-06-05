@@ -3,7 +3,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Users, Heart, Star, BadgeCheck } from "lucide-react";
 import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
 import { listingUrl } from "@/hooks/use-listings";
+import { useListingCardStats } from "@/hooks/use-listing-stats";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import type { Tables } from "@/integrations/supabase/types";
 import listingPlaceholder from "@/assets/listing-placeholder.webp";
 
@@ -51,8 +54,16 @@ const ListingCard = ({ listing }: Props) => {
 
   const dotsToShow = Math.min(photos.length, 5);
   const isAvailable = listing.available ?? true;
-  const rating = listing.rating ?? null;
-  const reviewCount = listing.review_count ?? null;
+
+  // Aggregated stats (shared single fetch across all cards)
+  const { data: statsMap } = useListingCardStats();
+  const stats = statsMap?.[listing.id];
+  const rating = listing.rating ?? stats?.rating ?? null;
+  const reviewCount = listing.review_count ?? stats?.review_count ?? null;
+
+  const dateRange = stats?.next_start && stats?.next_end
+    ? `${format(new Date(stats.next_start), "d MMM", { locale: fr })} – ${format(new Date(stats.next_end), "d MMM", { locale: fr })}`
+    : null;
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl bg-card transition-all duration-200 hover:shadow-lg">
@@ -153,12 +164,18 @@ const ListingCard = ({ listing }: Props) => {
           {typeLabel}
         </p>
 
-        {/* Availability */}
+        {/* Availability + next dates */}
         <p className="mt-1.5 flex items-center gap-1.5 text-sm">
           <span className={`h-2 w-2 rounded-full ${isAvailable ? "bg-olive" : "bg-muted-foreground/40"}`} />
           <span className={isAvailable ? "font-medium text-olive" : "text-muted-foreground"}>
             {isAvailable ? "Disponible" : "Indisponible"}
           </span>
+          {dateRange && (
+            <>
+              <span className="text-muted-foreground/50">·</span>
+              <span className="text-muted-foreground">{dateRange}</span>
+            </>
+          )}
         </p>
 
         {/* Footer: relation type (replaces price — exchange is free) */}
