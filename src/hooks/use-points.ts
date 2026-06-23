@@ -162,6 +162,10 @@ export const POINT_TYPE_LABELS: Record<string, string> = {
   referral_bonus: "Bonus parrainage",
   referral_welcome: "Bonus filleul",
   exchange_completed: "Échange terminé",
+  stay_redeemed: "Séjour réglé en points",
+  stay_earned: "Séjour accueilli",
+  stay_refunded: "Remboursement séjour",
+  stay_reverted: "Accueil annulé",
   admin_adjustment: "Ajustement admin",
 };
 
@@ -174,5 +178,9 @@ export const POINT_TYPE_ICONS: Record<string, string> = {
   referral_bonus: "🤝",
   referral_welcome: "🎉",
   exchange_completed: "🔄",
+  stay_redeemed: "🛎️",
+  stay_earned: "🏡",
+  stay_refunded: "↩️",
+  stay_reverted: "↩️",
   admin_adjustment: "⚖️",
 };
