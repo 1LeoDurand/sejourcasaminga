@@ -22,6 +22,9 @@ import {
   useExchangeRequest,
   useUpdateExchangeRequestStatus,
   useUpdateExchangeRequestDates,
+  useRevertStayAcceptance,
+  stayPointsCost,
+  stayPointsErrorMessage,
   type StayRequestStatus,
 } from "@/hooks/use-exchange-requests";
 import { toast } from "@/hooks/use-toast";
@@ -41,6 +44,7 @@ const StayRequestDetail = () => {
   const { data: request, isLoading } = useExchangeRequest(id);
   const updateStatus = useUpdateExchangeRequestStatus();
   const updateDates = useUpdateExchangeRequestDates();
+  const revertAcceptance = useRevertStayAcceptance();
 
   const [editOpen, setEditOpen] = useState(false);
   const [editStart, setEditStart] = useState("");
@@ -95,6 +99,10 @@ const StayRequestDetail = () => {
   }
 
   const isAuthor = request.from_user_id === user.id;
+  const isPoints = (request as any).exchange_type === "points";
+  const pointsCost = isPoints
+    ? stayPointsCost(request.start_date, request.end_date, listing?.points_per_night)
+    : 0;
 
   const setStatus = async (s: StayRequestStatus, msg: string) => {
     try {
@@ -102,6 +110,16 @@ const StayRequestDetail = () => {
       toast({ title: msg });
     } catch (e: any) {
       toast({ title: "Erreur", description: e.message, variant: "destructive" });
+    }
+  };
+
+  // Un-confirm: reverts the acceptance and refunds any points charged (RPC).
+  const unconfirm = async () => {
+    try {
+      await revertAcceptance.mutateAsync(request.id);
+      toast({ title: isPoints ? "Demande remise en attente — points remboursés" : "Demande remise en attente" });
+    } catch (e) {
+      toast({ title: "Erreur", description: stayPointsErrorMessage(e), variant: "destructive" });
     }
   };
 
@@ -188,6 +206,15 @@ const StayRequestDetail = () => {
                   Type d'échange : <span className="text-foreground">{EXCHANGE_LABELS[(request as any).exchange_type] || (request as any).exchange_type}</span>
                 </p>
               )}
+
+              {isPoints && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Coût : <span className="font-medium text-foreground">🛎️ {pointsCost} points</span>
+                  {status === "accepted" && typeof (request as any).points_spent === "number" && (
+                    <span className="text-foreground"> — débités</span>
+                  )}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -237,7 +264,7 @@ const StayRequestDetail = () => {
             )}
             {status === "accepted" && (
               <>
-                <Button variant="outline" onClick={() => setStatus("pending", "Demande remise en attente")}>
+                <Button variant="outline" disabled={revertAcceptance.isPending} onClick={unconfirm}>
                   <RotateCcw className="mr-2 h-4 w-4" /> Dé-confirmer
                 </Button>
                 <Link to={`/listing/${listing?.id}`}>
@@ -294,6 +321,7 @@ const StayRequestDetail = () => {
 const EXCHANGE_LABELS: Record<string, string> = {
   free: "Accueil gratuit",
   reciprocal: "Échange réciproque",
+  points: "Réglé en points",
   other: "Autre arrangement",
 };
 

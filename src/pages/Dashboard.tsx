@@ -13,7 +13,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/use-profile";
 import { useMyPlaces } from "@/hooks/use-places";
 import { useMyListings, useListings } from "@/hooks/use-listings";
-import { useMyExchangeRequests, useUpdateExchangeRequestStatus } from "@/hooks/use-exchange-requests";
+import {
+  useMyExchangeRequests,
+  useUpdateExchangeRequestStatus,
+  useAcceptStayRequest,
+  stayPointsCost,
+  stayPointsErrorMessage,
+} from "@/hooks/use-exchange-requests";
 import { useMyConversations } from "@/hooks/use-conversations";
 import { usePointBalance, usePointTransactions, useReferralCode, useMyReferrals, POINT_TYPE_LABELS, POINT_TYPE_ICONS } from "@/hooks/use-points";
 import { useSmartRecommendations } from "@/hooks/use-smart-recommendations";
@@ -524,7 +530,21 @@ function ExchangesTab({ pending, accepted, past, userId }: { pending: any[]; acc
 function ExchangeCard({ request, userId }: { request: any; userId: string }) {
   const isIncoming = request.to_member_id === userId;
   const updateStatus = useUpdateExchangeRequestStatus();
+  const acceptRequest = useAcceptStayRequest();
   const showActions = isIncoming && request.status === "pending";
+  const isPoints = request.exchange_type === "points";
+  const pointsCost = isPoints
+    ? stayPointsCost(request.start_date, request.end_date, request.listings?.points_per_night)
+    : 0;
+
+  const handleAccept = async () => {
+    try {
+      await acceptRequest.mutateAsync(request.id);
+      toast({ title: "Demande acceptée" });
+    } catch (e) {
+      toast({ title: "Erreur", description: stayPointsErrorMessage(e), variant: "destructive" });
+    }
+  };
   const statusColors: Record<string, string> = {
     pending: "bg-soleil/20 text-soleil-foreground border-soleil/30",
     accepted: "bg-olive/20 text-olive-foreground border-olive/30",
@@ -563,22 +583,27 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
             <Calendar className="h-3.5 w-3.5" />
             {Math.ceil((new Date(request.end_date).getTime() - new Date(request.start_date).getTime()) / (1000 * 60 * 60 * 24))} nuits
           </span>
+          {isPoints && (
+            <span className="flex items-center gap-1 font-medium text-foreground">
+              🛎️ {pointsCost} pts
+            </span>
+          )}
         </div>
         {showActions && (
           <div className="flex gap-2 mt-4 pt-4 border-t border-border">
             <Button
               size="sm"
               className="flex-1"
-              disabled={updateStatus.isPending}
-              onClick={() => updateStatus.mutate({ id: request.id, status: "accepted" })}
+              disabled={acceptRequest.isPending || updateStatus.isPending}
+              onClick={handleAccept}
             >
-              Accepter
+              {isPoints ? `Accepter (${pointsCost} pts)` : "Accepter"}
             </Button>
             <Button
               size="sm"
               variant="outline"
               className="flex-1"
-              disabled={updateStatus.isPending}
+              disabled={acceptRequest.isPending || updateStatus.isPending}
               onClick={() => updateStatus.mutate({ id: request.id, status: "declined" })}
             >
               Décliner

@@ -39,6 +39,7 @@ const CreateListing = () => {
   const [listingType, setListingType] = useState<ListingType>("private_room");
   const [relationship, setRelationship] = useState<CollectiveRelationship>("personal");
   const [capacity, setCapacity] = useState("2");
+  const [pointsPerNight, setPointsPerNight] = useState("10");
   const [autonomyLevel, setAutonomyLevel] = useState("");
   const [collectiveAccess, setCollectiveAccess] = useState("");
   const [interactionLevel, setInteractionLevel] = useState("");
@@ -59,6 +60,7 @@ const CreateListing = () => {
         listing_type: listingType,
         collective_relationship: relationship,
         capacity: parseInt(capacity) || 2,
+        points_per_night: Math.max(parseInt(pointsPerNight) || 0, 0),
         autonomy_level: autonomyLevel,
         collective_access: collectiveAccess,
         interaction_level: interactionLevel,
@@ -172,6 +174,11 @@ const CreateListing = () => {
             <div>
               <Label htmlFor="capacity">Capacité (voyageurs)</Label>
               <Input id="capacity" type="number" min="1" value={capacity} onChange={(e) => setCapacity(e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="points-per-night">Points / nuit</Label>
+              <Input id="points-per-night" type="number" min="0" value={pointsPerNight} onChange={(e) => setPointsPerNight(e.target.value)} />
+              <p className="mt-1 text-xs text-muted-foreground">Coût en points si un voyageur règle son séjour en points.</p>
             </div>
           </div>
           <div>

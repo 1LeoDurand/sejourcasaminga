@@ -24,7 +24,7 @@ import SEO from "@/components/SEO";
 import ListingCard from "@/components/ListingCard";
 import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCreateExchangeRequest } from "@/hooks/use-exchange-requests";
+import { useCreateExchangeRequest, stayPointsCost } from "@/hooks/use-exchange-requests";
 import { useListing, usePlaceListings } from "@/hooks/use-listings";
 import { useHostProfile } from "@/hooks/use-profile";
 import { useStayReviews } from "@/hooks/use-stay-reviews";
@@ -472,9 +472,14 @@ const ListingDetail = () => {
     allImages.push(listingPlaceholder);
   }
 
+  const pointsPerNight = (listing as any).points_per_night ?? 0;
+  const previewPointsCost =
+    startDate && endDate ? stayPointsCost(startDate, endDate, pointsPerNight) : pointsPerNight;
+
   const EXCHANGE_LABELS: Record<string, string> = {
     free: "Accueil gratuit",
     reciprocal: "Échange réciproque",
+    points: `Réglé en points (${pointsPerNight} pts/nuit)`,
     other: "Autre arrangement",
   };
 
@@ -695,6 +700,7 @@ const ListingDetail = () => {
                   <PreviewRow label="Départ" value={endDate} />
                   <PreviewRow label="Voyageurs" value={guests} />
                   <PreviewRow label="Type d'échange" value={EXCHANGE_LABELS[exchangeType]} />
+                  {exchangeType === "points" && <PreviewRow label="Coût en points" value={`🛎️ ${previewPointsCost} pts`} />}
                   {message && <PreviewRow label="Message" value={message} />}
                 </dl>
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -735,9 +741,15 @@ const ListingDetail = () => {
                       <SelectContent>
                         <SelectItem value="free">Accueil gratuit</SelectItem>
                         <SelectItem value="reciprocal">Échange réciproque</SelectItem>
+                        <SelectItem value="points">Réglé en points</SelectItem>
                         <SelectItem value="other">Autre arrangement</SelectItem>
                       </SelectContent>
                     </Select>
+                    {exchangeType === "points" && (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        🛎️ {previewPointsCost} points{startDate && endDate ? "" : ` (${pointsPerNight}/nuit)`} débités à l'acceptation.
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div>

@@ -35,6 +35,7 @@ const EditListing = () => {
     listing_type: "private_room" as ListingType,
     collective_relationship: "personal" as CollectiveRelationship,
     capacity: 2,
+    points_per_night: 10,
     autonomy_level: "",
     collective_access: "",
     interaction_level: "",
@@ -59,6 +60,7 @@ const EditListing = () => {
         listing_type: listing.listing_type,
         collective_relationship: listing.collective_relationship,
         capacity: listing.capacity || 2,
+        points_per_night: (listing as any).points_per_night ?? 10,
         autonomy_level: listing.autonomy_level || "",
         collective_access: listing.collective_access || "",
         interaction_level: listing.interaction_level || "",
@@ -160,9 +162,16 @@ const EditListing = () => {
               <Label>Description</Label>
               <Textarea value={form.description} onChange={(e) => set("description", e.target.value)} rows={5} />
             </div>
-            <div>
-              <Label>Capacité (voyageurs)</Label>
-              <Input type="number" min={1} value={form.capacity} onChange={(e) => set("capacity", parseInt(e.target.value) || 1)} />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Capacité (voyageurs)</Label>
+                <Input type="number" min={1} value={form.capacity} onChange={(e) => set("capacity", parseInt(e.target.value) || 1)} />
+              </div>
+              <div>
+                <Label>Points / nuit</Label>
+                <Input type="number" min={0} value={form.points_per_night} onChange={(e) => set("points_per_night", Math.max(parseInt(e.target.value) || 0, 0))} />
+                <p className="mt-1 text-xs text-muted-foreground">Coût si le séjour est réglé en points.</p>
+              </div>
             </div>
           </section>
 
