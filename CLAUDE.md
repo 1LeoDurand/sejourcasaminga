@@ -28,6 +28,14 @@ Le fichier `public/.htaccess` est copié dans `dist/` automatiquement — il gè
 - Commentaires de code : anglais
 - Réponses Claude : **français**, court et direct, sans récapitulatif superflu
 
+## Modèles & rôles (Opus / Sonnet / Haiku)
+- **Opus = penser & relire** : architecture, modèle de données, RLS, migrations/atomicité, sécurité, bugs complexes, revue. → sous-agent `architecte` (`.claude/agents/architecte.md`).
+- **Sonnet = construire le spécifié** : UI, CRUD, formulaires, i18n, tests, items bien cadrés. → sous-agent `builder` (`.claude/agents/builder.md`).
+- **Haiku = mécanique pure** : renommages, ajout de labels, tri de logs.
+- **Boucle par item** : `architecte (Opus) planifie → builder (Sonnet) exécute → verify → code-review → commit (sans push)`.
+- Bascule de modèle de session : `/model` ; `/fast` = Opus à sortie accélérée.
+- Le suivi visuel des items vit dans `0.1 Contexte sejour-casaminga/suivi/` (statuts.json + dashboard.html) et la feuille de route.
+
 ## Emails (Resend — remplace Lovable)
 - `process-email-queue` : dispatcher via `https://api.resend.com/emails` + `RESEND_API_KEY`
 - `auth-email-hook` : hook natif Supabase Auth (format `{ user, email_data }`)
