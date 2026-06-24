@@ -56,6 +56,7 @@ const AdminExchanges = lazy(() => import("./pages/admin/AdminExchanges.tsx"));
 const AdminPoints = lazy(() => import("./pages/admin/AdminPoints.tsx"));
 const AdminEmails = lazy(() => import("./pages/admin/AdminEmails.tsx"));
 const Referrals = lazy(() => import("./pages/Referrals.tsx"));
+const MyPoints = lazy(() => import("./pages/MyPoints.tsx"));
 const VerifyClaim = lazy(() => import("./pages/VerifyClaim.tsx"));
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -126,6 +127,7 @@ const App = () => (
               <Route path="/admin/points" element={<AdminPoints />} />
               <Route path="/admin/emails" element={<AdminEmails />} />
               <Route path="/referrals" element={<Referrals />} />
+              <Route path="/points" element={<MyPoints />} />
               <Route path="/verify-claim" element={<VerifyClaim />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

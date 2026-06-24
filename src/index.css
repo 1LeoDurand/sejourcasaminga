@@ -116,8 +116,9 @@
     @apply bg-background text-foreground font-sans;
   }
 
+  /* Brand signature: headings use Poppins (font-serif slot), body stays Inter */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-semibold tracking-tight text-foreground;
+    @apply font-serif font-semibold tracking-tight text-foreground;
     font-feature-settings: "ss01", "cv11";
   }
 

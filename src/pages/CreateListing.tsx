@@ -14,7 +14,8 @@ import { useMyPlaces } from "@/hooks/use-places";
 import { useCreateListing } from "@/hooks/use-listings";
 import { useProfile } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
-import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
+import { RELATIONSHIP_LABELS } from "@/data/demo";
+import { LISTING_TYPE_META, LISTING_TYPE_ORDER } from "@/lib/listing-types";
 import type { Database } from "@/integrations/supabase/types";
 
 // All supported exchange modes with their French labels
@@ -28,7 +29,6 @@ const EXCHANGE_MODE_OPTIONS: { value: string; label: string }[] = [
 type ListingType = Database["public"]["Enums"]["listing_type"];
 type CollectiveRelationship = Database["public"]["Enums"]["collective_relationship"];
 
-const LISTING_TYPES = Object.entries(LISTING_TYPE_LABELS) as [ListingType, string][];
 const RELATIONSHIPS = Object.entries(RELATIONSHIP_LABELS) as [CollectiveRelationship, string][];
 
 const CreateListing = () => {
@@ -175,9 +175,23 @@ const CreateListing = () => {
             <Select value={listingType} onValueChange={(v) => setListingType(v as ListingType)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {LISTING_TYPES.map(([key, label]) => <SelectItem key={key} value={key}>{label}</SelectItem>)}
+                {LISTING_TYPE_ORDER.map((key) => {
+                  const meta = LISTING_TYPE_META[key];
+                  const Icon = meta.icon;
+                  return (
+                    <SelectItem key={key} value={key}>
+                      <span className="flex items-center gap-2">
+                        <Icon className="h-4 w-4 text-primary shrink-0" />
+                        {meta.label}
+                      </span>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {LISTING_TYPE_META[listingType].shortDescription}
+            </p>
           </div>
           <div>
             <Label>Relation avec le collectif</Label>

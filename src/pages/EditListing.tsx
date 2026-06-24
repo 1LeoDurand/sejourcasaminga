@@ -24,7 +24,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useListing } from "@/hooks/use-listings";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
+import { RELATIONSHIP_LABELS } from "@/data/demo";
+import { LISTING_TYPE_META, LISTING_TYPE_ORDER } from "@/lib/listing-types";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -145,7 +146,6 @@ const EditListing = () => {
     );
   }
 
-  const LISTING_TYPES = Object.entries(LISTING_TYPE_LABELS) as [ListingType, string][];
   const RELATIONSHIPS = Object.entries(RELATIONSHIP_LABELS) as [CollectiveRelationship, string][];
 
   return (
@@ -171,9 +171,23 @@ const EditListing = () => {
               <Select value={form.listing_type} onValueChange={(v) => set("listing_type", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {LISTING_TYPES.map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}
+                  {LISTING_TYPE_ORDER.map((k) => {
+                    const meta = LISTING_TYPE_META[k];
+                    const Icon = meta.icon;
+                    return (
+                      <SelectItem key={k} value={k}>
+                        <span className="flex items-center gap-2">
+                          <Icon className="h-4 w-4 text-primary shrink-0" />
+                          {meta.label}
+                        </span>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {LISTING_TYPE_META[form.listing_type].shortDescription}
+              </p>
             </div>
             <div>
               <Label>Relation avec le collectif</Label>

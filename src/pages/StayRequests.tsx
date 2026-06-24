@@ -94,15 +94,30 @@ const StayRequests = () => {
           <div className="flex justify-center py-20">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           </div>
+        ) : sent.length === 0 ? (
+          /* No requests at all — warm invitation to start */
+          <div className="rounded-xl border border-dashed bg-card p-10 text-center">
+            <Calendar className="mx-auto h-10 w-10 text-muted-foreground/50" />
+            <p className="mt-3 text-base font-medium text-foreground">
+              Vous n'avez pas encore demandé de séjour
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Trouvez un habitat qui vous inspire et envoyez votre première demande — c'est ainsi que l'accueil commence.
+            </p>
+            <Link to="/discover" className="mt-4 inline-block">
+              <Button size="sm">Découvrir des séjours</Button>
+            </Link>
+          </div>
         ) : filtered.length === 0 ? (
+          /* Has requests, but none match the active filter */
           <div className="rounded-xl border bg-card p-10 text-center">
             <Calendar className="mx-auto h-10 w-10 text-muted-foreground/60" />
             <p className="mt-3 text-sm text-muted-foreground">
-              Aucune demande {statusFilter !== "all" ? "dans cette catégorie" : "pour le moment"}.
+              Aucune demande {STATUS_META[statusFilter as StayRequestStatus]?.label.toLowerCase() ?? "dans cette catégorie"}.
             </p>
-            <Link to="/discover" className="mt-4 inline-block">
-              <Button variant="outline" size="sm">Explorer les habitats</Button>
-            </Link>
+            <Button variant="outline" size="sm" className="mt-4" onClick={() => setStatusFilter("all")}>
+              Réinitialiser le filtre
+            </Button>
           </div>
         ) : (
           <div className="overflow-hidden rounded-xl border bg-card">

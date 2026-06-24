@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
-import { Users, Heart, Star, BadgeCheck } from "lucide-react";
-import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
+import { Users, Heart, Star, BadgeCheck, Coins } from "lucide-react";
+import { RELATIONSHIP_LABELS } from "@/data/demo";
+import { listingTypeMeta, listingTypeLabel } from "@/lib/listing-types";
 import { listingUrl } from "@/hooks/use-listings";
 import { useListingCardStats } from "@/hooks/use-listing-stats";
 import { useEffect, useState } from "react";
@@ -45,7 +46,16 @@ const ListingCard = ({ listing }: Props) => {
   }, [api]);
 
   const relLabel = RELATIONSHIP_LABELS[listing.collective_relationship as keyof typeof RELATIONSHIP_LABELS] || listing.collective_relationship;
-  const typeLabel = LISTING_TYPE_LABELS[listing.listing_type as keyof typeof LISTING_TYPE_LABELS] || listing.listing_type;
+  const typeLabel = listingTypeLabel(listing.listing_type);
+  const typeMeta = listingTypeMeta(listing.listing_type);
+  const TypeIcon = typeMeta?.icon;
+
+  // Points indicator — only when this listing actually accepts a points stay
+  const acceptedModes: string[] = Array.isArray((listing as any).accepted_exchange_types)
+    ? (listing as any).accepted_exchange_types
+    : [];
+  const pointsPerNight = (listing as any).points_per_night ?? 0;
+  const showPoints = acceptedModes.includes("points") && pointsPerNight > 0;
 
   // "Toulouse, France" style location
   const locationText = place
@@ -69,6 +79,13 @@ const ListingCard = ({ listing }: Props) => {
     <div className="group flex flex-col overflow-hidden rounded-2xl bg-card transition-all duration-200 hover:shadow-lg">
       {/* Image */}
       <div className="relative">
+        {/* Listing type badge — icon + label, readable in light & dark */}
+        {typeMeta && (
+          <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground shadow-sm backdrop-blur">
+            {TypeIcon && <TypeIcon className="h-3.5 w-3.5 text-primary" />}
+            {typeLabel}
+          </div>
+        )}
         <Carousel setApi={setApi} opts={{ loop: photos.length > 1 }} className="w-full">
           <CarouselContent>
             {photos.map((src, i) => (
@@ -160,8 +177,6 @@ const ListingCard = ({ listing }: Props) => {
         <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
           <Users className="h-3.5 w-3.5" />
           {listing.capacity || 1} voyageur{(listing.capacity || 1) > 1 ? "s" : ""}
-          <span className="text-muted-foreground/50">·</span>
-          {typeLabel}
         </p>
 
         {/* Availability + next dates */}
@@ -178,8 +193,17 @@ const ListingCard = ({ listing }: Props) => {
           )}
         </p>
 
-        {/* Footer: relation type (replaces price — exchange is free) */}
-        <div className="mt-auto pt-3 text-right">
+        {/* Footer: points indicator (when applicable) + relation to the collective */}
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+          {showPoints ? (
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-foreground">
+              <Coins className="h-3.5 w-3.5 text-primary" />
+              {pointsPerNight} pts
+              <span className="text-xs font-normal text-muted-foreground">/nuit</span>
+            </span>
+          ) : (
+            <span aria-hidden />
+          )}
           <span className="text-sm font-semibold text-foreground">{relLabel}</span>
         </div>
       </Link>

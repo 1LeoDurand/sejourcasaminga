@@ -25,7 +25,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import ListingCard from "@/components/ListingCard";
-import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
+import { RELATIONSHIP_LABELS } from "@/data/demo";
+import { listingTypeMeta, listingTypeLabel } from "@/lib/listing-types";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreateExchangeRequest, stayPointsCost } from "@/hooks/use-exchange-requests";
 import { useListing, usePlaceListings } from "@/hooks/use-listings";
@@ -488,7 +489,9 @@ const ListingDetail = () => {
 
   const hostName = hostProfile?.display_name || "l'hôte";
   const hostAvatar = hostProfile?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(hostName)}&background=random`;
-  const typeLabel = LISTING_TYPE_LABELS[listing.listing_type as keyof typeof LISTING_TYPE_LABELS] || listing.listing_type;
+  const typeLabel = listingTypeLabel(listing.listing_type);
+  const typeMeta = listingTypeMeta(listing.listing_type);
+  const TypeIcon = typeMeta?.icon;
   const relLabel = RELATIONSHIP_LABELS[listing.collective_relationship as keyof typeof RELATIONSHIP_LABELS] || listing.collective_relationship;
 
   // Galerie : image principale + images supplémentaires
@@ -555,7 +558,14 @@ const ListingDetail = () => {
       setMessage("");
       setAcceptedTerms(false);
     } catch (error: any) {
-      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      // Human-friendly message, with a safe fallback for unknown errors
+      const raw = String(error?.message ?? "");
+      const description = /duplicate|already|exists/i.test(raw)
+        ? "Vous avez déjà une demande en cours pour ce séjour."
+        : /network|fetch|timeout/i.test(raw)
+        ? "Connexion interrompue. Vérifiez votre réseau et réessayez."
+        : "Votre demande n'a pas pu être envoyée. Réessayez dans un instant.";
+      toast({ title: "Demande non envoyée", description, variant: "destructive" });
     } finally {
       setSending(false);
     }
@@ -631,11 +641,17 @@ const ListingDetail = () => {
        <div className="lg:grid lg:grid-cols-[1fr_22rem] lg:gap-10 lg:items-start">
         <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <Badge className="bg-primary/10 text-primary border-0 text-xs">{typeLabel}</Badge>
+          <Badge className="bg-primary/10 text-primary border-0 text-xs inline-flex items-center gap-1">
+            {TypeIcon && <TypeIcon className="h-3.5 w-3.5" />}
+            {typeLabel}
+          </Badge>
           <Badge variant="secondary" className="text-xs">{relLabel}</Badge>
         </div>
 
         <h1 className="text-2xl md:text-3xl text-foreground">{listing.title}</h1>
+        {typeMeta && (
+          <p className="mt-1.5 text-sm text-muted-foreground">{typeMeta.shortDescription}</p>
+        )}
 
         {place && (
           <p className="mt-1.5 flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -734,9 +750,9 @@ const ListingDetail = () => {
                 <dl className="text-sm divide-y rounded-lg border bg-muted/30">
                   <PreviewRow label="Habitat" value={listing.title} />
                   <PreviewRow label="Hôte" value={hostName} />
-                  <PreviewRow label="Arrivée" value={startDate} />
-                  <PreviewRow label="Départ" value={endDate} />
-                  <PreviewRow label="Voyageurs" value={guests} />
+                  <PreviewRow label="Arrivée" value={startDate ? format(new Date(startDate), "EEEE d MMMM yyyy", { locale: fr }) : "—"} />
+                  <PreviewRow label="Départ" value={endDate ? format(new Date(endDate), "EEEE d MMMM yyyy", { locale: fr }) : "—"} />
+                  <PreviewRow label="Voyageurs" value={`${guests} voyageur${Number(guests) > 1 ? "s" : ""}`} />
                   <PreviewRow label="Type d'échange" value={EXCHANGE_LABELS[exchangeType]} />
                   {exchangeType === "points" && <PreviewRow label="Coût en points" value={`🛎️ ${previewPointsCost} pts`} />}
                   {message && <PreviewRow label="Message" value={message} />}

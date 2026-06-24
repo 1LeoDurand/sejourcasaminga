@@ -18,6 +18,7 @@ import {
   LogOut,
   ChevronDown,
   Gift,
+  Coins,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -158,6 +159,7 @@ function MenuContent({ close }: { close: () => void }) {
       badge: unreadMessages || null,
       badgeVariant: unreadMessages > 0 ? "destructive" : "default",
     },
+    { icon: Coins, label: "Mes points", to: "/points" },
     { icon: Sparkles, label: "Recommandations", to: "/discover" },
     { icon: Star, label: "Mes préférences", to: "/edit-profile" },
   ];

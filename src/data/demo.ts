@@ -2,8 +2,9 @@
 import avatar1 from "@/assets/avatar-1.webp";
 import avatar2 from "@/assets/avatar-2.webp";
 import avatar3 from "@/assets/avatar-3.webp";
+import { LISTING_TYPE_META, LISTING_TYPE_ORDER, type ListingType } from "@/lib/listing-types";
 
-export type ListingType = "home_exchange" | "private_room" | "guest_room" | "immersion_stay" | "hosted_stay";
+export type { ListingType };
 export type CollectiveRelationship = "personal" | "known_by_collective" | "collective_supported" | "collective_run";
 
 // ═══════════ CONSTANTS ═══════════
@@ -17,13 +18,14 @@ export const HABITAT_TYPES = [
   "Communauté intentionnelle",
 ];
 
-export const LISTING_TYPE_LABELS: Record<ListingType, string> = {
-  home_exchange: "Échange de logement",
-  private_room: "Chambre privée",
-  guest_room: "Chambre d'amis",
-  immersion_stay: "Séjour immersif",
-  hosted_stay: "Séjour accompagné",
-};
+// Labels are derived from the single source of truth in @/lib/listing-types.
+export const LISTING_TYPE_LABELS: Record<ListingType, string> = LISTING_TYPE_ORDER.reduce(
+  (acc, key) => {
+    acc[key] = LISTING_TYPE_META[key].label;
+    return acc;
+  },
+  {} as Record<ListingType, string>,
+);
 
 export const RELATIONSHIP_LABELS: Record<CollectiveRelationship, string> = {
   personal: "Annonce personnelle",
