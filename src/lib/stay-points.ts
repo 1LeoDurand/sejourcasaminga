@@ -21,5 +21,6 @@ export function stayPointsErrorMessage(error: unknown): string {
   if (msg.includes("NOT_AUTHORIZED")) return "Vous n'êtes pas autorisé à effectuer cette action.";
   if (msg.includes("NOT_PENDING")) return "Cette demande n'est plus en attente.";
   if (msg.includes("NOT_ACCEPTED")) return "Cette demande n'est pas confirmée.";
+  if (msg.includes("DATES_UNAVAILABLE")) return "Ces dates chevauchent un séjour déjà accepté pour ce logement.";
   return msg || "Une erreur est survenue.";
 }

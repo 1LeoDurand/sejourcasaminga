@@ -2,6 +2,9 @@ import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { findBlockingPeriods } from "@/lib/stay-availability";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -425,6 +428,21 @@ const ListingDetail = () => {
   const place = listing?.places || null;
   const { data: hostProfile } = useHostProfile(listing?.host_id);
 
+  // Load explicitly blocked periods for the place (public RLS: select using(true)).
+  const placeId = (place as any)?.id as string | undefined;
+  const { data: unavailablePeriods = [] } = useQuery({
+    queryKey: ["place-unavailable-dates", placeId],
+    enabled: !!placeId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("place_unavailable_dates" as any)
+        .select("start_date, end_date, reason")
+        .eq("place_id", placeId!);
+      if (error) throw error;
+      return (data ?? []) as { start_date: string; end_date: string; reason?: string | null }[];
+    },
+  });
+
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [message, setMessage] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -485,6 +503,10 @@ const ListingDetail = () => {
   const pointsPerNight = (listing as any).points_per_night ?? 0;
   const previewPointsCost =
     startDate && endDate ? stayPointsCost(startDate, endDate, pointsPerNight) : pointsPerNight;
+
+  // Blocking periods from place_unavailable_dates that overlap the chosen dates.
+  const blockingPeriods = findBlockingPeriods(startDate || null, endDate || null, unavailablePeriods);
+  const hasDateConflict = blockingPeriods.length > 0;
 
   const EXCHANGE_LABELS: Record<string, string> = {
     free: "Accueil gratuit",
@@ -804,7 +826,19 @@ const ListingDetail = () => {
                     J'accepte les conditions d'accueil et m'engage à respecter le lieu et ses habitant·es.
                   </span>
                 </label>
-                <Button type="submit" className="w-full" disabled={!startDate || !endDate || !acceptedTerms}>
+                {/* Warn the guest if selected dates overlap an explicitly blocked period */}
+                {hasDateConflict && (
+                  <div className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                    <p className="font-medium">Dates non disponibles</p>
+                    {blockingPeriods.map((b, i) => (
+                      <p key={i} className="mt-0.5 text-xs">
+                        {b.start_date} → {b.end_date}
+                        {b.reason ? ` — ${b.reason}` : ""}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                <Button type="submit" className="w-full" disabled={!startDate || !endDate || !acceptedTerms || hasDateConflict}>
                   Aperçu de la demande
                 </Button>
               </form>
