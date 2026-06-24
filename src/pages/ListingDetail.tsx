@@ -600,6 +600,18 @@ const ListingDetail = () => {
     } : undefined,
   };
 
+  // Anchored in-page navigation — only sections that actually render
+  const sectionLinks = [
+    listing.description ? { id: "section-stay", label: "Le séjour" } : null,
+    { id: "section-availability", label: "Disponibilité" },
+    place ? { id: "section-location", label: "Localisation" } : null,
+    place?.id ? { id: "section-reviews", label: "Avis" } : null,
+  ].filter(Boolean) as { id: string; label: string }[];
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -635,6 +647,25 @@ const ListingDetail = () => {
 
       {/* Phase 1 — Galerie photos */}
       <PhotoGallery images={allImages} title={listing.title} />
+
+      {/* Anchored section nav (sticky, desktop) */}
+      <nav className="sticky top-14 z-30 hidden border-b bg-background/95 backdrop-blur md:block">
+        <div className="container px-5">
+          <ul className="flex items-center gap-6 overflow-x-auto py-3 text-sm">
+            {sectionLinks.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(s.id)}
+                  className="whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
 
       {/* Content */}
       <div className="container px-5 py-8 max-w-6xl pb-28 lg:pb-8">
@@ -689,7 +720,7 @@ const ListingDetail = () => {
 
         {/* Description */}
         {listing.description && (
-          <div className="mt-8">
+          <div id="section-stay" className="mt-8 scroll-mt-28">
             <h2 className="text-lg text-foreground mb-2">Le séjour</h2>
             <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{listing.description}</p>
           </div>
@@ -724,16 +755,20 @@ const ListingDetail = () => {
         <HouseRulesSection rules={listing.practical_rules} />
 
         {/* Phase 3 — Disponibilité visuelle */}
-        <AvailabilitySection listingId={listing.id} notes={listing.availability_notes} />
+        <div id="section-availability" className="scroll-mt-28">
+          <AvailabilitySection listingId={listing.id} notes={listing.availability_notes} />
+        </div>
 
         {/* Carte — localisation approximative */}
         {place && (
-          <ListingLocationMap
-            city={place.city}
-            region={place.region}
-            country={place.country}
-            label={place.region || place.city}
-          />
+          <div id="section-location" className="scroll-mt-28">
+            <ListingLocationMap
+              city={place.city}
+              region={place.region}
+              country={place.country}
+              label={place.region || place.city}
+            />
+          </div>
         )}
 
         {/* Demande de séjour — modale partagée (déclenchée par l'aside desktop + la barre mobile) */}
@@ -866,7 +901,11 @@ const ListingDetail = () => {
         <FaqSection faq={Array.isArray((listing as any).faq) ? (listing as any).faq : null} />
 
         {/* Phase 4 — Avis */}
-        {place?.id && <ReviewsSection placeId={place.id} listingTitle={listing.title} />}
+        {place?.id && (
+          <div id="section-reviews" className="scroll-mt-28">
+            <ReviewsSection placeId={place.id} listingTitle={listing.title} />
+          </div>
+        )}
 
         {/* Phase 5 — Séjours similaires */}
         {place?.id && <SimilarListings placeId={place.id} currentId={listing.id} />}

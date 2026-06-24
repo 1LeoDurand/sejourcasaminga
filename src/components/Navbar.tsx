@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 import AccountDropdown from "@/components/AccountDropdown";
 import { useRealtimeNotifications } from "@/hooks/use-realtime-notifications";
 import { formatDistanceToNow } from "date-fns";
@@ -45,6 +46,7 @@ const Navbar = () => {
             {t("nav.resources")}
           </Link>
           <LanguageSwitcher />
+          <ThemeToggle />
           {user ? (
             <div className="flex items-center gap-2">
               {/* Cloche de notifications */}
@@ -133,6 +135,7 @@ const Navbar = () => {
 
         {/* Mobile */}
         <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
           <LanguageSwitcher compact />
           {user ? (
             <AccountDropdown />
