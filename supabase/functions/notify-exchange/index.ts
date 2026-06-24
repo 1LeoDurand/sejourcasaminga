@@ -154,19 +154,25 @@ Deno.serve(async (req) => {
     return jsonResponse({ success: true, sent: 0, warning: 'No recipients' })
   }
 
-  // Invoke send-transactional-email for each dispatch
+  // Invoke send-transactional-email for each dispatch (direct fetch avoids JWT forwarding issues)
   const results = await Promise.allSettled(
     dispatches.map(async (d) => {
-      const { data, error } = await supabase.functions.invoke('send-transactional-email', {
-        body: {
+      const resp = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           templateName: d.template,
           recipientEmail: d.to,
           idempotencyKey: d.key,
           templateData: d.data,
-        },
+        }),
       })
-      if (error) throw error
-      return data
+      const result = await resp.json()
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${JSON.stringify(result)}`)
+      return result
     })
   )
 

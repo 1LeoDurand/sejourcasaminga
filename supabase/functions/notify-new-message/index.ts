@@ -121,16 +121,22 @@ Deno.serve(async (req) => {
 
   const results = await Promise.allSettled(
     valid.map(async (d) => {
-      const { data, error } = await supabase.functions.invoke('send-transactional-email', {
-        body: {
+      const resp = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           templateName: 'new-message',
           recipientEmail: d.to,
           idempotencyKey: d.key,
           templateData: d.data,
-        },
+        }),
       })
-      if (error) throw error
-      return data
+      const result = await resp.json()
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${JSON.stringify(result)}`)
+      return result
     })
   )
 
