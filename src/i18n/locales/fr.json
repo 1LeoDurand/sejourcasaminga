@@ -205,6 +205,7 @@
     "earnPoints": "Gagnez des points, échangez plus",
     "recentActivity": "Dernières activités",
     "referFriend": "Parrainez un ami",
+    "referText": "Partagez votre code : vous gagnez <strong>+50 pts</strong> et votre filleul <strong>+25 pts</strong> 🎁",
     "codeGenerating": "Code en cours de génération…",
     "successfulReferrals": "{{count}} parrainage(s) réussi(s)",
     "addPlace": "Ajouter un lieu",
@@ -238,7 +239,12 @@
     "languages": "Langues",
     "collectivePlace": "Lieu collectif",
     "publishedStay": "Séjour publié",
-    "codeCopied": "Code copié !"
+    "codeCopied": "Code copié !",
+    "myClaims": "Mes revendications",
+    "claimRequested": "Demandée le {{date}}",
+    "claimPending": "En attente",
+    "claimApproved": "Approuvée",
+    "claimRejected": "Refusée"
   },
   "discover": {
     "title": "Trouvez un séjour",
@@ -403,7 +409,11 @@
     "noAccess": "Accès refusé",
     "noAccessText": "Vous ne pouvez modifier que vos propres lieux.",
     "createFirst": "Créez d'abord un lieu",
-    "createFirstText": "Pour proposer un séjour, vous devez d'abord être membre d'un lieu collectif."
+    "createFirstText": "Pour proposer un séjour, vous devez d'abord être membre d'un lieu collectif.",
+    "tagsSection": "🏷️ Étiquettes",
+    "addTag": "Ajouter une étiquette…",
+    "contactEnabled": "Contact activé",
+    "contactEnabledHint": "Les visiteurs peuvent vous contacter directement."
   },
   "createListing": {
     "title": "Proposer un séjour",
@@ -533,6 +543,7 @@
     "loginCta": "Connectez-vous",
     "claimToManage": "Revendiquez cette fiche pour la gérer et la mettre à jour.",
     "claimThisListing": "Revendiquer cette fiche",
+    "claimThisPlace": "Revendiquer ce lieu",
     "claimTitle": "Revendiquer « {{name}} »",
     "fullName": "Nom complet *",
     "fullNamePlaceholder": "Prénom Nom",
@@ -540,6 +551,8 @@
     "emailPlaceholder": "votre@email.fr",
     "yourRole": "Votre rôle dans ce lieu *",
     "yourRolePlaceholder": "Ex : Co-fondateur, habitant, responsable comm…",
+    "yourLink": "Quel est votre lien avec ce lieu ? *",
+    "yourLinkPlaceholder": "Ex : je suis membre fondateur / habitant depuis 2018 / responsable communication du collectif…",
     "messageOptional": "Message (optionnel)",
     "messageOptionalPlaceholder": "Expliquez votre lien avec ce lieu…",
     "proofOptional": "Lien de preuve (optionnel)",
@@ -565,6 +578,8 @@
     "uploading": "Upload en cours…",
     "addPhotos": "Ajouter des photos ({{current}}/{{max}})",
     "cover": "Couverture",
+    "moveBefore": "Déplacer avant",
+    "moveAfter": "Déplacer après",
     "delete": "Supprimer",
     "maxPhotos": "Maximum {{max}} photos",
     "uploadError": "Erreur d'upload"

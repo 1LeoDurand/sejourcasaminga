@@ -205,6 +205,7 @@
     "earnPoints": "Gana puntos, intercambia más",
     "recentActivity": "Actividad reciente",
     "referFriend": "Invita a un amigo",
+    "referText": "Comparte tu código: ganas <strong>+50 pts</strong> y tu invitado <strong>+25 pts</strong> 🎁",
     "codeGenerating": "Generando código...",
     "successfulReferrals": "{{count}} invitación(es) con éxito",
     "addPlace": "Añadir un lugar",
@@ -238,7 +239,12 @@
     "languages": "Idiomas",
     "collectivePlace": "Lugar colectivo",
     "publishedStay": "Estancia publicada",
-    "codeCopied": "¡Código copiado!"
+    "codeCopied": "¡Código copiado!",
+    "myClaims": "Mis reclamaciones",
+    "claimRequested": "Solicitada el {{date}}",
+    "claimPending": "Pendiente",
+    "claimApproved": "Aprobada",
+    "claimRejected": "Rechazada"
   },
   "discover": {
     "title": "Encuentra una estancia",
@@ -403,7 +409,11 @@
     "noAccess": "Acceso denegado",
     "noAccessText": "Solo puedes modificar tus propios lugares.",
     "createFirst": "Primero, crea un lugar",
-    "createFirstText": "Para ofrecer una estancia, primero debes ser miembro de un lugar colectivo."
+    "createFirstText": "Para ofrecer una estancia, primero debes ser miembro de un lugar colectivo.",
+    "tagsSection": "🏷️ Etiquetas",
+    "addTag": "Añadir una etiqueta…",
+    "contactEnabled": "Contacto activado",
+    "contactEnabledHint": "Los visitantes pueden contactarte directamente."
   },
   "createListing": {
     "title": "Ofrecer una estancia",
@@ -533,6 +543,7 @@
     "loginCta": "Inicia sesión",
     "claimToManage": "Reclama esta ficha para gestionarla y actualizarla.",
     "claimThisListing": "Reclamar esta ficha",
+    "claimThisPlace": "Reclamar este lugar",
     "claimTitle": "Reclamar «{{name}}»",
     "fullName": "Nombre completo *",
     "fullNamePlaceholder": "Nombre Apellido",
@@ -540,6 +551,8 @@
     "emailPlaceholder": "tu@email.es",
     "yourRole": "Tu rol en este lugar *",
     "yourRolePlaceholder": "P. ej.: Cofundador/a, habitante, responsable de comunicación...",
+    "yourLink": "¿Cuál es tu vínculo con este lugar? *",
+    "yourLinkPlaceholder": "P. ej.: soy miembro fundador / habitante desde 2018 / responsable de comunicación del colectivo...",
     "messageOptional": "Mensaje (opcional)",
     "messageOptionalPlaceholder": "Explica tu relación con este lugar...",
     "proofOptional": "Enlace de prueba (opcional)",
@@ -565,6 +578,8 @@
     "uploading": "Subiendo...",
     "addPhotos": "Añadir fotos ({{current}}/{{max}})",
     "cover": "Portada",
+    "moveBefore": "Mover antes",
+    "moveAfter": "Mover después",
     "delete": "Eliminar",
     "maxPhotos": "Máximo {{max}} fotos",
     "uploadError": "Error al subir"
