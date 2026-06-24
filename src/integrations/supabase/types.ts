@@ -642,6 +642,7 @@ export type Database = {
       }
       listings: {
         Row: {
+          accepted_exchange_types: string[]
           autonomy_level: string | null
           availability_notes: string | null
           available: boolean | null
@@ -660,6 +661,7 @@ export type Database = {
           interaction_level: string | null
           listing_type: Database["public"]["Enums"]["listing_type"]
           place_id: string
+          points_per_night: number | null
           practical_rules: string[] | null
           published: boolean | null
           slug: string | null
@@ -668,6 +670,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          accepted_exchange_types?: string[] | null
           autonomy_level?: string | null
           availability_notes?: string | null
           available?: boolean | null
@@ -686,6 +689,7 @@ export type Database = {
           interaction_level?: string | null
           listing_type?: Database["public"]["Enums"]["listing_type"]
           place_id: string
+          points_per_night?: number | null
           practical_rules?: string[] | null
           published?: boolean | null
           slug?: string | null
@@ -694,6 +698,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          accepted_exchange_types?: string[] | null
           autonomy_level?: string | null
           availability_notes?: string | null
           available?: boolean | null
@@ -712,6 +717,7 @@ export type Database = {
           interaction_level?: string | null
           listing_type?: Database["public"]["Enums"]["listing_type"]
           place_id?: string
+          points_per_night?: number | null
           practical_rules?: string[] | null
           published?: boolean | null
           slug?: string | null

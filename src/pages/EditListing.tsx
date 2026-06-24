@@ -4,9 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, ArrowLeft, Save, Plus, X } from "lucide-react";
+
+// All supported exchange modes with their French labels
+const EXCHANGE_MODE_OPTIONS: { value: string; label: string }[] = [
+  { value: "free", label: "Accueil gratuit" },
+  { value: "reciprocal", label: "Échange réciproque" },
+  { value: "points", label: "Réglé en points" },
+  { value: "other", label: "Autre arrangement" },
+];
 import PhotoManager from "@/components/PhotoManager";
 import VideoEmbedField from "@/components/VideoEmbedField";
 import Navbar from "@/components/Navbar";
@@ -36,6 +45,7 @@ const EditListing = () => {
     collective_relationship: "personal" as CollectiveRelationship,
     capacity: 2,
     points_per_night: 10,
+    accepted_exchange_types: ["free", "reciprocal", "points", "other"] as string[],
     autonomy_level: "",
     collective_access: "",
     interaction_level: "",
@@ -54,13 +64,19 @@ const EditListing = () => {
 
   useEffect(() => {
     if (listing) {
+      // Load accepted_exchange_types; fall back to all modes for existing listings
+      const storedModes = listing.accepted_exchange_types;
+      const modes: string[] = Array.isArray(storedModes) && storedModes.length > 0
+        ? storedModes
+        : ["free", "reciprocal", "points", "other"];
       setForm({
         title: listing.title || "",
         description: listing.description || "",
         listing_type: listing.listing_type,
         collective_relationship: listing.collective_relationship,
         capacity: listing.capacity || 2,
-        points_per_night: (listing as any).points_per_night ?? 10,
+        points_per_night: listing.points_per_night ?? 10,
+        accepted_exchange_types: modes,
         autonomy_level: listing.autonomy_level || "",
         collective_access: listing.collective_access || "",
         interaction_level: listing.interaction_level || "",
@@ -93,6 +109,16 @@ const EditListing = () => {
   }
 
   const set = (key: string, value: any) => setForm((f) => ({ ...f, [key]: value }));
+
+  // Toggle a single exchange mode; enforce at least one selected
+  const toggleExchangeMode = (value: string, checked: boolean) => {
+    set("accepted_exchange_types", (() => {
+      const prev = form.accepted_exchange_types;
+      if (checked) return prev.includes(value) ? prev : [...prev, value];
+      const next = prev.filter((v) => v !== value);
+      return next.length === 0 ? prev : next;
+    })());
+  };
 
   const handleSave = async () => {
     if (!id) return;
@@ -167,12 +193,29 @@ const EditListing = () => {
                 <Label>Capacité (voyageurs)</Label>
                 <Input type="number" min={1} value={form.capacity} onChange={(e) => set("capacity", parseInt(e.target.value) || 1)} />
               </div>
+            </div>
+            <div>
+              <Label>Modes d'échange acceptés *</Label>
+              <p className="mt-0.5 mb-2 text-xs text-muted-foreground">Au moins un mode requis. Les voyageurs ne pourront choisir que parmi ces options.</p>
+              <div className="space-y-2">
+                {EXCHANGE_MODE_OPTIONS.map((opt) => (
+                  <label key={opt.value} className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <Checkbox
+                      checked={form.accepted_exchange_types.includes(opt.value)}
+                      onCheckedChange={(checked) => toggleExchangeMode(opt.value, Boolean(checked))}
+                    />
+                    {opt.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+            {form.accepted_exchange_types.includes("points") && (
               <div>
                 <Label>Points / nuit</Label>
                 <Input type="number" min={0} value={form.points_per_night} onChange={(e) => set("points_per_night", Math.max(parseInt(e.target.value) || 0, 0))} />
                 <p className="mt-1 text-xs text-muted-foreground">Coût si le séjour est réglé en points.</p>
               </div>
-            </div>
+            )}
           </section>
 
           {/* Photos */}

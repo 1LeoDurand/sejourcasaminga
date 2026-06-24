@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -15,6 +16,14 @@ import { useProfile } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
 import { LISTING_TYPE_LABELS, RELATIONSHIP_LABELS } from "@/data/demo";
 import type { Database } from "@/integrations/supabase/types";
+
+// All supported exchange modes with their French labels
+const EXCHANGE_MODE_OPTIONS: { value: string; label: string }[] = [
+  { value: "free", label: "Accueil gratuit" },
+  { value: "reciprocal", label: "Échange réciproque" },
+  { value: "points", label: "Réglé en points" },
+  { value: "other", label: "Autre arrangement" },
+];
 
 type ListingType = Database["public"]["Enums"]["listing_type"];
 type CollectiveRelationship = Database["public"]["Enums"]["collective_relationship"];
@@ -40,11 +49,23 @@ const CreateListing = () => {
   const [relationship, setRelationship] = useState<CollectiveRelationship>("personal");
   const [capacity, setCapacity] = useState("2");
   const [pointsPerNight, setPointsPerNight] = useState("10");
+  // Default: all modes accepted
+  const [acceptedExchangeTypes, setAcceptedExchangeTypes] = useState<string[]>(["free", "reciprocal", "points", "other"]);
   const [autonomyLevel, setAutonomyLevel] = useState("");
   const [collectiveAccess, setCollectiveAccess] = useState("");
   const [interactionLevel, setInteractionLevel] = useState("");
   const [availabilityNotes, setAvailabilityNotes] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Toggle a single exchange mode in/out of the accepted list
+  const toggleExchangeMode = (value: string, checked: boolean) => {
+    setAcceptedExchangeTypes((prev) => {
+      if (checked) return prev.includes(value) ? prev : [...prev, value];
+      // Enforce at least one mode selected
+      const next = prev.filter((v) => v !== value);
+      return next.length === 0 ? prev : next;
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,11 +82,12 @@ const CreateListing = () => {
         collective_relationship: relationship,
         capacity: parseInt(capacity) || 2,
         points_per_night: Math.max(parseInt(pointsPerNight) || 0, 0),
+        accepted_exchange_types: acceptedExchangeTypes,
         autonomy_level: autonomyLevel,
         collective_access: collectiveAccess,
         interaction_level: interactionLevel,
         availability_notes: availabilityNotes,
-      });
+      } as any);
 
       toast({ title: "Séjour créé !", description: `"${title}" est maintenant visible.` });
       navigate(`/listing/${listing.id}`);
@@ -175,12 +197,29 @@ const CreateListing = () => {
               <Label htmlFor="capacity">Capacité (voyageurs)</Label>
               <Input id="capacity" type="number" min="1" value={capacity} onChange={(e) => setCapacity(e.target.value)} />
             </div>
+          </div>
+          <div>
+            <Label>Modes d'échange acceptés *</Label>
+            <p className="mt-0.5 mb-2 text-xs text-muted-foreground">Au moins un mode requis. Les voyageurs ne pourront choisir que parmi ces options.</p>
+            <div className="space-y-2">
+              {EXCHANGE_MODE_OPTIONS.map((opt) => (
+                <label key={opt.value} className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                  <Checkbox
+                    checked={acceptedExchangeTypes.includes(opt.value)}
+                    onCheckedChange={(checked) => toggleExchangeMode(opt.value, Boolean(checked))}
+                  />
+                  {opt.label}
+                </label>
+              ))}
+            </div>
+          </div>
+          {acceptedExchangeTypes.includes("points") && (
             <div>
               <Label htmlFor="points-per-night">Points / nuit</Label>
               <Input id="points-per-night" type="number" min="0" value={pointsPerNight} onChange={(e) => setPointsPerNight(e.target.value)} />
               <p className="mt-1 text-xs text-muted-foreground">Coût en points si un voyageur règle son séjour en points.</p>
             </div>
-          </div>
+          )}
           <div>
             <Label htmlFor="autonomy">Niveau d'autonomie</Label>
             <Input id="autonomy" placeholder="ex: Totalement autonome" value={autonomyLevel} onChange={(e) => setAutonomyLevel(e.target.value)} />

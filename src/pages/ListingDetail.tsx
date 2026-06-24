@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import listingPlaceholder from "@/assets/listing-placeholder.webp";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -435,6 +435,16 @@ const ListingDetail = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [sending, setSending] = useState(false);
 
+  // Once the listing loads, set exchangeType to the first accepted mode
+  useEffect(() => {
+    if (!listing) return;
+    const modes: string[] = listing.accepted_exchange_types ?? ["free"];
+    if (modes.length > 0 && !modes.includes(exchangeType)) {
+      setExchangeType(modes[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listing?.id]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -482,6 +492,12 @@ const ListingDetail = () => {
     points: `Réglé en points (${pointsPerNight} pts/nuit)`,
     other: "Autre arrangement",
   };
+
+  // Modes the host accepts; fall back to all for old listings without the column
+  const acceptedModes: string[] = (() => {
+    const raw = listing.accepted_exchange_types;
+    return Array.isArray(raw) && raw.length > 0 ? raw : ["free", "reciprocal", "points", "other"];
+  })();
 
   const handleGoToPreview = (e: React.FormEvent) => {
     e.preventDefault();
@@ -736,18 +752,32 @@ const ListingDetail = () => {
                   </div>
                   <div>
                     <Label htmlFor="exchange-type">Type d'échange</Label>
-                    <Select value={exchangeType} onValueChange={setExchangeType}>
-                      <SelectTrigger id="exchange-type"><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="free">Accueil gratuit</SelectItem>
-                        <SelectItem value="reciprocal">Échange réciproque</SelectItem>
-                        <SelectItem value="points">Réglé en points</SelectItem>
-                        <SelectItem value="other">Autre arrangement</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    {acceptedModes.length === 1 ? (
+                      /* Single mode: no dropdown, display as plain text */
+                      <p className="mt-1 rounded-md border bg-muted/50 px-3 py-2 text-sm text-foreground">
+                        {EXCHANGE_LABELS[acceptedModes[0]] ?? acceptedModes[0]}
+                      </p>
+                    ) : (
+                      <Select value={exchangeType} onValueChange={setExchangeType}>
+                        <SelectTrigger id="exchange-type"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {acceptedModes.map((mode) => (
+                            <SelectItem key={mode} value={mode}>
+                              {EXCHANGE_LABELS[mode] ?? mode}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    {/* Contextual help distinguishing reciprocal vs points */}
+                    {exchangeType === "reciprocal" && (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Vous accueillez à votre tour — aucun point échangé.
+                      </p>
+                    )}
                     {exchangeType === "points" && (
                       <p className="mt-1 text-xs text-muted-foreground">
-                        🛎️ {previewPointsCost} points{startDate && endDate ? "" : ` (${pointsPerNight}/nuit)`} débités à l'acceptation.
+                        {previewPointsCost} point{previewPointsCost !== 1 ? "s" : ""}{startDate && endDate ? "" : ` (${pointsPerNight}/nuit)`} débités de votre solde, crédités à l'hôte à l'acceptation.
                       </p>
                     )}
                   </div>
