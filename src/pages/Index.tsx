@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight, Search, Shield, Users, Heart, Home, HandHeart, Compass,
-  Quote, MapPin, Loader2,
+  Quote, MapPin, Loader2, ArrowLeftRight, Coins,
 } from "lucide-react";
 import ListingCard from "@/components/ListingCard";
 import { DEMO_TESTIMONIALS } from "@/data/demo";
+import { LISTING_TYPE_META, LISTING_TYPE_ORDER } from "@/lib/listing-types";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchModal from "@/components/SearchModal";
@@ -215,6 +216,53 @@ const Index = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ 5 WAYS TO STAY ═══════════ */}
+      <section className="px-5 py-12 md:px-8 md:py-16">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl md:text-3xl text-foreground">{t("home.waysTitle")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground mb-8">{t("home.waysSub")}</p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {LISTING_TYPE_ORDER.map((key) => {
+              const meta = LISTING_TYPE_META[key];
+              const Icon = meta.icon;
+              return (
+                <div key={key} className="rounded-xl border bg-card p-5 transition-shadow hover:shadow-sm">
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">{meta.label}</h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{meta.shortDescription}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ EXCHANGE MODEL — reciprocal or points ═══════════ */}
+      <section className="border-y bg-warm px-5 py-12 md:px-8 md:py-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-3">{t("home.exchangeModelEyebrow")}</p>
+          <h2 className="text-2xl md:text-3xl text-foreground leading-snug">{t("home.exchangeModelTitle")}</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 text-left">
+            <div className="rounded-xl border bg-card p-6">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-azur/10 text-azur">
+                <ArrowLeftRight className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-semibold text-foreground">{t("home.reciprocalTitle")}</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{t("home.reciprocalBody")}</p>
+            </div>
+            <div className="rounded-xl border bg-card p-6">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Coins className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-semibold text-foreground">{t("home.pointsTitle")}</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{t("home.pointsBody")}</p>
+            </div>
           </div>
         </div>
       </section>
