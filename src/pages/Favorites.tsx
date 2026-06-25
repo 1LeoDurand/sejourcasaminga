@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -50,6 +51,7 @@ type SortKey = "recent" | "alpha";
 const FALLBACK_IMG = listingPlaceholder;
 
 const Favorites = () => {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const { data: favorites = [], isLoading } = useFavorites(user?.id);
   const toggleFav = useToggleFavorite();
@@ -115,7 +117,7 @@ const Favorites = () => {
       try {
         await createShare.mutateAsync(user.id);
       } catch (e: any) {
-        toast.error(e.message || "Erreur lors de la création du lien");
+        toast.error(e.message || t("favorites.linkError"));
       }
     }
   };
@@ -128,28 +130,28 @@ const Favorites = () => {
     if (!shareUrl) return;
     await navigator.clipboard.writeText(shareUrl);
     setCopied(true);
-    toast.success("Lien copié");
+    toast.success(t("favorites.linkCopied"));
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="min-h-screen">
-      <SEO title="Mes favoris | Casa Minga" description="Vos lieux et séjours préférés." />
+      <SEO title={t("favorites.seoTitle")} description={t("favorites.seoDesc")} />
       <Navbar />
       <div className="container py-8 px-4 md:px-8">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="font-serif text-3xl md:text-4xl text-foreground">Mes favoris</h1>
+            <h1 className="font-serif text-3xl md:text-4xl text-foreground">{t("favorites.title")}</h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Vos coups de cœur, prêts à inspirer votre prochain séjour.
+              {t("favorites.subtitle")}
             </p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => window.print()}>
-              <Download className="mr-2 h-4 w-4" /> PDF
+              <Download className="mr-2 h-4 w-4" /> {t("favorites.pdf")}
             </Button>
             <Button onClick={openShare}>
-              <Share2 className="mr-2 h-4 w-4" /> Partager ma liste
+              <Share2 className="mr-2 h-4 w-4" /> {t("favorites.shareList")}
             </Button>
           </div>
         </div>
@@ -159,29 +161,29 @@ const Favorites = () => {
           <aside className="space-y-5 md:sticky md:top-20 md:self-start print:hidden">
             <div>
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Recherche
+                {t("favorites.searchLabel")}
               </label>
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Titre, lieu, note…"
+                placeholder={t("favorites.searchPlaceholder")}
                 className="mt-1.5 h-9 text-sm"
               />
             </div>
 
             <div>
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Type
+                {t("favorites.typeLabel")}
               </label>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
                 className="mt-1.5 w-full rounded-md border bg-background px-3 py-2 text-sm"
               >
-                <option value="all">Tous</option>
-                {types.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
+                <option value="all">{t("favorites.allTypes")}</option>
+                {types.map((ty) => (
+                  <option key={ty} value={ty}>
+                    {ty}
                   </option>
                 ))}
               </select>
@@ -189,14 +191,14 @@ const Favorites = () => {
 
             <div>
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Région
+                {t("favorites.regionLabel")}
               </label>
               <select
                 value={regionFilter}
                 onChange={(e) => setRegionFilter(e.target.value)}
                 className="mt-1.5 w-full rounded-md border bg-background px-3 py-2 text-sm"
               >
-                <option value="all">Toutes</option>
+                <option value="all">{t("favorites.allRegions")}</option>
                 {regions.map((r) => (
                   <option key={r} value={r}>
                     {r}
@@ -207,13 +209,13 @@ const Favorites = () => {
 
             <div>
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Tri
+                {t("favorites.sortLabel")}
               </label>
               <div className="mt-1.5 inline-flex rounded-md border bg-background p-0.5 w-full">
                 {(
                   [
-                    { k: "recent", l: "Récent" },
-                    { k: "alpha", l: "A–Z" },
+                    { k: "recent", l: t("favorites.sortRecent") },
+                    { k: "alpha", l: t("favorites.sortAlpha") },
                   ] as const
                 ).map((o) => (
                   <button
@@ -241,12 +243,12 @@ const Favorites = () => {
             ) : filtered.length === 0 ? (
               <div className="mt-12 text-center">
                 <Heart className="mx-auto mb-4 h-12 w-12 text-muted-foreground/40" />
-                <h3 className="text-xl">Aucun favori pour l'instant</h3>
+                <h3 className="text-xl">{t("favorites.emptyTitle")}</h3>
                 <p className="mt-2 text-muted-foreground">
-                  Explorez les lieux et ajoutez-en à vos favoris.
+                  {t("favorites.emptyHint")}
                 </p>
                 <Button asChild className="mt-4">
-                  <Link to="/discover">Découvrir</Link>
+                  <Link to="/discover">{t("favorites.discover")}</Link>
                 </Button>
               </div>
             ) : (
@@ -280,7 +282,7 @@ const Favorites = () => {
                             })
                           }
                           className="absolute right-3 top-3 z-10 rounded-full bg-background/90 p-2 shadow-sm backdrop-blur-sm hover:bg-background print:hidden"
-                          aria-label="Retirer des favoris"
+                          aria-label={t("favorites.removeFav")}
                         >
                           <Heart className="h-4 w-4 fill-primary text-primary" />
                         </button>
@@ -298,15 +300,15 @@ const Favorites = () => {
                                   setNotesDraft(fav.notes || "");
                                 }}
                               >
-                                <StickyNote className="mr-2 h-4 w-4" /> Éditer mes notes
+                                <StickyNote className="mr-2 h-4 w-4" /> {t("favorites.editNotes")}
                               </DropdownMenuItem>
                               <DropdownMenuItem asChild>
                                 <Link to={`/listing/${l.id}`}>
-                                  <Eye className="mr-2 h-4 w-4" /> Voir détails
+                                  <Eye className="mr-2 h-4 w-4" /> {t("favorites.viewDetails")}
                                 </Link>
                               </DropdownMenuItem>
                               <DropdownMenuItem onClick={openShare}>
-                                <Share2 className="mr-2 h-4 w-4" /> Partager ma liste
+                                <Share2 className="mr-2 h-4 w-4" /> {t("favorites.shareList")}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -353,7 +355,7 @@ const Favorites = () => {
                             }}
                             className="mt-3 text-xs text-muted-foreground hover:text-foreground print:hidden"
                           >
-                            + Ajouter une note privée
+                            + {t("favorites.addNote")}
                           </button>
                         )}
                       </div>
@@ -370,30 +372,30 @@ const Favorites = () => {
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Notes privées</DialogTitle>
+            <DialogTitle>{t("favorites.notesTitle")}</DialogTitle>
           </DialogHeader>
           <p className="text-xs text-muted-foreground">
-            Visibles uniquement par vous. Ex : « À visiter en été 2026, vérifier dispo agriculture ».
+            {t("favorites.notesHint")}
           </p>
           <Textarea
             value={notesDraft}
             onChange={(e) => setNotesDraft(e.target.value)}
             rows={5}
-            placeholder="Vos notes…"
+            placeholder={t("favorites.notesPlaceholder")}
           />
           <DialogFooter>
             <Button variant="ghost" onClick={() => setEditing(null)}>
-              Annuler
+              {t("favorites.cancel")}
             </Button>
             <Button
               onClick={async () => {
                 if (!editing) return;
                 await updateNotes.mutateAsync({ id: editing.id, notes: notesDraft });
-                toast.success("Notes enregistrées");
+                toast.success(t("favorites.notesSaved"));
                 setEditing(null);
               }}
             >
-              Enregistrer
+              {t("favorites.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -403,11 +405,10 @@ const Favorites = () => {
       <Dialog open={shareOpen} onOpenChange={setShareOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Partager ma wishlist</DialogTitle>
+            <DialogTitle>{t("favorites.shareTitle")}</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            Toute personne avec ce lien pourra consulter vos favoris (vos notes privées
-            restent cachées).
+            {t("favorites.shareHint")}
           </p>
           {shareUrl ? (
             <div className="flex gap-2">
@@ -418,12 +419,12 @@ const Favorites = () => {
             </div>
           ) : (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" /> Génération du lien…
+              <Loader2 className="h-4 w-4 animate-spin" /> {t("favorites.generating")}
             </div>
           )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setShareOpen(false)}>
-              Fermer
+              {t("favorites.close")}
             </Button>
           </DialogFooter>
         </DialogContent>

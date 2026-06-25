@@ -26,6 +26,7 @@ import { useSmartRecommendations } from "@/hooks/use-smart-recommendations";
 import MyClaimRequests from "@/components/MyClaimRequests";
 import { useIsAdmin } from "@/hooks/use-claim-requests";
 import { useEffect, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "@/hooks/use-toast";
@@ -33,6 +34,7 @@ import { toast } from "@/hooks/use-toast";
 type Tab = "exchanges" | "messages" | "profile";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = (searchParams.get("tab") as Tab) || "profile";
@@ -59,7 +61,7 @@ const Dashboard = () => {
   if (!user) return null;
 
   const setTab = (tab: Tab) => setSearchParams({ tab });
-  const displayName = profile?.display_name || user.email?.split("@")[0] || "Voyageur";
+  const displayName = profile?.display_name || user.email?.split("@")[0] || t("dashboard.traveler");
   const pendingRequests = requests?.filter((r) => r.status === "pending") || [];
   const acceptedRequests = requests?.filter((r) => r.status === "accepted") || [];
   const pastRequests = requests?.filter((r) => r.status === "completed" || r.status === "declined") || [];
@@ -68,9 +70,9 @@ const Dashboard = () => {
   const suggestedListings = allListings?.filter((l: any) => l.host_id !== user.id).slice(0, 4) || [];
 
   const tabs: { key: Tab; label: string; icon: React.ElementType; count?: number }[] = [
-    { key: "profile", label: "Profil", icon: User },
-    { key: "exchanges", label: "Échanges", icon: ArrowLeftRight, count: pendingRequests.length },
-    { key: "messages", label: "Messages", icon: MessageCircle, count: conversations?.length || 0 },
+    { key: "profile", label: t("dashboard.profile"), icon: User },
+    { key: "exchanges", label: t("dashboard.exchanges"), icon: ArrowLeftRight, count: pendingRequests.length },
+    { key: "messages", label: t("dashboard.messages"), icon: MessageCircle, count: conversations?.length || 0 },
   ];
 
   return (
@@ -143,6 +145,7 @@ function ProfileTab({
   user: any; profile: any; displayName: string; myPlaces: any; myListings: any;
   placesLoading: boolean; suggestedListings: any[]; onSignOut: () => void;
 }) {
+  const { t } = useTranslation();
   const { data: pointBalance } = usePointBalance(user.id);
   const { data: transactions } = usePointTransactions(user.id);
   const { data: referralData } = useReferralCode(user.id);
@@ -152,11 +155,11 @@ function ProfileTab({
   const [copied, setCopied] = useState(false);
 
   const completionSteps = [
-    { done: !!profile?.bio, label: "Bio", pts: 10 },
-    { done: !!profile?.hosting_style, label: "Style d'accueil", pts: 5 },
-    { done: (profile?.languages?.length || 0) > 0, label: "Langues", pts: 5 },
-    { done: myPlaces && myPlaces.length > 0, label: "Lieu collectif", pts: 30 },
-    { done: myListings && myListings.length > 0, label: "Séjour publié", pts: 20 },
+    { done: !!profile?.bio, label: t("dashboard.bio"), pts: 10 },
+    { done: !!profile?.hosting_style, label: t("dashboard.hostingStyle"), pts: 5 },
+    { done: (profile?.languages?.length || 0) > 0, label: t("dashboard.languages"), pts: 5 },
+    { done: myPlaces && myPlaces.length > 0, label: t("dashboard.collectivePlace"), pts: 30 },
+    { done: myListings && myListings.length > 0, label: t("dashboard.publishedStay"), pts: 20 },
   ];
   const completedCount = completionSteps.filter((s) => s.done).length;
   const completionPct = Math.round((completedCount / completionSteps.length) * 100);
@@ -166,7 +169,7 @@ function ProfileTab({
       navigator.clipboard.writeText(referralData.code);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      toast({ title: "Code copié !" });
+      toast({ title: t("dashboard.codeCopied") });
     }
   };
 
@@ -189,12 +192,12 @@ function ProfileTab({
               {/* Rating placeholder */}
             </div>
             <Link to="/edit-profile" className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 mt-1">
-              <Pencil className="h-3.5 w-3.5" /> Modifier mon profil
+              <Pencil className="h-3.5 w-3.5" /> {t("dashboard.editProfile")}
             </Link>
             <div className="flex items-center gap-1.5 mt-2">
               <Star className="h-4 w-4 text-soleil fill-soleil" />
               <span className="text-sm font-bold text-foreground">{pointBalance?.balance ?? 0}</span>
-              <span className="text-xs text-muted-foreground">Points</span>
+              <span className="text-xs text-muted-foreground">{t("dashboard.points")}</span>
             </div>
             {profile?.languages && profile.languages.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
@@ -225,7 +228,7 @@ function ProfileTab({
                   <p className="text-sm text-muted-foreground mt-0.5">{l.places?.name || l.places?.city || "France"}</p>
                   <Badge variant="outline" className={`mt-2 text-xs ${l.published ? "bg-olive/15 text-olive border-olive/25" : "bg-muted text-muted-foreground"}`}>
                     <span className={`inline-block h-1.5 w-1.5 rounded-full mr-1.5 ${l.published ? "bg-olive" : "bg-muted-foreground"}`} />
-                    {l.published ? "Publié" : "Brouillon"}
+                    {l.published ? t("dashboard.published") : t("dashboard.draft")}
                   </Badge>
                 </div>
               </div>
@@ -240,7 +243,7 @@ function ProfileTab({
                 size="lg"
               >
                 <Calendar className="mr-2 h-4 w-4" />
-                Gérer votre calendrier
+                {t("dashboard.manageCalendar")}
               </Button>
             </Link>
           </div>
@@ -273,7 +276,7 @@ function ProfileTab({
         <section className="rounded-2xl bg-gradient-to-r from-primary/8 to-soleil/8 border border-primary/15 p-5">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold text-foreground">Complétez votre profil</h3>
+            <h3 className="text-sm font-semibold text-foreground">{t("dashboard.completeProfile")}</h3>
             <span className="ml-auto text-xs font-bold text-primary">{completionPct}%</span>
           </div>
           <div className="w-full bg-border/50 rounded-full h-2 mb-3">
@@ -292,7 +295,7 @@ function ProfileTab({
           </div>
           <Link to="/edit-profile">
             <Button size="sm" className="mt-3 w-full" variant="outline">
-              <Pencil className="mr-1.5 h-3.5 w-3.5" /> Compléter
+              <Pencil className="mr-1.5 h-3.5 w-3.5" /> {t("dashboard.complete")}
             </Button>
           </Link>
         </section>
@@ -306,8 +309,8 @@ function ProfileTab({
               <Star className="h-5 w-5 text-soleil" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium text-foreground">Mes points Casa Minga</p>
-              <p className="text-xs text-muted-foreground">Gagnez des points, échangez plus</p>
+              <p className="text-sm font-medium text-foreground">{t("dashboard.myPointsTitle")}</p>
+              <p className="text-xs text-muted-foreground">{t("dashboard.earnPoints")}</p>
             </div>
             <span className="text-2xl font-bold text-foreground">{pointBalance?.balance ?? 0}</span>
           </div>
@@ -316,7 +319,7 @@ function ProfileTab({
         {/* Recent transactions */}
         {transactions && transactions.length > 0 && (
           <div className="px-5 py-3 border-b">
-            <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Dernières activités</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">{t("dashboard.recentActivity")}</p>
             <div className="space-y-2">
               {transactions.slice(0, 4).map((t: any) => (
                 <div key={t.id} className="flex items-center gap-2.5 text-sm">
@@ -335,10 +338,10 @@ function ProfileTab({
         <div className="p-5">
           <div className="flex items-center gap-2 mb-2">
             <Gift className="h-4 w-4 text-rosa" />
-            <p className="text-sm font-medium text-foreground">Parrainez un ami</p>
+            <p className="text-sm font-medium text-foreground">{t("dashboard.referFriend")}</p>
           </div>
           <p className="text-xs text-muted-foreground mb-3">
-            Partagez votre code : vous gagnez <span className="font-semibold text-olive">+50 pts</span> et votre filleul <span className="font-semibold text-olive">+25 pts</span> 🎁
+            <Trans i18nKey="dashboard.referText" components={{ strong: <span className="font-semibold text-olive" /> }} />
           </p>
           {referralData?.code ? (
             <div className="flex items-center gap-2">
@@ -350,16 +353,16 @@ function ProfileTab({
               </Button>
             </div>
           ) : (
-            <p className="text-xs text-muted-foreground italic">Code en cours de génération…</p>
+            <p className="text-xs text-muted-foreground italic">{t("dashboard.codeGenerating")}</p>
           )}
           {myReferrals && myReferrals.length > 0 && (
             <p className="text-xs text-muted-foreground mt-2">
-              {myReferrals.filter((r: any) => r.status === "completed").length} parrainage(s) réussi(s)
+              {t("dashboard.successfulReferrals", { count: myReferrals.filter((r: any) => r.status === "completed").length })}
             </p>
           )}
           <Button asChild size="sm" variant="default" className="w-full mt-3">
             <Link to="/referrals">
-              <Gift className="h-4 w-4 mr-2" /> Inviter des amis
+              <Gift className="h-4 w-4 mr-2" /> {t("dashboard.inviteFriends")}
             </Link>
           </Button>
         </div>
@@ -370,7 +373,7 @@ function ProfileTab({
 
       {/* My places */}
       <section>
-        <h3 className="text-base font-serif text-foreground mb-3">Mes lieux</h3>
+        <h3 className="text-base font-serif text-foreground mb-3">{t("dashboard.myPlaces")}</h3>
         {placesLoading ? (
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
         ) : myPlaces && myPlaces.length > 0 ? (
@@ -396,7 +399,7 @@ function ProfileTab({
         ) : (
           <Link to="/create-place"
             className="flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-8 text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors">
-            <Plus className="h-5 w-5" /><span className="text-sm font-medium">Ajouter un lieu</span>
+            <Plus className="h-5 w-5" /><span className="text-sm font-medium">{t("dashboard.addPlace")}</span>
           </Link>
         )}
         {myPlaces && myPlaces.length > 0 && (
@@ -410,11 +413,11 @@ function ProfileTab({
           <div className="flex items-start justify-between gap-2 mb-3">
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-primary" />
-              <h3 className="text-base font-serif text-foreground">Habitats alignés avec vos valeurs</h3>
+              <h3 className="text-base font-serif text-foreground">{t("dashboard.alignedHabitats")}</h3>
             </div>
             {!hasPrefs && (
               <Link to="/edit-profile" className="text-[11px] text-primary underline-offset-2 hover:underline shrink-0">
-                Affiner mes préférences
+                {t("dashboard.refinePrefs")}
               </Link>
             )}
           </div>
@@ -434,7 +437,7 @@ function ProfileTab({
                   {hasPrefs && p.matchPct > 0 && (
                     <span className="absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-semibold text-primary border border-primary/20">
                       <Sparkles className="h-2.5 w-2.5" />
-                      {p.matchPct}% match
+                      {t("dashboard.matchBadge", { pct: p.matchPct })}
                     </span>
                   )}
                 </div>
@@ -445,7 +448,7 @@ function ProfileTab({
                     {[p.city, p.region].filter(Boolean).join(", ") || "France"}
                   </p>
                   {hasPrefs && p.matchPct >= 60 && (
-                    <p className="text-[10px] text-primary mt-1 italic">Correspond à {p.matchPct}% de vos valeurs</p>
+                    <p className="text-[10px] text-primary mt-1 italic">{t("dashboard.matchesValues", { pct: p.matchPct })}</p>
                   )}
                 </div>
               </Link>
@@ -453,7 +456,7 @@ function ProfileTab({
           </div>
           <Link to="/discover">
             <Button variant="ghost" size="sm" className="mt-3 w-full text-primary">
-              Explorer tous les habitats <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              {t("dashboard.exploreAllHabitats")} <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
             </Button>
           </Link>
         </section>
@@ -461,24 +464,24 @@ function ProfileTab({
 
       {/* Account */}
       <section>
-        <h3 className="text-base font-serif text-foreground mb-3">Mon compte</h3>
+        <h3 className="text-base font-serif text-foreground mb-3">{t("dashboard.myAccount")}</h3>
         <div className="rounded-xl border bg-card divide-y divide-border overflow-hidden">
           <Link to="/favorites" className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors">
-            <Heart className="h-4 w-4 text-rosa" /><span className="text-sm text-foreground flex-1">Séjours favoris</span>
+            <Heart className="h-4 w-4 text-rosa" /><span className="text-sm text-foreground flex-1">{t("dashboard.favorites")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
           </Link>
           {isAdmin && (
             <Link to="/admin/claims" className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors">
-              <ShieldCheck className="h-4 w-4 text-primary" /><span className="text-sm text-foreground flex-1">Gérer les revendications</span>
+              <ShieldCheck className="h-4 w-4 text-primary" /><span className="text-sm text-foreground flex-1">{t("dashboard.manageClaims")}</span>
               <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
             </Link>
           )}
           <Link to="/edit-profile" className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors">
-            <Settings className="h-4 w-4 text-muted-foreground" /><span className="text-sm text-foreground flex-1">Paramètres</span>
+            <Settings className="h-4 w-4 text-muted-foreground" /><span className="text-sm text-foreground flex-1">{t("dashboard.settings")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
           </Link>
           <button onClick={onSignOut} className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors w-full text-left">
-            <LogOut className="h-4 w-4 text-destructive" /><span className="text-sm text-destructive">Déconnexion</span>
+            <LogOut className="h-4 w-4 text-destructive" /><span className="text-sm text-destructive">{t("dashboard.signOut")}</span>
           </button>
         </div>
       </section>
@@ -489,17 +492,18 @@ function ProfileTab({
 
 /* ─── Exchanges Tab ─── */
 function ExchangesTab({ pending, accepted, past, userId }: { pending: any[]; accepted: any[]; past: any[]; userId: string }) {
+  const { t } = useTranslation();
   const [subTab, setSubTab] = useState<"pending" | "upcoming" | "past">("pending");
   const subTabs = [
-    { key: "pending" as const, label: "En attente", count: pending.length },
-    { key: "upcoming" as const, label: "À venir", count: accepted.length },
-    { key: "past" as const, label: "Passés", count: past.length },
+    { key: "pending" as const, label: t("dashboard.pending"), count: pending.length },
+    { key: "upcoming" as const, label: t("dashboard.upcoming"), count: accepted.length },
+    { key: "past" as const, label: t("dashboard.past"), count: past.length },
   ];
   const currentRequests = subTab === "pending" ? pending : subTab === "upcoming" ? accepted : past;
 
   return (
     <div>
-      <h1 className="text-xl font-serif text-foreground mb-4">Mes échanges</h1>
+      <h1 className="text-xl font-serif text-foreground mb-4">{t("dashboard.myExchanges")}</h1>
       <div className="flex gap-1 mb-6 bg-muted rounded-lg p-1">
         {subTabs.map(({ key, label, count }) => (
           <button key={key} onClick={() => setSubTab(key)}
@@ -514,9 +518,9 @@ function ExchangesTab({ pending, accepted, past, userId }: { pending: any[]; acc
         <div className="py-16 text-center">
           <ArrowLeftRight className="mx-auto h-10 w-10 text-muted-foreground/30 mb-3" />
           <p className="text-muted-foreground text-sm">
-            {subTab === "pending" ? "Aucune demande en attente" : subTab === "upcoming" ? "Aucun séjour à venir" : "Aucun séjour passé"}
+            {subTab === "pending" ? t("dashboard.noPending") : subTab === "upcoming" ? t("dashboard.noUpcoming") : t("dashboard.noPast")}
           </p>
-          <Link to="/discover"><Button variant="outline" size="sm" className="mt-4">Explorer les séjours</Button></Link>
+          <Link to="/discover"><Button variant="outline" size="sm" className="mt-4">{t("dashboard.exploreStays")}</Button></Link>
         </div>
       ) : (
         <div className="space-y-4">
@@ -528,6 +532,7 @@ function ExchangesTab({ pending, accepted, past, userId }: { pending: any[]; acc
 }
 
 function ExchangeCard({ request, userId }: { request: any; userId: string }) {
+  const { t } = useTranslation();
   const isIncoming = request.to_member_id === userId;
   const updateStatus = useUpdateExchangeRequestStatus();
   const acceptRequest = useAcceptStayRequest();
@@ -540,9 +545,9 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
   const handleAccept = async () => {
     try {
       await acceptRequest.mutateAsync(request.id);
-      toast({ title: "Demande acceptée" });
+      toast({ title: t("dashboard.requestAccepted") });
     } catch (e) {
-      toast({ title: "Erreur", description: stayPointsErrorMessage(e), variant: "destructive" });
+      toast({ title: t("dashboard.error"), description: stayPointsErrorMessage(e), variant: "destructive" });
     }
   };
   const statusColors: Record<string, string> = {
@@ -552,8 +557,8 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
     completed: "bg-muted text-muted-foreground border-border",
   };
   const statusLabels: Record<string, string> = {
-    pending: isIncoming ? "Demande reçue" : "En attente",
-    accepted: "Confirmé", declined: "Déclinée", completed: "Terminé",
+    pending: isIncoming ? t("dashboard.requestReceived") : t("dashboard.pending"),
+    accepted: t("dashboard.confirmed"), declined: t("dashboard.declined"), completed: t("dashboard.completed"),
   };
 
   return (
@@ -569,7 +574,7 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
             <p className="text-xs text-muted-foreground">
               {format(new Date(request.start_date), "dd MMM yyyy", { locale: fr })} – {format(new Date(request.end_date), "dd MMM yyyy", { locale: fr })}
             </p>
-            <h3 className="font-serif text-base text-foreground mt-0.5">{request.listings?.title || "Séjour"}</h3>
+            <h3 className="font-serif text-base text-foreground mt-0.5">{request.listings?.title || t("dashboard.stay")}</h3>
           </div>
           <Badge variant="outline" className={`text-xs shrink-0 ${statusColors[request.status] || ""}`}>
             {statusLabels[request.status] || request.status}
@@ -577,11 +582,11 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
         </div>
         <div className="flex items-center gap-4 text-xs text-muted-foreground mt-3">
           {request.number_of_guests && (
-            <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{request.number_of_guests} voyageur{request.number_of_guests > 1 ? "s" : ""}</span>
+            <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{t("dashboard.travelers", { count: request.number_of_guests })}</span>
           )}
           <span className="flex items-center gap-1">
             <Calendar className="h-3.5 w-3.5" />
-            {Math.ceil((new Date(request.end_date).getTime() - new Date(request.start_date).getTime()) / (1000 * 60 * 60 * 24))} nuits
+            {Math.ceil((new Date(request.end_date).getTime() - new Date(request.start_date).getTime()) / (1000 * 60 * 60 * 24))} {t("dashboard.nights")}
           </span>
           {isPoints && (
             <span className="flex items-center gap-1 font-medium text-foreground">
@@ -597,7 +602,7 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
               disabled={acceptRequest.isPending || updateStatus.isPending}
               onClick={handleAccept}
             >
-              {isPoints ? `Accepter (${pointsCost} pts)` : "Accepter"}
+              {isPoints ? t("dashboard.acceptWithPoints", { pts: pointsCost }) : t("dashboard.accept")}
             </Button>
             <Button
               size="sm"
@@ -606,7 +611,7 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
               disabled={acceptRequest.isPending || updateStatus.isPending}
               onClick={() => updateStatus.mutate({ id: request.id, status: "declined" })}
             >
-              Décliner
+              {t("dashboard.decline")}
             </Button>
           </div>
         )}
@@ -617,17 +622,18 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
 
 /* ─── Messages Tab ─── */
 function MessagesTab({ conversations, userId }: { conversations: any[]; userId: string }) {
+  const { t } = useTranslation();
   if (conversations.length === 0) {
     return (
       <div className="py-16 text-center">
         <MessageCircle className="mx-auto h-10 w-10 text-muted-foreground/30 mb-3" />
-        <p className="text-muted-foreground text-sm">Aucun message pour le moment</p>
+        <p className="text-muted-foreground text-sm">{t("dashboard.noMessagesYet")}</p>
       </div>
     );
   }
   return (
     <div>
-      <h1 className="text-xl font-serif text-foreground mb-4">Messages</h1>
+      <h1 className="text-xl font-serif text-foreground mb-4">{t("dashboard.messages")}</h1>
       <div className="divide-y divide-border rounded-xl border bg-card overflow-hidden">
         {conversations.map((conv: any) => {
           const unread = conv.unread_count || 0;
@@ -641,7 +647,7 @@ function MessagesTab({ conversations, userId }: { conversations: any[]; userId: 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
                 <p className={`text-sm truncate ${unread > 0 ? "font-semibold text-foreground" : "font-medium text-foreground"}`}>
-                  {conv.other_profile?.display_name || "Membre"}
+                  {conv.other_profile?.display_name || t("dashboard.member")}
                 </p>
                 <div className="flex items-center gap-2 shrink-0">
                   {conv.last_message && (
@@ -653,7 +659,7 @@ function MessagesTab({ conversations, userId }: { conversations: any[]; userId: 
                 </div>
               </div>
               <p className={`text-xs truncate mt-0.5 ${unread > 0 ? "text-foreground/80" : "text-muted-foreground"}`}>
-                {conv.last_message?.content || "Nouvelle conversation"}
+                {conv.last_message?.content || t("dashboard.newConversation")}
               </p>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0" />
@@ -677,6 +683,7 @@ function GuidedBanners({
   searchParams: URLSearchParams;
   setSearchParams: (p: any) => void;
 }) {
+  const { t } = useTranslation();
   const completePlaceId = searchParams.get("completePlace");
   const proposeStayPlaceId = searchParams.get("proposeStay");
   const hasPlace = myPlaces && myPlaces.length > 0;
@@ -701,17 +708,17 @@ function GuidedBanners({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif text-sm sm:text-base text-foreground">
-              Étape 2 — Enrichissez le profil de {place?.places?.name || "votre lieu"}
+              {t("dashboard.bannerCompleteTitle", { name: place?.places?.name || t("dashboard.yourPlace") })}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Valeurs, gouvernance, accueil… inspire confiance et améliore les échanges.
+              {t("dashboard.bannerCompleteText")}
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
               <Link to={`/edit-place/${completePlaceId}`}>
-                <Button size="sm">Compléter le profil</Button>
+                <Button size="sm">{t("dashboard.bannerCompleteCta")}</Button>
               </Link>
               <Button size="sm" variant="ghost" onClick={() => dismissParam("completePlace")}>
-                Plus tard
+                {t("dashboard.later")}
               </Button>
             </div>
           </div>
@@ -731,19 +738,19 @@ function GuidedBanners({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif text-sm sm:text-base text-foreground">
-              Souhaitez-vous proposer un séjour à {place?.places?.name || "votre lieu"} ?
+              {t("dashboard.bannerProposeTitle", { name: place?.places?.name || t("dashboard.yourPlace") })}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Une fiche séjour permet d'accueillir les voyageur·ses Casa Minga.
+              {t("dashboard.bannerProposeText")}
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
               <Link to={`/create-listing?place=${proposeStayPlaceId}`}>
                 <Button size="sm" className="bg-soleil hover:bg-soleil/90 text-soleil-foreground">
-                  Oui, proposer un séjour
+                  {t("dashboard.bannerProposeCta")}
                 </Button>
               </Link>
               <Button size="sm" variant="ghost" onClick={() => dismissParam("proposeStay")}>
-                Pas maintenant
+                {t("dashboard.notNow")}
               </Button>
             </div>
           </div>
@@ -762,17 +769,17 @@ function GuidedBanners({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif text-sm sm:text-base text-foreground">
-              Connectez-vous d'abord à un lieu
+              {t("dashboard.bannerNoPlaceTitle")}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Sur Casa Minga, on rejoint ou on crée un lieu collectif avant de proposer un séjour.
+              {t("dashboard.bannerNoPlaceText")}
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
               <Link to="/onboarding">
-                <Button size="sm">Démarrer</Button>
+                <Button size="sm">{t("dashboard.start")}</Button>
               </Link>
               <Link to="/discover">
-                <Button size="sm" variant="ghost">Explorer d'abord</Button>
+                <Button size="sm" variant="ghost">{t("dashboard.exploreFirst")}</Button>
               </Link>
             </div>
           </div>
@@ -791,14 +798,14 @@ function GuidedBanners({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif text-sm sm:text-base text-foreground">
-              Proposez votre premier séjour
+              {t("dashboard.bannerFirstStayTitle")}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Vous êtes membre d'un lieu : invitez la communauté à venir y séjourner.
+              {t("dashboard.bannerFirstStayText")}
             </p>
             <Link to="/create-listing" className="inline-block mt-3">
               <Button size="sm" className="bg-soleil hover:bg-soleil/90 text-soleil-foreground">
-                Créer une fiche séjour
+                {t("dashboard.bannerFirstStayCta")}
               </Button>
             </Link>
           </div>

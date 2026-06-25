@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { Link, Navigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -20,16 +21,17 @@ import { toast } from "@/hooks/use-toast";
 
 const STATUS_META: Record<
   StayRequestStatus,
-  { label: string; emoji: string; className: string }
+  { labelKey: string; emoji: string; className: string }
 > = {
-  pending: { label: "En attente", emoji: "⏳", className: "bg-amber-100 text-amber-900 border-amber-200" },
-  accepted: { label: "Confirmé", emoji: "✅", className: "bg-emerald-100 text-emerald-900 border-emerald-200" },
-  declined: { label: "Refusé", emoji: "✕", className: "bg-rose-100 text-rose-900 border-rose-200" },
-  cancelled: { label: "Annulé", emoji: "❌", className: "bg-muted text-muted-foreground border-border" },
-  completed: { label: "Effectué", emoji: "✓", className: "bg-primary/10 text-primary border-primary/20" },
+  pending: { labelKey: "stayRequestDetail.statusPending", emoji: "⏳", className: "bg-amber-100 text-amber-900 border-amber-200" },
+  accepted: { labelKey: "stayRequestDetail.statusAccepted", emoji: "✅", className: "bg-emerald-100 text-emerald-900 border-emerald-200" },
+  declined: { labelKey: "stayRequestDetail.statusDeclined", emoji: "✕", className: "bg-rose-100 text-rose-900 border-rose-200" },
+  cancelled: { labelKey: "stayRequestDetail.statusCancelled", emoji: "❌", className: "bg-muted text-muted-foreground border-border" },
+  completed: { labelKey: "stayRequestDetail.statusCompleted", emoji: "✓", className: "bg-primary/10 text-primary border-primary/20" },
 };
 
 const StayRequests = () => {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const { data: requests, isLoading } = useMyExchangeRequests(user?.id);
   const update = useUpdateExchangeRequestStatus();
@@ -53,38 +55,38 @@ const StayRequests = () => {
   const handleCancel = async (id: string) => {
     try {
       await update.mutateAsync({ id, status: "cancelled" });
-      toast({ title: "Demande annulée" });
+      toast({ title: t("stayRequests.cancelled") });
     } catch (e: any) {
-      toast({ title: "Erreur", description: e.message, variant: "destructive" });
+      toast({ title: t("stayRequests.error"), description: e.message, variant: "destructive" });
     }
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="Mes demandes de séjour | Casa Minga" description="Suivez vos demandes de visite et d'échange." />
+      <SEO title={t("stayRequests.seoTitle")} description={t("stayRequests.seoDesc")} />
       <Navbar />
 
       <div className="container px-5 py-8 max-w-5xl">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
           <div>
-            <h1 className="text-2xl md:text-3xl text-foreground">Mes demandes de séjour</h1>
+            <h1 className="text-2xl md:text-3xl text-foreground">{t("stayRequests.title")}</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Suivez l'état de vos demandes et reprenez contact avec les habitats.
+              {t("stayRequests.subtitle")}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />
             <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
               <SelectTrigger className="w-44">
-                <SelectValue placeholder="Filtrer par statut" />
+                <SelectValue placeholder={t("stayRequests.filterByStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Toutes</SelectItem>
-                <SelectItem value="pending">⏳ En attente</SelectItem>
-                <SelectItem value="accepted">✅ Confirmées</SelectItem>
-                <SelectItem value="declined">✕ Refusées</SelectItem>
-                <SelectItem value="cancelled">❌ Annulées</SelectItem>
-                <SelectItem value="completed">✓ Effectuées</SelectItem>
+                <SelectItem value="all">{t("stayRequests.filterAll")}</SelectItem>
+                <SelectItem value="pending">⏳ {t("stayRequestDetail.statusPending")}</SelectItem>
+                <SelectItem value="accepted">✅ {t("stayRequests.filterAccepted")}</SelectItem>
+                <SelectItem value="declined">✕ {t("stayRequests.filterDeclined")}</SelectItem>
+                <SelectItem value="cancelled">❌ {t("stayRequests.filterCancelled")}</SelectItem>
+                <SelectItem value="completed">✓ {t("stayRequests.filterCompleted")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -99,13 +101,13 @@ const StayRequests = () => {
           <div className="rounded-xl border border-dashed bg-card p-10 text-center">
             <Calendar className="mx-auto h-10 w-10 text-muted-foreground/50" />
             <p className="mt-3 text-base font-medium text-foreground">
-              Vous n'avez pas encore demandé de séjour
+              {t("stayRequests.emptyTitle")}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Trouvez un habitat qui vous inspire et envoyez votre première demande — c'est ainsi que l'accueil commence.
+              {t("stayRequests.emptyHint")}
             </p>
             <Link to="/discover" className="mt-4 inline-block">
-              <Button size="sm">Découvrir des séjours</Button>
+              <Button size="sm">{t("stayRequests.discover")}</Button>
             </Link>
           </div>
         ) : filtered.length === 0 ? (
@@ -113,20 +115,24 @@ const StayRequests = () => {
           <div className="rounded-xl border bg-card p-10 text-center">
             <Calendar className="mx-auto h-10 w-10 text-muted-foreground/60" />
             <p className="mt-3 text-sm text-muted-foreground">
-              Aucune demande {STATUS_META[statusFilter as StayRequestStatus]?.label.toLowerCase() ?? "dans cette catégorie"}.
+              {t("stayRequests.noneInCategory", {
+                status: STATUS_META[statusFilter as StayRequestStatus]
+                  ? t(STATUS_META[statusFilter as StayRequestStatus].labelKey).toLowerCase()
+                  : t("stayRequests.thisCategory"),
+              })}
             </p>
             <Button variant="outline" size="sm" className="mt-4" onClick={() => setStatusFilter("all")}>
-              Réinitialiser le filtre
+              {t("stayRequests.resetFilter")}
             </Button>
           </div>
         ) : (
           <div className="overflow-hidden rounded-xl border bg-card">
             <div className="hidden grid-cols-12 gap-4 border-b bg-muted/40 px-5 py-3 text-xs font-medium text-muted-foreground sm:grid">
-              <div className="col-span-4">Habitat</div>
-              <div className="col-span-3">Dates</div>
-              <div className="col-span-2">Statut</div>
-              <div className="col-span-2">Dernière action</div>
-              <div className="col-span-1 text-right">Actions</div>
+              <div className="col-span-4">{t("stayRequests.colHabitat")}</div>
+              <div className="col-span-3">{t("stayRequests.colDates")}</div>
+              <div className="col-span-2">{t("stayRequests.colStatus")}</div>
+              <div className="col-span-2">{t("stayRequests.colLastAction")}</div>
+              <div className="col-span-1 text-right">{t("stayRequests.colActions")}</div>
             </div>
             <ul className="divide-y">
               {filtered.map((r: any) => {
@@ -144,7 +150,7 @@ const StayRequests = () => {
                       />
                       <div className="min-w-0">
                         <Link to={`/stay-requests/${r.id}`} className="text-sm font-medium text-foreground hover:underline truncate block">
-                          {listing?.title || "Séjour"}
+                          {listing?.title || t("stayRequests.stay")}
                         </Link>
                         {place && (
                           <p className="text-xs text-muted-foreground truncate">
@@ -159,7 +165,7 @@ const StayRequests = () => {
                     </div>
                     <div className="sm:col-span-2">
                       <Badge variant="outline" className={meta.className}>
-                        {meta.emoji} {meta.label}
+                        {meta.emoji} {t(meta.labelKey)}
                       </Badge>
                     </div>
                     <div className="sm:col-span-2 text-xs text-muted-foreground">
@@ -170,7 +176,7 @@ const StayRequests = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          title="Annuler"
+                          title={t("stayRequests.cancelTitle")}
                           onClick={() => handleCancel(r.id)}
                           disabled={update.isPending}
                         >
@@ -178,7 +184,7 @@ const StayRequests = () => {
                         </Button>
                       )}
                       <Link to={`/stay-requests/${r.id}`}>
-                        <Button variant="ghost" size="icon" title="Voir détails">
+                        <Button variant="ghost" size="icon" title={t("stayRequests.viewDetails")}>
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       </Link>

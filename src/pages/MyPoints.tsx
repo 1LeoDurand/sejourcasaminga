@@ -1,4 +1,5 @@
 import { Navigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Coins, Sparkles, TrendingUp, TrendingDown, Gift, ArrowRight } from "lucide-react";
@@ -14,17 +15,18 @@ import {
   POINT_TYPE_ICONS,
 } from "@/hooks/use-points";
 
-// How members earn points (pedagogy block)
+// How members earn points (pedagogy block) — labels resolved via i18n at render.
 const EARN_WAYS = [
-  { icon: "✨", label: "Compléter ton profil", points: "+10" },
-  { icon: "🏡", label: "Ajouter un lieu", points: "+30" },
-  { icon: "🛏️", label: "Publier un séjour", points: "+20" },
-  { icon: "📅", label: "Ajouter des disponibilités", points: "+10" },
-  { icon: "🤝", label: "Parrainer un·e ami·e", points: "+50" },
-  { icon: "🏡", label: "Accueillir un séjour réglé en points", points: "+pts" },
-];
+  { icon: "✨", key: "earnProfile", points: "+10" },
+  { icon: "🏡", key: "earnPlace", points: "+30" },
+  { icon: "🛏️", key: "earnListing", points: "+20" },
+  { icon: "📅", key: "earnAvailability", points: "+10" },
+  { icon: "🤝", key: "earnReferral", points: "+50" },
+  { icon: "🏡", key: "earnHosting", points: "+pts" },
+] as const;
 
 const MyPoints = () => {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const { data: balance, isLoading: balLoading } = usePointBalance(user?.id);
   const { data: transactions, isLoading: txLoading } = usePointTransactions(user?.id);
@@ -37,14 +39,14 @@ const MyPoints = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="Mes points | Casa Minga" description="Votre solde de points d'hospitalité et l'historique de vos gains et dépenses." />
+      <SEO title={t("myPoints.seoTitle")} description={t("myPoints.seoDesc")} />
       <Navbar />
 
       <div className="container px-5 py-8 max-w-3xl">
         <div className="mb-6">
-          <h1 className="text-2xl md:text-3xl text-foreground">Mes points</h1>
+          <h1 className="text-2xl md:text-3xl text-foreground">{t("myPoints.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Les points d'hospitalité circulent quand on s'accueille. Gagnez-en en participant, dépensez-les pour séjourner.
+            {t("myPoints.intro")}
           </p>
         </div>
 
@@ -55,13 +57,13 @@ const MyPoints = () => {
               <Coins className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Solde actuel</p>
+              <p className="text-sm text-muted-foreground">{t("myPoints.balanceLabel")}</p>
               <p className="text-3xl font-bold text-foreground leading-tight">{points}</p>
             </div>
           </div>
           <Button asChild variant="outline" size="sm">
             <Link to="/discover" className="inline-flex items-center gap-1.5">
-              Trouver un séjour <ArrowRight className="h-3.5 w-3.5" />
+              {t("myPoints.findStay")} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </Button>
         </div>
@@ -70,38 +72,38 @@ const MyPoints = () => {
         <div className="mt-8">
           <h2 className="text-lg text-foreground mb-3 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            Comment gagner des points
+            {t("myPoints.howToEarn")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {EARN_WAYS.map((w) => (
-              <div key={w.label} className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3">
+              <div key={w.key} className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3">
                 <span className="text-xl" aria-hidden>{w.icon}</span>
-                <span className="flex-1 text-sm text-foreground">{w.label}</span>
+                <span className="flex-1 text-sm text-foreground">{t(`myPoints.${w.key}`)}</span>
                 <span className="text-sm font-semibold text-olive">{w.points}</span>
               </div>
             ))}
           </div>
           <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
             <Gift className="h-3.5 w-3.5" />
-            Vous dépensez des points pour être accueilli·e sur un séjour réglé en points — le coût est fixé par l'hôte.
+            {t("myPoints.giftNote")}
           </p>
         </div>
 
         {/* History */}
         <div className="mt-8">
-          <h2 className="text-lg text-foreground mb-3">Historique</h2>
+          <h2 className="text-lg text-foreground mb-3">{t("myPoints.history")}</h2>
 
           {isLoading ? (
-            <p className="text-sm text-muted-foreground py-6 text-center">Chargement…</p>
+            <p className="text-sm text-muted-foreground py-6 text-center">{t("myPoints.loading")}</p>
           ) : !transactions || transactions.length === 0 ? (
             <div className="rounded-xl border border-dashed bg-card px-4 py-10 text-center">
               <Coins className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
-              <p className="text-sm font-medium text-foreground">Aucun mouvement pour l'instant</p>
+              <p className="text-sm font-medium text-foreground">{t("myPoints.emptyTitle")}</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Complétez votre profil ou ajoutez un lieu pour gagner vos premiers points.
+                {t("myPoints.emptyHint")}
               </p>
               <Button asChild variant="outline" size="sm" className="mt-4">
-                <Link to="/edit-profile">Compléter mon profil</Link>
+                <Link to="/edit-profile">{t("myPoints.completeProfile")}</Link>
               </Button>
             </div>
           ) : (

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { compressImage } from "@/lib/compress-image";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import { computeCompletion, completionColor, COMPLETION_LABELS, type CompletionF
 import { Progress } from "@/components/ui/progress";
 
 const EditProfile = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: profile, isLoading } = useProfile(user?.id);
@@ -122,9 +124,9 @@ const EditProfile = () => {
       const url = `${publicUrl}?t=${Date.now()}`;
       setAvatarUrl(url);
       await updateProfile.mutateAsync({ userId: user.id, updates: { avatar_url: url } });
-      toast({ title: "Photo mise à jour ✓" });
+      toast({ title: t("editProfile.photoUpdated") });
     } catch (err: any) {
-      toast({ title: "Erreur upload", description: err.message, variant: "destructive" });
+      toast({ title: t("editProfile.uploadError"), description: err.message, variant: "destructive" });
     } finally {
       setUploading(false);
     }
@@ -156,10 +158,10 @@ const EditProfile = () => {
         preferred_regions: prefForm.preferred_regions,
         desired_stay_duration: prefForm.desired_stay_duration || null,
       });
-      toast({ title: "Profil mis à jour ✓" });
+      toast({ title: t("editProfile.profileUpdated") });
       navigate("/dashboard?tab=profile");
     } catch (err: any) {
-      toast({ title: "Erreur", description: err.message, variant: "destructive" });
+      toast({ title: t("editProfile.error"), description: err.message, variant: "destructive" });
     }
   };
 
@@ -182,11 +184,11 @@ const EditProfile = () => {
   const fieldOk = (f: CompletionField) =>
     completion.checks[f] ? (
       <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 font-medium">
-        <Check className="h-3 w-3" /> rempli
+        <Check className="h-3 w-3" /> {t("editProfile.filled")}
       </span>
     ) : (
       <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-        <X className="h-3 w-3" /> à compléter
+        <X className="h-3 w-3" /> {t("editProfile.toFill")}
       </span>
     );
 
@@ -196,11 +198,11 @@ const EditProfile = () => {
       <Navbar />
       <div className="container max-w-xl py-8 px-4">
         <button onClick={() => navigate(-1)} className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Retour
+          <ArrowLeft className="h-4 w-4" /> {t("editProfile.back")}
         </button>
 
-        <h1 className="text-2xl font-serif text-foreground mb-1">Modifier mon profil</h1>
-        <p className="text-sm text-muted-foreground mb-8">Ces informations sont visibles par les autres membres.</p>
+        <h1 className="text-2xl font-serif text-foreground mb-1">{t("editProfile.title")}</h1>
+        <p className="text-sm text-muted-foreground mb-8">{t("editProfile.subtitle")}</p>
 
         <div className="space-y-6">
           {/* ─── Completion tracker ─── */}
@@ -213,12 +215,12 @@ const EditProfile = () => {
                   <Sparkles className="h-4 w-4 text-primary" />
                 )}
                 <span className="text-sm font-medium text-foreground">
-                  Profil {completion.pct}% complet
+                  {t("editProfile.profileComplete", { pct: completion.pct })}
                 </span>
               </div>
               {completion.pct >= 90 && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[11px] font-semibold">
-                  <Check className="h-3 w-3" /> Profil complet
+                  <Check className="h-3 w-3" /> {t("editProfile.complete")}
                 </span>
               )}
             </div>
@@ -244,7 +246,7 @@ const EditProfile = () => {
             </div>
             {completion.pct < 100 && (
               <p className="text-xs text-muted-foreground">
-                Complète ton profil pour de meilleures recommandations.
+                {t("editProfile.completeHint")}
               </p>
             )}
           </section>
@@ -255,7 +257,7 @@ const EditProfile = () => {
             <div className="relative group">
               <div className="h-24 w-24 rounded-full bg-muted flex items-center justify-center overflow-hidden ring-2 ring-primary/20">
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                  <img src={avatarUrl} alt={t("editProfile.avatarAlt")} className="h-full w-full object-cover" />
                 ) : (
                   <User className="h-10 w-10 text-muted-foreground" />
                 )}
@@ -276,40 +278,40 @@ const EditProfile = () => {
                 onChange={handleAvatarUpload}
               />
             </div>
-            <p className="text-xs text-muted-foreground">Cliquez pour changer votre photo</p>
+            <p className="text-xs text-muted-foreground">{t("editProfile.changePhoto")}</p>
             {fieldOk("photo")}
           </section>
 
           <section className="rounded-xl border bg-card p-5 space-y-4">
             <div>
-              <Label>Nom affiché *</Label>
+              <Label>{t("editProfile.displayName")}</Label>
               <Input value={form.display_name} onChange={(e) => set("display_name", e.target.value)} />
             </div>
             <div>
               <div className="flex items-center justify-between mb-1">
-                <Label>Bio</Label>
+                <Label>{t("editProfile.bio")}</Label>
                 {fieldOk("bio")}
               </div>
-              <Textarea value={form.bio} onChange={(e) => set("bio", e.target.value)} rows={4} placeholder="Parlez de vous, de votre parcours, de ce qui vous anime…" />
-              <p className="text-[11px] text-muted-foreground mt-1">Au moins 20 caractères.</p>
+              <Textarea value={form.bio} onChange={(e) => set("bio", e.target.value)} rows={4} placeholder={t("editProfile.bioPlaceholder")} />
+              <p className="text-[11px] text-muted-foreground mt-1">{t("editProfile.bioHint")}</p>
             </div>
           </section>
 
           <section className="rounded-xl border bg-card p-5 space-y-4">
-            <h2 className="text-base font-serif text-foreground">Style d'accueil</h2>
+            <h2 className="text-base font-serif text-foreground">{t("editProfile.hostingStyle")}</h2>
             <div>
-              <Label>Comment accueillez-vous ?</Label>
-              <Textarea value={form.hosting_style} onChange={(e) => set("hosting_style", e.target.value)} rows={2} placeholder="ex: J'aime partager un repas le premier soir…" />
+              <Label>{t("editProfile.hostingStyleLabel")}</Label>
+              <Textarea value={form.hosting_style} onChange={(e) => set("hosting_style", e.target.value)} rows={2} placeholder={t("editProfile.hostingStylePlaceholder")} />
             </div>
             <div>
-              <Label>Expérience collective</Label>
-              <Textarea value={form.collective_experience} onChange={(e) => set("collective_experience", e.target.value)} rows={2} placeholder="ex: 5 ans en habitat participatif, fondateur d'un écolieu…" />
+              <Label>{t("editProfile.collectiveExp")}</Label>
+              <Textarea value={form.collective_experience} onChange={(e) => set("collective_experience", e.target.value)} rows={2} placeholder={t("editProfile.collectiveExpPlaceholder")} />
             </div>
           </section>
 
           <section className="rounded-xl border bg-card p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-serif text-foreground">Langues parlées</h2>
+              <h2 className="text-base font-serif text-foreground">{t("editProfile.languages")}</h2>
               {fieldOk("languages")}
             </div>
             <div className="flex flex-wrap gap-2">
@@ -324,7 +326,7 @@ const EditProfile = () => {
               <Input
                 value={newLang}
                 onChange={(e) => setNewLang(e.target.value)}
-                placeholder="Ajouter une langue…"
+                placeholder={t("editProfile.addLanguage")}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addLanguage())}
               />
               <Button type="button" variant="outline" size="sm" onClick={addLanguage}>+</Button>
@@ -338,21 +340,21 @@ const EditProfile = () => {
                 <Sparkles className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h2 className="text-base font-serif text-foreground">Mes préférences de lieux</h2>
-                <p className="text-xs text-muted-foreground">Aidez-nous à vous proposer des habitats qui vous correspondent vraiment.</p>
+                <h2 className="text-base font-serif text-foreground">{t("editProfile.placePrefs")}</h2>
+                <p className="text-xs text-muted-foreground">{t("editProfile.placePrefsHint")}</p>
               </div>
             </div>
 
             <div>
-              <Label className="mb-2 block">Types d'habitat qui vous attirent</Label>
+              <Label className="mb-2 block">{t("editProfile.habitatTypes")}</Label>
               <div className="grid grid-cols-2 gap-2">
-                {HABITAT_TYPE_OPTIONS.map((t) => {
-                  const id = `pref-type-${t}`;
-                  const checked = prefForm.preferred_habitat_types.includes(t);
+                {HABITAT_TYPE_OPTIONS.map((ht) => {
+                  const id = `pref-type-${ht}`;
+                  const checked = prefForm.preferred_habitat_types.includes(ht);
                   return (
-                    <label key={t} htmlFor={id} className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted/50 cursor-pointer">
-                      <Checkbox id={id} checked={checked} onCheckedChange={() => togglePref("preferred_habitat_types", t)} />
-                      <span className="select-none">{t}</span>
+                    <label key={ht} htmlFor={id} className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted/50 cursor-pointer">
+                      <Checkbox id={id} checked={checked} onCheckedChange={() => togglePref("preferred_habitat_types", ht)} />
+                      <span className="select-none">{ht}</span>
                     </label>
                   );
                 })}
@@ -361,7 +363,7 @@ const EditProfile = () => {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <Label className="block">Valeurs qui vous parlent</Label>
+                <Label className="block">{t("editProfile.valuesLabel")}</Label>
                 {fieldOk("values")}
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -381,7 +383,7 @@ const EditProfile = () => {
             {regionOptions && regionOptions.length > 0 && (
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <Label className="block">Régions préférées</Label>
+                  <Label className="block">{t("editProfile.regionsLabel")}</Label>
                   {fieldOk("regions")}
                 </div>
                 <div className="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
@@ -400,7 +402,7 @@ const EditProfile = () => {
             )}
 
             <div>
-              <Label className="mb-2 block">Durée de séjour idéale</Label>
+              <Label className="mb-2 block">{t("editProfile.stayDuration")}</Label>
               <div className="flex flex-wrap gap-2">
                 {STAY_DURATION_OPTIONS.map((o) => {
                   const active = prefForm.desired_stay_duration === o.value;
@@ -426,8 +428,8 @@ const EditProfile = () => {
           {/* ─── Préférences email ─── */}
           <section className="rounded-xl border bg-card p-5 space-y-4">
             <div>
-              <h2 className="text-base font-serif text-foreground">Email & notifications</h2>
-              <p className="text-xs text-muted-foreground">Choisissez la fréquence du digest hebdomadaire.</p>
+              <h2 className="text-base font-serif text-foreground">{t("editProfile.emailNotif")}</h2>
+              <p className="text-xs text-muted-foreground">{t("editProfile.emailNotifHint")}</p>
             </div>
 
             <label className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-muted/40 cursor-pointer">
@@ -435,12 +437,12 @@ const EditProfile = () => {
                 checked={emailSettings.weekly_digest}
                 onCheckedChange={(c) => setEmailSettings((s) => ({ ...s, weekly_digest: !!c }))}
               />
-              <span className="text-sm">Recevoir le digest hebdomadaire</span>
+              <span className="text-sm">{t("editProfile.weeklyDigest")}</span>
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <Label className="mb-1.5 block text-xs">Fréquence</Label>
+                <Label className="mb-1.5 block text-xs">{t("editProfile.frequency")}</Label>
                 <select
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   value={emailSettings.frequency}
@@ -449,14 +451,14 @@ const EditProfile = () => {
                   }
                   disabled={!emailSettings.weekly_digest}
                 >
-                  <option value="weekly">Hebdomadaire</option>
-                  <option value="biweekly">Toutes les 2 semaines</option>
-                  <option value="monthly">Mensuel</option>
-                  <option value="never">Jamais</option>
+                  <option value="weekly">{t("editProfile.freqWeekly")}</option>
+                  <option value="biweekly">{t("editProfile.freqBiweekly")}</option>
+                  <option value="monthly">{t("editProfile.freqMonthly")}</option>
+                  <option value="never">{t("editProfile.freqNever")}</option>
                 </select>
               </div>
               <div>
-                <Label className="mb-1.5 block text-xs">Jour d'envoi</Label>
+                <Label className="mb-1.5 block text-xs">{t("editProfile.sendDay")}</Label>
                 <select
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                   value={emailSettings.preferred_day}
@@ -465,13 +467,13 @@ const EditProfile = () => {
                   }
                   disabled={!emailSettings.weekly_digest}
                 >
-                  <option value={1}>Lundi</option>
-                  <option value={2}>Mardi</option>
-                  <option value={3}>Mercredi</option>
-                  <option value={4}>Jeudi</option>
-                  <option value={5}>Vendredi</option>
-                  <option value={6}>Samedi</option>
-                  <option value={0}>Dimanche</option>
+                  <option value={1}>{t("editProfile.monday")}</option>
+                  <option value={2}>{t("editProfile.tuesday")}</option>
+                  <option value={3}>{t("editProfile.wednesday")}</option>
+                  <option value={4}>{t("editProfile.thursday")}</option>
+                  <option value={5}>{t("editProfile.friday")}</option>
+                  <option value={6}>{t("editProfile.saturday")}</option>
+                  <option value={0}>{t("editProfile.sunday")}</option>
                 </select>
               </div>
             </div>
@@ -480,7 +482,7 @@ const EditProfile = () => {
 
           <Button onClick={handleSave} className="w-full" size="lg" disabled={updateProfile.isPending || upsertPrefs.isPending || !form.display_name}>
             {(updateProfile.isPending || upsertPrefs.isPending) ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-            Enregistrer
+            {t("editProfile.save")}
           </Button>
         </div>
       </div>
