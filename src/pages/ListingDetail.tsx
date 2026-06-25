@@ -433,6 +433,9 @@ const ListingDetail = () => {
   const place = listing?.places || null;
   const { data: hostProfile } = useHostProfile(listing?.host_id);
 
+  // Availabilities flagged "unavailable" also block the request form (client-side UX guard).
+  const { data: listingAvails = [] } = useListingAvailabilities(listing?.id);
+
   // Load explicitly blocked periods for the place (public RLS: select using(true)).
   const placeId = (place as any)?.id as string | undefined;
   const { data: unavailablePeriods = [] } = useQuery({
@@ -511,8 +514,15 @@ const ListingDetail = () => {
   const previewPointsCost =
     startDate && endDate ? stayPointsCost(startDate, endDate, pointsPerNight) : pointsPerNight;
 
-  // Blocking periods from place_unavailable_dates that overlap the chosen dates.
-  const blockingPeriods = findBlockingPeriods(startDate || null, endDate || null, unavailablePeriods);
+  // Blocking periods from place_unavailable_dates + availabilities marked "unavailable".
+  const availBlocks = (listingAvails as { start_date: string; end_date: string; status: string }[])
+    .filter((a) => a.status === "unavailable")
+    .map((a) => ({ start_date: a.start_date, end_date: a.end_date, reason: null }));
+  const blockingPeriods = findBlockingPeriods(
+    startDate || null,
+    endDate || null,
+    [...unavailablePeriods, ...availBlocks],
+  );
   const hasDateConflict = blockingPeriods.length > 0;
 
   const EXCHANGE_LABELS: Record<string, string> = {
