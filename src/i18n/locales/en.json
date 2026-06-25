@@ -843,7 +843,15 @@
     "reviewsReceived": "Reviews received",
     "host": "Host",
     "noReviews": "No reviews yet.",
-    "verifiedBadge": "Verified profile"
+    "verifiedBadge": "Verified profile",
+    "trustedBadge": "Trusted host",
+    "trustedBadgeTitle": "Praised in {{count}} reviews from verified travellers",
+    "tenureNew": "New member",
+    "tenureNewTitle": "Recently joined the community",
+    "tenureLoyal": "Loyal member",
+    "tenureLoyalTitle": "Member for over a year",
+    "tenurePillar": "Community pillar",
+    "tenurePillarTitle": "Member for over three years"
   },
   "hostReview": {
     "cta": "Review {{name}}",

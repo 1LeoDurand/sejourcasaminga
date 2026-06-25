@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Loader2, MapPin, Star, Quote, Award, MessageSquare, Languages as LanguagesIcon, BadgeCheck } from "lucide-react";
+import { Loader2, MapPin, Star, Quote, Award, MessageSquare, Languages as LanguagesIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -14,6 +14,7 @@ import { useHostProfile } from "@/hooks/use-profile";
 import { useHostListings } from "@/hooks/use-listings";
 import { useGuestHostReviews } from "@/hooks/use-host-reviews";
 import { useIsMemberVerified } from "@/hooks/use-verification";
+import MemberBadges from "@/components/MemberBadges";
 
 function StarRating({ rating }: { rating: number | null }) {
   if (!rating) return null;
@@ -155,16 +156,11 @@ const MemberProfile = () => {
             <Award className="h-5 w-5 text-primary" />
             {t("memberProfile.badges")}
           </h2>
-          {isVerified ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary">
-              <BadgeCheck className="h-4 w-4" />
-              {t("memberProfile.verifiedBadge")}
-            </span>
-          ) : (
-            <div className="rounded-xl border border-dashed bg-card px-4 py-6 text-center">
-              <p className="text-sm text-muted-foreground">{t("memberProfile.soon")}</p>
-            </div>
-          )}
+          <MemberBadges
+            verified={isVerified}
+            createdAt={profile.created_at}
+            placeIds={(listings ?? []).map((l: any) => l.place_id).filter(Boolean)}
+          />
         </div>
 
         {/* ── Published stays ── */}

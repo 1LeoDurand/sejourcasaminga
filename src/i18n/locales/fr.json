@@ -843,7 +843,15 @@
     "reviewsReceived": "Avis reçus",
     "host": "Hôte",
     "noReviews": "Pas encore d'avis.",
-    "verifiedBadge": "Profil vérifié"
+    "verifiedBadge": "Profil vérifié",
+    "trustedBadge": "Hôte de confiance",
+    "trustedBadgeTitle": "Salué par {{count}} avis de voyageurs vérifiés",
+    "tenureNew": "Nouveau membre",
+    "tenureNewTitle": "A rejoint la communauté récemment",
+    "tenureLoyal": "Membre fidèle",
+    "tenureLoyalTitle": "Membre depuis plus d'un an",
+    "tenurePillar": "Pilier de la communauté",
+    "tenurePillarTitle": "Membre depuis plus de trois ans"
   },
   "hostReview": {
     "cta": "Noter {{name}}",
