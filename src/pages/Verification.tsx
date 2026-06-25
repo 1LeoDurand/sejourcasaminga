@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Loader2, ShieldCheck, Clock, AlertCircle, CheckCircle2, Upload } from "lucide-react";
+import { Loader2, ShieldCheck, Clock, AlertCircle, CheckCircle2, Upload, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -118,7 +118,35 @@ const Verification = () => {
   const submitDoc = useSubmitIdentityDocument();
 
   const [uploading, setUploading] = useState(false);
+  const [paying, setPaying] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Surface the Stripe redirect outcome once, then clean the URL.
+  useEffect(() => {
+    if (searchParams.get("paid") === "1") {
+      toast({ title: t("verification.payReturnTitle"), description: t("verification.payReturnDesc") });
+      searchParams.delete("paid");
+      setSearchParams(searchParams, { replace: true });
+    } else if (searchParams.get("canceled") === "1") {
+      searchParams.delete("canceled");
+      setSearchParams(searchParams, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Card payment via Stripe Checkout (hosted) — redirects to Stripe.
+  const payByCard = async () => {
+    setPaying(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", { body: {} });
+      if (error || !data?.url) throw new Error(error?.message ?? "no_url");
+      window.location.href = data.url as string;
+    } catch (e: any) {
+      toast({ title: t("verification.payError"), description: e?.message, variant: "destructive" });
+      setPaying(false);
+    }
+  };
 
   // ---- Auth guard ----
   if (authLoading) {
@@ -225,9 +253,23 @@ const Verification = () => {
                 <p className="text-sm text-muted-foreground">{t("verification.membershipDesc")}</p>
               </section>
 
-              {/* 3. Bank transfer instructions */}
+              {/* 3. Payment — card (Stripe) or bank transfer */}
               <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
                 <h2 className="font-semibold text-foreground">{t("verification.paymentTitle")}</h2>
+
+                {/* Card payment (Stripe Checkout) */}
+                <Button type="button" className="w-full gap-2" disabled={paying} onClick={payByCard}>
+                  {paying ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
+                  {t("verification.payByCard")}
+                </Button>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="h-px flex-1 bg-border" />
+                  {t("verification.payOr")}
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+
                 <p className="text-sm text-muted-foreground">{t("verification.paymentInstructions")}</p>
 
                 {/* Bank details (IBAN is not secret — it is shown to members so they can pay by transfer) */}
