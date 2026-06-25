@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -69,12 +72,23 @@ const SORT_OPTIONS = [
 ] as const;
 type SortKey = (typeof SORT_OPTIONS)[number]["key"];
 
-const LS_KEY = "discover:filters:v2";
+// Boolean suitability flags stored on `places`. labelKey → i18n.
+const SUITABILITY_FLAGS = [
+  { key: "children_friendly", labelKey: "discover.flagChildren" },
+  { key: "family_friendly", labelKey: "discover.flagFamily" },
+  { key: "solo_friendly", labelKey: "discover.flagSolo" },
+  { key: "animals_allowed", labelKey: "discover.flagAnimals" },
+  { key: "accessible", labelKey: "discover.flagAccessible" },
+] as const;
+type FlagKey = (typeof SUITABILITY_FLAGS)[number]["key"];
+
+const LS_KEY = "discover:filters:v3";
 
 const normalize = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
 const Discover = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const cityParam = searchParams.get("city") || "";
   const regionParam = searchParams.get("region") || "";
@@ -86,6 +100,9 @@ const Discover = () => {
       searchParams.get("type") ||
       searchParams.get("themes") ||
       searchParams.get("sizes") ||
+      searchParams.get("amenities") ||
+      searchParams.get("offerings") ||
+      searchParams.get("flags") ||
       searchParams.get("sort");
     if (hasAny) return;
     try {
@@ -109,6 +126,18 @@ const Discover = () => {
     () => (searchParams.get("sizes") || "").split(",").filter(Boolean) as SizeKey[],
     [searchParams]
   );
+  const selectedAmenities = useMemo(
+    () => (searchParams.get("amenities") || "").split(",").filter(Boolean),
+    [searchParams]
+  );
+  const selectedOfferings = useMemo(
+    () => (searchParams.get("offerings") || "").split(",").filter(Boolean),
+    [searchParams]
+  );
+  const selectedFlags = useMemo(
+    () => (searchParams.get("flags") || "").split(",").filter(Boolean) as FlagKey[],
+    [searchParams]
+  );
   const sort = (searchParams.get("sort") || "relevance") as SortKey;
 
   // Persist to localStorage on change
@@ -120,11 +149,14 @@ const Discover = () => {
           type: typeFilter !== "all" ? typeFilter : "",
           themes: selectedThemes.join(","),
           sizes: selectedSizes.join(","),
+          amenities: selectedAmenities.join(","),
+          offerings: selectedOfferings.join(","),
+          flags: selectedFlags.join(","),
           sort: sort !== "relevance" ? sort : "",
         })
       );
     } catch {}
-  }, [typeFilter, selectedThemes, selectedSizes, sort]);
+  }, [typeFilter, selectedThemes, selectedSizes, selectedAmenities, selectedOfferings, selectedFlags, sort]);
 
   const expandedTags = useMemo(() => {
     const set = new Set<string>();
@@ -139,6 +171,18 @@ const Discover = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const { data: listings, isLoading } = useListings();
+
+  // Available amenity / offering options, derived from loaded places (no extra query).
+  const collectOptions = (field: "shared_amenities" | "offerings") => {
+    const set = new Set<string>();
+    (listings || []).forEach((l: any) => {
+      const arr: string[] = l.places?.[field] || [];
+      arr.forEach((v) => v && set.add(v));
+    });
+    return [...set].sort((a, b) => a.localeCompare(b, "fr"));
+  };
+  const availableAmenities = useMemo(() => collectOptions("shared_amenities"), [listings]);
+  const availableOfferings = useMemo(() => collectOptions("offerings"), [listings]);
 
   const updateParams = (mut: (sp: URLSearchParams) => void) => {
     const sp = new URLSearchParams(searchParams);
@@ -168,11 +212,27 @@ const Discover = () => {
   const setSort = (key: SortKey) =>
     updateParams((sp) => (key === "relevance" ? sp.delete("sort") : sp.set("sort", key)));
 
+  // Generic multi-select toggle for a comma-separated URL param.
+  const toggleInParam = (param: string, current: string[], value: string) =>
+    updateParams((sp) => {
+      const next = current.includes(value)
+        ? current.filter((v) => v !== value)
+        : [...current, value];
+      next.length ? sp.set(param, next.join(",")) : sp.delete(param);
+    });
+
+  const toggleAmenity = (v: string) => toggleInParam("amenities", selectedAmenities, v);
+  const toggleOffering = (v: string) => toggleInParam("offerings", selectedOfferings, v);
+  const toggleFlag = (v: FlagKey) => toggleInParam("flags", selectedFlags, v);
+
   const clearAll = () =>
     updateParams((sp) => {
       sp.delete("type");
       sp.delete("themes");
       sp.delete("sizes");
+      sp.delete("amenities");
+      sp.delete("offerings");
+      sp.delete("flags");
       sp.delete("sort");
     });
 
@@ -232,6 +292,19 @@ const Discover = () => {
       const placeValues: string[] = place?.values || [];
       if (!expandedTags.some((t) => placeValues.includes(t))) return false;
     }
+    // Amenities / offerings: place must include EVERY selected option.
+    if (selectedAmenities.length > 0) {
+      const arr: string[] = place?.shared_amenities || [];
+      if (!selectedAmenities.every((a) => arr.includes(a))) return false;
+    }
+    if (selectedOfferings.length > 0) {
+      const arr: string[] = place?.offerings || [];
+      if (!selectedOfferings.every((o) => arr.includes(o))) return false;
+    }
+    // Suitability flags: place must satisfy EVERY selected boolean.
+    if (selectedFlags.length > 0) {
+      if (!selectedFlags.every((f) => place?.[f] === true)) return false;
+    }
     if (!matchesSize(place)) return false;
     return true;
   });
@@ -262,7 +335,12 @@ const Discover = () => {
 
   const count = sorted.length;
   const activeFilterCount =
-    (typeFilter !== "all" ? 1 : 0) + selectedThemes.length + selectedSizes.length;
+    (typeFilter !== "all" ? 1 : 0) +
+    selectedThemes.length +
+    selectedSizes.length +
+    selectedAmenities.length +
+    selectedOfferings.length +
+    selectedFlags.length;
 
   const seoTitle = activeDestination
     ? `Séjours à ${activeDestination} — habitats participatifs | Casa Minga`
@@ -270,6 +348,62 @@ const Discover = () => {
   const seoDesc = activeDestination
     ? `Découvrez ${count} séjour${count > 1 ? "s" : ""} en habitat participatif et écolieu à ${activeDestination}.`
     : "Parcourez tous les séjours proposés par les habitats participatifs et écolieux de la communauté Casa Minga.";
+
+  // Collapsible chip group (multi-select). Hidden entirely when no options exist.
+  const ChipGroup = ({
+    title,
+    options,
+    selected,
+    onToggle,
+    clearKey,
+  }: {
+    title: string;
+    options: { value: string; label: string }[];
+    selected: string[];
+    onToggle: (v: string) => void;
+    clearKey?: string;
+  }) => {
+    if (options.length === 0) return null;
+    return (
+      <Collapsible defaultOpen className="border-t pt-4">
+        <div className="flex items-center justify-between">
+          <CollapsibleTrigger className="group flex items-center gap-1.5 text-sm font-medium text-foreground">
+            {title}
+            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-data-[state=closed]:-rotate-90" />
+          </CollapsibleTrigger>
+          {clearKey && selected.length > 0 && (
+            <button
+              type="button"
+              onClick={() => updateParams((sp) => sp.delete(clearKey))}
+              className="text-xs text-muted-foreground hover:text-foreground"
+            >
+              {t("discover.clear")}
+            </button>
+          )}
+        </div>
+        <CollapsibleContent className="mt-2 flex flex-wrap gap-1.5">
+          {options.map((o) => {
+            const active = selected.includes(o.value);
+            return (
+              <button
+                key={o.value}
+                type="button"
+                onClick={() => onToggle(o.value)}
+                aria-pressed={active}
+                className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
+                  active
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-background text-foreground border-border hover:border-primary/40"
+                }`}
+              >
+                {o.label}
+              </button>
+            );
+          })}
+        </CollapsibleContent>
+      </Collapsible>
+    );
+  };
 
   // ─── Filters panel (reused in sidebar + drawer) ───
   const FiltersPanel = (
@@ -336,9 +470,33 @@ const Discover = () => {
         </div>
       </div>
 
+      <ChipGroup
+        title={t("discover.suitability")}
+        options={SUITABILITY_FLAGS.map((f) => ({ value: f.key, label: t(f.labelKey) }))}
+        selected={selectedFlags}
+        onToggle={(v) => toggleFlag(v as FlagKey)}
+        clearKey="flags"
+      />
+
+      <ChipGroup
+        title={t("discover.amenities")}
+        options={availableAmenities.map((a) => ({ value: a, label: a }))}
+        selected={selectedAmenities}
+        onToggle={toggleAmenity}
+        clearKey="amenities"
+      />
+
+      <ChipGroup
+        title={t("discover.offerings")}
+        options={availableOfferings.map((o) => ({ value: o, label: o }))}
+        selected={selectedOfferings}
+        onToggle={toggleOffering}
+        clearKey="offerings"
+      />
+
       {activeFilterCount > 0 && (
         <Button variant="ghost" size="sm" onClick={clearAll} className="w-full">
-          <X className="mr-1 h-3 w-3" /> Tout réinitialiser
+          <X className="mr-1 h-3 w-3" /> {t("discover.resetFilters")}
         </Button>
       )}
     </div>
