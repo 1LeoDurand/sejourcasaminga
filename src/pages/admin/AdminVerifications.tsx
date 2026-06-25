@@ -26,7 +26,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, RefreshCw, Eye, CreditCard, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, RefreshCw, Eye, CreditCard, CheckCircle2, XCircle, FileX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -139,6 +139,24 @@ export default function AdminVerifications() {
     }
   };
 
+  // ── Delete identity document (RGPD) ─────────────────────────────────────────
+  // The GDPR notice promises the document is erased after review. Called after a
+  // successful approve/reject decision. Non-blocking: a failure only warns — the
+  // recorded decision stands. Never log the path.
+  const deleteIdentityDoc = async (path: string | null) => {
+    if (!path) return;
+    try {
+      const { error } = await supabase.storage.from("identity-docs").remove([path]);
+      if (error) throw error;
+    } catch {
+      toast({
+        title: t("adminVerifications.docDeleteWarnTitle"),
+        description: t("adminVerifications.docDeleteWarnDesc"),
+        variant: "destructive",
+      });
+    }
+  };
+
   // ── Mark paid ─────────────────────────────────────────────────────────────
 
   const handleMarkPaid = async (row: VerifRow) => {
@@ -173,6 +191,8 @@ export default function AdminVerifications() {
         _note: "",
       });
       if (error) throw error;
+      // RGPD: erase the identity document once the decision is recorded.
+      await deleteIdentityDoc(row.id_doc_path);
       toast({ title: t("adminVerifications.approveSuccess") });
       await fetchVerifications();
     } catch (e: any) {
@@ -213,6 +233,8 @@ export default function AdminVerifications() {
         _note: rejectNote,
       });
       if (error) throw error;
+      // RGPD: erase the identity document once the decision is recorded.
+      await deleteIdentityDoc(rejectTarget.id_doc_path);
       toast({ title: t("adminVerifications.rejectSuccess") });
       setRejectDialogOpen(false);
       await fetchVerifications();
@@ -347,19 +369,32 @@ export default function AdminVerifications() {
                       {/* Actions */}
                       <TableCell>
                         <div className="flex items-center justify-end gap-2 flex-wrap">
-                          {/* View document */}
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={!row.id_doc_path || busy}
-                            onClick={() => handleViewDoc(row)}
-                            title={t("adminVerifications.viewDoc")}
-                          >
-                            <Eye className="h-4 w-4" />
-                            <span className="hidden sm:inline ml-1">
-                              {t("adminVerifications.viewDoc")}
+                          {/* Identity document — viewable only before review;
+                              erased (RGPD) once verified/rejected. */}
+                          {row.status === "pending" ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={!row.id_doc_path || busy}
+                              onClick={() => handleViewDoc(row)}
+                              title={t("adminVerifications.viewDoc")}
+                            >
+                              <Eye className="h-4 w-4" />
+                              <span className="hidden sm:inline ml-1">
+                                {t("adminVerifications.viewDoc")}
+                              </span>
+                            </Button>
+                          ) : row.id_doc_path ? (
+                            <span
+                              className="inline-flex items-center gap-1 text-xs text-muted-foreground"
+                              title={t("adminVerifications.docDeletedHint")}
+                            >
+                              <FileX className="h-3.5 w-3.5" />
+                              <span className="hidden sm:inline">
+                                {t("adminVerifications.docDeleted")}
+                              </span>
                             </span>
-                          </Button>
+                          ) : null}
 
                           {/* Mark paid (only if not yet paid) */}
                           {!row.paid_at && (

@@ -26,6 +26,7 @@ import { useSmartRecommendations } from "@/hooks/use-smart-recommendations";
 import { useUserPreferences } from "@/hooks/use-user-preferences";
 import { computeCompletion, completionColor } from "@/lib/profile-completion";
 import MyClaimRequests from "@/components/MyClaimRequests";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { useIsAdmin } from "@/hooks/use-claim-requests";
 import { useEffect, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
@@ -192,7 +193,10 @@ function DashboardHome({
   return (
     <div className="mb-6 space-y-4">
       {/* Greeting */}
-      <h1 className="text-2xl font-serif text-foreground">{t("dashboard.greeting", { name: displayName })}</h1>
+      <div className="flex flex-wrap items-center gap-2.5">
+        <h1 className="text-2xl font-serif text-foreground">{t("dashboard.greeting", { name: displayName })}</h1>
+        <VerifiedBadge userId={user.id} />
+      </div>
 
       {/* Snapshot: completion gauge + points + pending actions */}
       <section className="rounded-2xl border bg-card p-5 space-y-4">

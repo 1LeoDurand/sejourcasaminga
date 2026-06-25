@@ -5,6 +5,7 @@ import { RELATIONSHIP_LABELS } from "@/data/demo";
 import { listingTypeMeta, listingTypeLabel } from "@/lib/listing-types";
 import { listingUrl } from "@/hooks/use-listings";
 import { useListingCardStats } from "@/hooks/use-listing-stats";
+import { useIsMemberVerified } from "@/hooks/use-verification";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -31,6 +32,8 @@ const ListingCard = ({ listing }: Props) => {
   const [current, setCurrent] = useState(0);
   const place = listing.places;
   const profile = listing.profiles;
+  // Real host verification — the check marks below are shown only when true.
+  const { data: hostVerified } = useIsMemberVerified(profile?.id);
 
   const photos: string[] = (() => {
     const arr = Array.isArray(listing.images) ? (listing.images.filter(Boolean) as string[]) : [];
@@ -143,9 +146,11 @@ const ListingCard = ({ listing }: Props) => {
                 alt={profile.display_name}
                 className="h-11 w-11 rounded-full object-cover ring-2 ring-card"
               />
-              <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary ring-2 ring-card">
-                <BadgeCheck className="h-3 w-3 text-primary-foreground" />
-              </span>
+              {hostVerified && (
+                <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary ring-2 ring-card">
+                  <BadgeCheck className="h-3 w-3 text-primary-foreground" />
+                </span>
+              )}
             </div>
           </div>
         )}
@@ -162,7 +167,9 @@ const ListingCard = ({ listing }: Props) => {
         <div className="mt-0.5 flex items-start justify-between gap-2">
           <h3 className="flex items-center gap-1.5 font-serif text-base font-semibold leading-snug text-foreground line-clamp-1 group-hover:text-primary transition-colors">
             {listing.title}
-            {profile && <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />}
+            {hostVerified && (
+              <BadgeCheck className="h-4 w-4 shrink-0 text-primary" aria-label="Profil vérifié" />
+            )}
           </h3>
           {rating != null && (
             <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-foreground">

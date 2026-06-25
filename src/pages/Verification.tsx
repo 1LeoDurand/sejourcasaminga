@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Loader2, ShieldCheck, Clock, AlertCircle, CheckCircle2, Upload, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -112,6 +113,7 @@ function StatusBanner({
 const Verification = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
+  const queryClient = useQueryClient();
 
   const { data: verif, isLoading: verifLoading, isError: verifError } = useMyVerification();
   const { data: price, isLoading: priceLoading } = useMembershipPrice();
@@ -126,6 +128,8 @@ const Verification = () => {
   useEffect(() => {
     if (searchParams.get("paid") === "1") {
       toast({ title: t("verification.payReturnTitle"), description: t("verification.payReturnDesc") });
+      // The Stripe webhook may have already written paid_at — refresh so the UI reflects it.
+      queryClient.invalidateQueries({ queryKey: ["member-verification"] });
       searchParams.delete("paid");
       setSearchParams(searchParams, { replace: true });
     } else if (searchParams.get("canceled") === "1") {
@@ -164,6 +168,8 @@ const Verification = () => {
   // ---- Derived status ----
   const status: VerifStatus = verif?.status ?? "none";
   const canSubmit = status === "none" || status === "rejected";
+  const isVerified = status === "verified";
+  const isPaid = !!verif?.paid_at;
 
   // ---- File upload handler ----
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,62 +248,81 @@ const Verification = () => {
               {/* 1. Current status */}
               <StatusBanner status={status} reviewNote={verif?.review_note ?? null} />
 
-              {/* 2. Price */}
-              <section className="rounded-2xl border border-border bg-card p-4 space-y-1">
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  {t("verification.membershipLabel")}
-                </p>
-                <p className="text-2xl font-bold text-foreground">
-                  {price !== undefined ? `${price} €` : "—"}
-                </p>
-                <p className="text-sm text-muted-foreground">{t("verification.membershipDesc")}</p>
-              </section>
+              {/* 2. Price — hidden once verified (nothing left to pay) */}
+              {!isVerified && (
+                <section className="rounded-2xl border border-border bg-card p-4 space-y-1">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                    {t("verification.membershipLabel")}
+                  </p>
+                  <p className="text-2xl font-bold text-foreground">
+                    {price !== undefined ? `${price} €` : "—"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">{t("verification.membershipDesc")}</p>
+                </section>
+              )}
 
-              {/* 3. Payment — card (Stripe) or bank transfer */}
-              <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
-                <h2 className="font-semibold text-foreground">{t("verification.paymentTitle")}</h2>
+              {/* 3. Payment — hidden once verified. When already paid, show a
+                  confirmation instead of inviting another payment. */}
+              {!isVerified && (
+                <section className="rounded-2xl border border-border bg-card p-4 space-y-3">
+                  <h2 className="font-semibold text-foreground">{t("verification.paymentTitle")}</h2>
 
-                {/* Card payment (Stripe Checkout) */}
-                <Button type="button" className="w-full gap-2" disabled={paying} onClick={payByCard}>
-                  {paying ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
-                  {t("verification.payByCard")}
-                </Button>
+                  {isPaid ? (
+                    <div className="flex items-start gap-3 rounded-xl border border-green-500/30 bg-green-500/10 p-3 text-green-700 dark:text-green-400">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" />
+                      <div>
+                        <p className="font-semibold">{t("verification.paymentReceived")}</p>
+                        <p className="text-sm text-green-600/80 dark:text-green-400/80">
+                          {t("verification.paymentReceivedDesc")}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Card payment (Stripe Checkout) */}
+                      <Button type="button" className="w-full gap-2" disabled={paying} onClick={payByCard}>
+                        {paying ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
+                        {t("verification.payByCard")}
+                      </Button>
 
-                {/* Divider */}
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="h-px flex-1 bg-border" />
-                  {t("verification.payOr")}
-                  <span className="h-px flex-1 bg-border" />
-                </div>
+                      {/* Divider */}
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span className="h-px flex-1 bg-border" />
+                        {t("verification.payOr")}
+                        <span className="h-px flex-1 bg-border" />
+                      </div>
 
-                <p className="text-sm text-muted-foreground">{t("verification.paymentInstructions")}</p>
+                      <p className="text-sm text-muted-foreground">{t("verification.paymentInstructions")}</p>
 
-                {/* Bank details (IBAN is not secret — it is shown to members so they can pay by transfer) */}
-                <dl className="rounded-lg border border-border bg-muted/40 p-3 text-sm space-y-1.5">
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-muted-foreground">{t("verification.bankHolder")}</dt>
-                    <dd className="font-medium text-foreground text-right">DURAND LEO (EI)</dd>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-muted-foreground">IBAN</dt>
-                    <dd className="font-mono text-foreground text-right break-all">FR76 1027 8091 1300 0214 1210 150</dd>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-muted-foreground">BIC</dt>
-                    <dd className="font-mono text-foreground text-right">CMCIFR2A</dd>
-                  </div>
-                  <div className="flex justify-between gap-3">
-                    <dt className="text-muted-foreground">{t("verification.bankName")}</dt>
-                    <dd className="font-medium text-foreground text-right">CCM Bassin de Thau</dd>
-                  </div>
-                  <div className="flex justify-between gap-3 border-t border-border pt-1.5">
-                    <dt className="text-muted-foreground">{t("verification.paymentReference")}</dt>
-                    <dd className="font-medium text-foreground text-right break-all">{user.email}</dd>
-                  </div>
-                </dl>
+                      {/* Bank details (IBAN is not secret — it is shown to members so they can pay by transfer) */}
+                      <dl className="rounded-lg border border-border bg-muted/40 p-3 text-sm space-y-1.5">
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-muted-foreground">{t("verification.bankHolder")}</dt>
+                          <dd className="font-medium text-foreground text-right">DURAND LEO (EI)</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-muted-foreground">IBAN</dt>
+                          <dd className="font-mono text-foreground text-right break-all">FR76 1027 8091 1300 0214 1210 150</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-muted-foreground">BIC</dt>
+                          <dd className="font-mono text-foreground text-right">CMCIFR2A</dd>
+                        </div>
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-muted-foreground">{t("verification.bankName")}</dt>
+                          <dd className="font-medium text-foreground text-right">CCM Bassin de Thau</dd>
+                        </div>
+                        <div className="flex justify-between gap-3 border-t border-border pt-1.5">
+                          <dt className="text-muted-foreground">{t("verification.paymentReference")}</dt>
+                          <dd className="font-medium text-foreground text-right break-all">{user.email}</dd>
+                        </div>
+                      </dl>
 
-                <p className="text-xs text-muted-foreground">{t("verification.paymentNote")}</p>
-              </section>
+                      <p className="text-xs text-muted-foreground">{t("verification.paymentNote")}</p>
+                    </>
+                  )}
+                </section>
+              )}
 
               {/* 4. Identity document upload — only when action is possible */}
               {canSubmit && (
