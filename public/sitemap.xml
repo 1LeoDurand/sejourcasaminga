@@ -9,6 +9,7 @@
   <url><loc>https://sejour.casaminga.com/hospitalite</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/charte</loc><priority>0.5</priority></url>
   <url><loc>https://sejour.casaminga.com/contact</loc><priority>0.5</priority></url>
+  <url><loc>https://sejour.casaminga.com/statistiques</loc><priority>0.5</priority></url>
 
   <!-- Ressources : Documentaires -->
   <url><loc>https://sejour.casaminga.com/ressources/demain</loc><priority>0.6</priority></url>
@@ -48,6 +49,11 @@
   <url><loc>https://sejour.casaminga.com/ressources/decider-ensemble-sociocratie</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/ressources/financer-un-projet-d-habitat-collectif</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/ressources/reussir-son-premier-sejour</loc><priority>0.6</priority></url>
+
+  <!-- Ressources : Cluster 4 — échange de maison (pilier + satellites) -->
+  <url><loc>https://sejour.casaminga.com/ressources/echange-de-maison-guide</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/echange-reciproque-ou-points</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/verification-confiance-entre-hotes</loc><priority>0.6</priority></url>
 
   <!-- Ressources : Guides -->
   <url><loc>https://sejour.casaminga.com/ressources/guide-creer-sa-fiche-de-lieu</loc><priority>0.6</priority></url>
