@@ -60,6 +60,8 @@ const Referrals = lazy(() => import("./pages/Referrals.tsx"));
 const MyPoints = lazy(() => import("./pages/MyPoints.tsx"));
 const MemberProfile = lazy(() => import("./pages/MemberProfile.tsx"));
 const VerifyClaim = lazy(() => import("./pages/VerifyClaim.tsx"));
+const Verification = lazy(() => import("./pages/Verification.tsx"));
+const AdminVerifications = lazy(() => import("./pages/admin/AdminVerifications.tsx"));
 
 import ScrollToTop from "./components/ScrollToTop";
 import FeedbackButton from "./components/FeedbackButton";
@@ -132,6 +134,8 @@ const App = () => (
               <Route path="/referrals" element={<Referrals />} />
               <Route path="/points" element={<MyPoints />} />
               <Route path="/membre/:id" element={<MemberProfile />} />
+              <Route path="/verification" element={<Verification />} />
+              <Route path="/admin/verifications" element={<AdminVerifications />} />
               <Route path="/verify-claim" element={<VerifyClaim />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

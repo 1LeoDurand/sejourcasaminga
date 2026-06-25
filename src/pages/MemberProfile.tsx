@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Loader2, MapPin, Star, Quote, Award, MessageSquare, Languages as LanguagesIcon } from "lucide-react";
+import { Loader2, MapPin, Star, Quote, Award, MessageSquare, Languages as LanguagesIcon, BadgeCheck } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useHostProfile } from "@/hooks/use-profile";
 import { useHostListings } from "@/hooks/use-listings";
 import { useGuestHostReviews } from "@/hooks/use-host-reviews";
+import { useIsMemberVerified } from "@/hooks/use-verification";
 
 function StarRating({ rating }: { rating: number | null }) {
   if (!rating) return null;
@@ -33,6 +34,7 @@ const MemberProfile = () => {
   const { data: profile, isLoading: loadingProfile } = useHostProfile(id);
   const { data: listings, isLoading: loadingListings } = useHostListings(id);
   const { data: reviews } = useGuestHostReviews(id);
+  const { data: isVerified } = useIsMemberVerified(id);
 
   // Average rating from received reviews that carry a score.
   const ratedReviews = (reviews ?? []).filter((r) => typeof r.rating === "number" && r.rating > 0);
@@ -137,15 +139,22 @@ const MemberProfile = () => {
           </div>
         )}
 
-        {/* ── Badges (placeholder — real badges come from a future back item) ── */}
+        {/* ── Badges ── */}
         <div className="mt-8">
           <h2 className="text-lg text-foreground mb-3 flex items-center gap-2">
             <Award className="h-5 w-5 text-primary" />
             {t("memberProfile.badges")}
           </h2>
-          <div className="rounded-xl border border-dashed bg-card px-4 py-6 text-center">
-            <p className="text-sm text-muted-foreground">{t("memberProfile.soon")}</p>
-          </div>
+          {isVerified ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary">
+              <BadgeCheck className="h-4 w-4" />
+              {t("memberProfile.verifiedBadge")}
+            </span>
+          ) : (
+            <div className="rounded-xl border border-dashed bg-card px-4 py-6 text-center">
+              <p className="text-sm text-muted-foreground">{t("memberProfile.soon")}</p>
+            </div>
+          )}
         </div>
 
         {/* ── Published stays ── */}

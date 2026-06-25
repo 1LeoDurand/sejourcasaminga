@@ -19,7 +19,7 @@ import {
   ArrowLeft, MapPin, Users, Home, Shield, Heart, Mail,
   ChevronRight, Eye, Loader2, Send, Pencil, Clock,
   Star, X, ZoomIn, CheckCircle2, MessageSquare, Sparkles,
-  ChevronDown, HelpCircle, ListChecks,
+  ChevronDown, HelpCircle, ListChecks, BadgeCheck,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -31,6 +31,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCreateExchangeRequest, stayPointsCost } from "@/hooks/use-exchange-requests";
 import { useListing, usePlaceListings } from "@/hooks/use-listings";
 import { useHostProfile } from "@/hooks/use-profile";
+import { useIsMemberVerified } from "@/hooks/use-verification";
 import { useStayReviews } from "@/hooks/use-stay-reviews";
 import { useListingAvailabilities } from "@/hooks/use-availabilities";
 import { toast } from "@/hooks/use-toast";
@@ -163,6 +164,8 @@ function HostCard({
   experience?: string | null;
   createdAt?: string | null;
 }) {
+  const { t } = useTranslation();
+  const { data: isVerified } = useIsMemberVerified(hostId);
   const memberSince = createdAt
     ? new Date(createdAt).getFullYear()
     : null;
@@ -174,8 +177,11 @@ function HostCard({
           <img src={avatar} alt={name} className="h-16 w-16 rounded-full object-cover ring-2 ring-border transition-opacity hover:opacity-90" />
         </Link>
         <div className="flex-1 min-w-0">
-          <Link to={`/membre/${hostId}`} className="text-sm font-medium text-foreground transition-colors hover:text-primary">
+          <Link to={`/membre/${hostId}`} className="inline-flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-primary">
             Accueilli par {name}
+            {isVerified && (
+              <BadgeCheck className="h-4 w-4 text-primary" aria-label={t("memberProfile.verifiedBadge")} />
+            )}
           </Link>
           {memberSince && (
             <p className="text-xs text-muted-foreground mt-0.5">

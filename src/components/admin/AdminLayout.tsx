@@ -15,6 +15,7 @@ import {
   ArrowLeftRight,
   Coins,
   Mail,
+  BadgeCheck,
 } from "lucide-react";
 import {
   Sidebar,
@@ -37,6 +38,7 @@ const items = [
   { title: "Lieux", url: "/admin/places", icon: Home },
   { title: "Séjours", url: "/admin/listings", icon: BedDouble },
   { title: "Revendications", url: "/admin/claims", icon: ShieldCheck },
+  { title: "Vérifications", url: "/admin/verifications", icon: BadgeCheck },
   { title: "Signalements", url: "/admin/reports", icon: Flag },
   { title: "Échanges", url: "/admin/exchanges", icon: ArrowLeftRight },
   { title: "Points", url: "/admin/points", icon: Coins },

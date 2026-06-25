@@ -174,10 +174,8 @@ function MenuContent({ close }: { close: () => void }) {
     },
     {
       icon: ShieldCheck,
-      label: "Vérification",
-      to: "/edit-profile",
-      badge: completion.pct >= 80 ? "Vérifié" : "À compléter",
-      badgeVariant: completion.pct >= 80 ? "success" : "default",
+      label: "Devenir membre vérifié",
+      to: "/verification",
     },
     { icon: Gift, label: "Inviter des amis", to: "/referrals" },
     { icon: Settings, label: "Paramètres", to: "/edit-profile" },
