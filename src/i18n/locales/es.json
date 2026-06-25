@@ -287,7 +287,19 @@
     "bannerNoPlaceText": "En Casa Minga, te unes o creas un lugar colectivo antes de ofrecer una estancia.",
     "bannerFirstStayTitle": "Ofrece tu primera estancia",
     "bannerFirstStayText": "Eres miembro de un lugar: invita a la comunidad a venir a alojarse.",
-    "bannerFirstStayCta": "Crear una ficha de estancia"
+    "bannerFirstStayCta": "Crear una ficha de estancia",
+    "greeting": "Hola {{name}} 👋",
+    "profilePct": "Perfil {{pct}}% completo",
+    "pendingActions": "Por gestionar",
+    "receivedToHandle_one": "{{count}} solicitud recibida por gestionar",
+    "receivedToHandle_other": "{{count}} solicitudes recibidas por gestionar",
+    "sentPending_one": "{{count}} solicitud enviada pendiente",
+    "sentPending_other": "{{count}} solicitudes enviadas pendientes",
+    "allCaughtUp": "Nada por gestionar por ahora 🎉",
+    "recommendedForYou": "Recomendado para ti",
+    "setPrefsText": "Indica tus preferencias para recibir recomendaciones a medida.",
+    "setPrefsCta": "Indicar mis preferencias",
+    "noRecs": "Aún no hay recomendaciones — explora los hábitats."
   },
   "discover": {
     "title": "Encuentra una estancia",

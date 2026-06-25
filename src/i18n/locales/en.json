@@ -287,7 +287,19 @@
     "bannerNoPlaceText": "On Casa Minga, you join or create a collective place before offering a stay.",
     "bannerFirstStayTitle": "Offer your first stay",
     "bannerFirstStayText": "You're a member of a place: invite the community to come and stay.",
-    "bannerFirstStayCta": "Create a stay listing"
+    "bannerFirstStayCta": "Create a stay listing",
+    "greeting": "Hello {{name}} 👋",
+    "profilePct": "Profile {{pct}}% complete",
+    "pendingActions": "To handle",
+    "receivedToHandle_one": "{{count}} received request to handle",
+    "receivedToHandle_other": "{{count}} received requests to handle",
+    "sentPending_one": "{{count}} sent request pending",
+    "sentPending_other": "{{count}} sent requests pending",
+    "allCaughtUp": "Nothing to handle right now 🎉",
+    "recommendedForYou": "Recommended for you",
+    "setPrefsText": "Set your preferences to get tailored recommendations.",
+    "setPrefsCta": "Set your preferences",
+    "noRecs": "No recommendations yet — explore the habitats."
   },
   "discover": {
     "title": "Find a stay",

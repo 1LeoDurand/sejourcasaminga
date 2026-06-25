@@ -23,6 +23,8 @@ import {
 import { useMyConversations } from "@/hooks/use-conversations";
 import { usePointBalance, usePointTransactions, useReferralCode, useMyReferrals, POINT_TYPE_LABELS, POINT_TYPE_ICONS } from "@/hooks/use-points";
 import { useSmartRecommendations } from "@/hooks/use-smart-recommendations";
+import { useUserPreferences } from "@/hooks/use-user-preferences";
+import { computeCompletion, completionColor } from "@/lib/profile-completion";
 import MyClaimRequests from "@/components/MyClaimRequests";
 import { useIsAdmin } from "@/hooks/use-claim-requests";
 import { useEffect, useState } from "react";
@@ -106,6 +108,14 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-6">
+        <DashboardHome
+          user={user}
+          displayName={displayName}
+          profile={profile}
+          requests={requests}
+          pointBalance={pointBalance}
+          onGoToExchanges={() => setTab("exchanges")}
+        />
         <GuidedBanners
           myPlaces={myPlaces}
           myListings={myListings}
@@ -138,6 +148,168 @@ const Dashboard = () => {
   );
 };
 
+/* ─── Consolidated home (above tabs) ─── */
+function DashboardHome({
+  user, displayName, profile, requests, pointBalance, onGoToExchanges,
+}: {
+  user: any; displayName: string; profile: any; requests: any[] | undefined;
+  pointBalance: any; onGoToExchanges: () => void;
+}) {
+  const { t } = useTranslation();
+  const { data: prefs } = useUserPreferences(user.id);
+  const { data: recommendations, isLoading: recsLoading, hasPrefs } = useSmartRecommendations(user.id, 4);
+
+  // Loading skeleton until the profile is available.
+  if (!profile) {
+    return (
+      <div className="mb-6 space-y-3 animate-pulse">
+        <div className="h-7 w-48 rounded bg-muted" />
+        <div className="rounded-2xl border bg-card p-5 space-y-3">
+          <div className="h-4 w-40 rounded bg-muted" />
+          <div className="h-2 w-full rounded-full bg-muted" />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="h-16 rounded-xl bg-muted" />
+            <div className="h-16 rounded-xl bg-muted" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const completion = computeCompletion({
+    avatar_url: profile.avatar_url,
+    bio: profile.bio,
+    preferred_values: prefs?.preferred_values,
+    languages: profile.languages,
+    preferred_regions: prefs?.preferred_regions,
+  });
+
+  const list = requests || [];
+  const receivedPending = list.filter((r: any) => r.to_member_id === user.id && r.status === "pending").length;
+  const sentPending = list.filter((r: any) => r.from_user_id === user.id && r.status === "pending").length;
+  const hasActions = receivedPending > 0 || sentPending > 0;
+
+  return (
+    <div className="mb-6 space-y-4">
+      {/* Greeting */}
+      <h1 className="text-2xl font-serif text-foreground">{t("dashboard.greeting", { name: displayName })}</h1>
+
+      {/* Snapshot: completion gauge + points + pending actions */}
+      <section className="rounded-2xl border bg-card p-5 space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {/* Completion gauge */}
+          <Link to="/edit-profile" className="block rounded-xl border bg-background/60 p-4 hover:shadow-sm transition-shadow">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-foreground">{t("dashboard.profilePct", { pct: completion.pct })}</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+              <div className={`h-2 rounded-full transition-all ${completionColor(completion.pct)}`} style={{ width: `${completion.pct}%` }} />
+            </div>
+            {completion.pct < 100 && (
+              <p className="mt-2 text-xs text-primary">{t("dashboard.complete")} →</p>
+            )}
+          </Link>
+
+          {/* Points balance */}
+          <Link to="/points" className="block rounded-xl border bg-background/60 p-4 hover:shadow-sm transition-shadow">
+            <div className="flex items-center gap-2 mb-1">
+              <Star className="h-4 w-4 text-soleil fill-soleil" />
+              <span className="text-sm font-medium text-foreground">{t("dashboard.points")}</span>
+            </div>
+            <p className="text-2xl font-bold text-foreground leading-tight">{pointBalance?.balance ?? 0}</p>
+          </Link>
+        </div>
+
+        {/* Pending actions recap */}
+        <div className="rounded-xl bg-muted/40 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-foreground">{t("dashboard.pendingActions")}</span>
+          </div>
+          {hasActions ? (
+            <div className="space-y-1.5">
+              {receivedPending > 0 && (
+                <button onClick={onGoToExchanges} className="flex w-full items-center gap-2 text-left text-sm text-foreground hover:text-primary">
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary" />
+                  {t("dashboard.receivedToHandle", { count: receivedPending })}
+                </button>
+              )}
+              {sentPending > 0 && (
+                <Link to="/stay-requests" className="flex items-center gap-2 text-sm text-foreground hover:text-primary">
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary" />
+                  {t("dashboard.sentPending", { count: sentPending })}
+                </Link>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">{t("dashboard.allCaughtUp")}</p>
+          )}
+        </div>
+      </section>
+
+      {/* Matchmaking: recommended places */}
+      <section>
+        <div className="flex items-center gap-2 mb-3">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <h2 className="text-base font-serif text-foreground">{t("dashboard.recommendedForYou")}</h2>
+        </div>
+
+        {!hasPrefs ? (
+          <div className="rounded-2xl border border-dashed bg-card p-5 text-center">
+            <p className="text-sm text-muted-foreground mb-3">{t("dashboard.setPrefsText")}</p>
+            <Link to="/edit-profile">
+              <Button size="sm" variant="outline">{t("dashboard.setPrefsCta")}</Button>
+            </Link>
+          </div>
+        ) : recsLoading ? (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="animate-pulse rounded-xl border bg-card overflow-hidden">
+                <div className="h-24 bg-muted" />
+                <div className="p-2.5 space-y-1.5"><div className="h-3 w-3/4 rounded bg-muted" /><div className="h-2 w-1/2 rounded bg-muted" /></div>
+              </div>
+            ))}
+          </div>
+        ) : recommendations.length === 0 ? (
+          <div className="rounded-2xl border border-dashed bg-card p-5 text-center">
+            <p className="text-sm text-muted-foreground mb-3">{t("dashboard.noRecs")}</p>
+            <Link to="/discover"><Button size="sm" variant="outline">{t("dashboard.exploreAllHabitats")}</Button></Link>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {recommendations.map((p) => (
+                <Link key={p.id} to={`/habitat/${p.id}`} className="rounded-xl border bg-card overflow-hidden hover:shadow-md transition-shadow group relative">
+                  <div className="h-24 overflow-hidden relative">
+                    <img src={p.image || placePlaceholder} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    {hasPrefs && p.matchPct > 0 && (
+                      <span className="absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-semibold text-primary border border-primary/20">
+                        <Sparkles className="h-2.5 w-2.5" />{t("dashboard.matchBadge", { pct: p.matchPct })}
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-2.5">
+                    <p className="font-serif text-xs text-foreground line-clamp-1">{p.name}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1">
+                      <MapPin className="h-2.5 w-2.5" />{[p.city, p.region].filter(Boolean).join(", ") || "France"}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <Link to="/discover">
+              <Button variant="ghost" size="sm" className="mt-3 w-full text-primary">
+                {t("dashboard.exploreAllHabitats")} <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </>
+        )}
+      </section>
+    </div>
+  );
+}
+
 /* ─── Profile Tab ─── */
 function ProfileTab({
   user, profile, displayName, myPlaces, myListings, placesLoading, suggestedListings, onSignOut,
@@ -151,7 +323,6 @@ function ProfileTab({
   const { data: referralData } = useReferralCode(user.id);
   const { data: myReferrals } = useMyReferrals(user.id);
   const { data: isAdmin } = useIsAdmin(user.id);
-  const { data: recommendations, hasPrefs } = useSmartRecommendations(user.id, 6);
   const [copied, setCopied] = useState(false);
 
   const completionSteps = [
@@ -406,61 +577,6 @@ function ProfileTab({
           <Link to="/create-place"><Button variant="outline" size="sm" className="mt-3 w-full"><Plus className="mr-2 h-4 w-4" /> Ajouter un lieu</Button></Link>
         )}
       </section>
-
-      {/* Smart recommendations */}
-      {recommendations.length > 0 && (
-        <section>
-          <div className="flex items-start justify-between gap-2 mb-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <h3 className="text-base font-serif text-foreground">{t("dashboard.alignedHabitats")}</h3>
-            </div>
-            {!hasPrefs && (
-              <Link to="/edit-profile" className="text-[11px] text-primary underline-offset-2 hover:underline shrink-0">
-                {t("dashboard.refinePrefs")}
-              </Link>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {recommendations.map((p) => (
-              <Link
-                key={p.id}
-                to={`/habitat/${p.id}`}
-                className="rounded-xl border bg-card overflow-hidden hover:shadow-md transition-shadow group relative"
-              >
-                <div className="h-28 overflow-hidden relative">
-                  <img
-                    src={p.image || placePlaceholder}
-                    alt={p.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  {hasPrefs && p.matchPct > 0 && (
-                    <span className="absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-semibold text-primary border border-primary/20">
-                      <Sparkles className="h-2.5 w-2.5" />
-                      {t("dashboard.matchBadge", { pct: p.matchPct })}
-                    </span>
-                  )}
-                </div>
-                <div className="p-2.5">
-                  <p className="font-serif text-xs text-foreground line-clamp-1">{p.name}</p>
-                  <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1">
-                    <MapPin className="h-2.5 w-2.5" />
-                    {[p.city, p.region].filter(Boolean).join(", ") || "France"}
-                  </p>
-                  {hasPrefs && p.matchPct >= 60 && (
-                    <p className="text-[10px] text-primary mt-1 italic">{t("dashboard.matchesValues", { pct: p.matchPct })}</p>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-          <Link to="/discover">
-            <Button variant="ghost" size="sm" className="mt-3 w-full text-primary">
-              {t("dashboard.exploreAllHabitats")} <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-            </Button>
-          </Link>
-        </section>
-      )}
 
       {/* Account */}
       <section>

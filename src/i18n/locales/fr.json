@@ -287,7 +287,19 @@
     "bannerNoPlaceText": "Sur Casa Minga, on rejoint ou on crée un lieu collectif avant de proposer un séjour.",
     "bannerFirstStayTitle": "Proposez votre premier séjour",
     "bannerFirstStayText": "Vous êtes membre d'un lieu : invitez la communauté à venir y séjourner.",
-    "bannerFirstStayCta": "Créer une fiche séjour"
+    "bannerFirstStayCta": "Créer une fiche séjour",
+    "greeting": "Bonjour {{name}} 👋",
+    "profilePct": "Profil {{pct}}% complet",
+    "pendingActions": "À traiter",
+    "receivedToHandle_one": "{{count}} demande reçue à traiter",
+    "receivedToHandle_other": "{{count}} demandes reçues à traiter",
+    "sentPending_one": "{{count}} demande envoyée en attente",
+    "sentPending_other": "{{count}} demandes envoyées en attente",
+    "allCaughtUp": "Rien à traiter pour l'instant 🎉",
+    "recommendedForYou": "Recommandés pour vous",
+    "setPrefsText": "Renseigne tes préférences pour recevoir des recommandations sur mesure.",
+    "setPrefsCta": "Renseigne tes préférences",
+    "noRecs": "Aucune recommandation pour l'instant — explore les habitats."
   },
   "discover": {
     "title": "Trouvez un séjour",
