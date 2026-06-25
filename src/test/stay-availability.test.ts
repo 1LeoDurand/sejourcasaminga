@@ -81,3 +81,34 @@ describe("findBlockingPeriods", () => {
     expect(result[0].reason).toBeUndefined();
   });
 });
+
+describe("rangesOverlap — edge cases", () => {
+  it("treats identical ranges as overlapping", () => {
+    expect(rangesOverlap("2026-07-01", "2026-07-10", "2026-07-01", "2026-07-10")).toBe(true);
+  });
+
+  it("returns false when the second range's end is invalid", () => {
+    expect(rangesOverlap("2026-07-01", "2026-07-10", "2026-07-05", "bad")).toBe(false);
+  });
+
+  it("detects a single-day overlap at the boundary edge", () => {
+    // a ends 07-11, b starts 07-10 → one day of overlap
+    expect(rangesOverlap("2026-07-05", "2026-07-11", "2026-07-10", "2026-07-20")).toBe(true);
+  });
+});
+
+describe("findBlockingPeriods — edge cases", () => {
+  const oneBlock = [{ start_date: "2026-08-01", end_date: "2026-08-10", reason: "Travaux" }];
+
+  it("returns the block when the request fully contains it", () => {
+    expect(findBlockingPeriods("2026-07-30", "2026-08-15", oneBlock)).toHaveLength(1);
+  });
+
+  it("returns [] when the end date is invalid", () => {
+    expect(findBlockingPeriods("2026-08-01", "bad-date", oneBlock)).toEqual([]);
+  });
+
+  it("returns [] for an empty blocks list", () => {
+    expect(findBlockingPeriods("2026-08-01", "2026-08-10", [])).toEqual([]);
+  });
+});
