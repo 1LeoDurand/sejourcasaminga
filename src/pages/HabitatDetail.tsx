@@ -16,6 +16,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { breadcrumbLd } from "@/lib/structured-data";
 import ReportButton from "@/components/ReportButton";
 import TrustBadges from "@/components/TrustBadges";
 import { usePlace } from "@/hooks/use-places";
@@ -193,7 +194,14 @@ const HabitatDetail = () => {
         description={seoDesc}
         canonical={`/habitat/${place.id}`}
         image={images[0]}
-        jsonLd={jsonLd}
+        jsonLd={[
+          jsonLd,
+          breadcrumbLd([
+            { name: "Accueil", url: "/" },
+            { name: "Découvrir", url: "/discover" },
+            { name: place.name, url: `/habitat/${place.id}` },
+          ]),
+        ]}
       />
       <Navbar />
       <div className="container py-8">

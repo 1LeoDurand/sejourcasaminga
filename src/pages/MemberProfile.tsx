@@ -6,6 +6,7 @@ import { Loader2, MapPin, Star, Quote, Award, MessageSquare, Languages as Langua
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { breadcrumbLd } from "@/lib/structured-data";
 import ListingCard from "@/components/ListingCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -80,7 +81,16 @@ const MemberProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={`${name} | Casa Minga`} description={t("memberProfile.seoDesc", { name })} />
+      <SEO
+        title={`${name} | Casa Minga`}
+        description={t("memberProfile.seoDesc", { name })}
+        canonical={`/membre/${id}`}
+        image={profile?.avatar_url || undefined}
+        jsonLd={breadcrumbLd([
+          { name: "Accueil", url: "/" },
+          { name, url: `/membre/${id}` },
+        ])}
+      />
       <Navbar />
 
       <div className="container px-5 py-8 max-w-5xl">

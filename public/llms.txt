@@ -1,0 +1,20 @@
+# Casa Minga Séjours
+
+> Casa Minga Séjours est une plateforme d'échange de maisons, d'appartements et de chambres entre lieux de vie collectifs : habitats participatifs, écovillages, maisons partagées et coliving. On n'y loue rien et on n'y paie jamais à la nuitée : les membres échangent leur logement de façon réciproque ou via un système de points d'hospitalité. Le modèle repose sur une adhésion annuelle (gratuite jusqu'en juin 2026), sans commission par séjour.
+
+## Pages clés
+- [Accueil](https://sejour.casaminga.com/) : présentation du réseau et des maisons à échanger.
+- [Découvrir](https://sejour.casaminga.com/discover) : explorer les lieux collectifs et les logements disponibles, avec filtres (région, type, valeurs).
+- [Comment ça marche](https://sejour.casaminga.com/comment-ca-marche) : les étapes de l'échange, échange réciproque et points d'hospitalité.
+- [Ressources](https://sejour.casaminga.com/ressources) : films, documentaires, livres, podcasts, articles et guides autour de l'habitat collectif et de la sobriété.
+- [Hospitalité](https://sejour.casaminga.com/hospitalite) : la philosophie d'accueil entre collectifs.
+- [Charte](https://sejour.casaminga.com/charte) : la charte de l'hospitalité, valeurs et engagements des membres.
+- [À propos](https://sejour.casaminga.com/a-propos) : l'histoire et la mission de Casa Minga.
+- [Communauté](https://sejour.casaminga.com/communaute) : actualités et échanges entre membres.
+- [Statistiques](https://sejour.casaminga.com/statistiques) : indicateurs publics du réseau (lieux, membres, séjours).
+- [Contact](https://sejour.casaminga.com/contact) : nous écrire.
+
+## À noter
+- Plateforme communautaire : la création de profil et la proposition d'un logement sont gratuites.
+- Profils vérifiés (pièce d'identité + adhésion) pour la confiance entre membres.
+- Disponible en français, anglais et espagnol.

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO, { SITE_URL } from "@/components/SEO";
+import { breadcrumbLd } from "@/lib/structured-data";
 import ResourceCover from "@/components/ResourceCover";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -78,15 +79,11 @@ function buildResourceJsonLd(r: {
     };
   }
 
-  const breadcrumb: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "Ressources", item: `${SITE_URL}/ressources` },
-      { "@type": "ListItem", position: 3, name: r.title, item: url },
-    ],
-  };
+  const breadcrumb = breadcrumbLd([
+    { name: "Accueil", url: "/" },
+    { name: "Ressources", url: "/ressources" },
+    { name: r.title, url },
+  ]);
 
   return [main, breadcrumb];
 }

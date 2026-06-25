@@ -24,6 +24,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { breadcrumbLd } from "@/lib/structured-data";
 import ListingCard from "@/components/ListingCard";
 import { RELATIONSHIP_LABELS } from "@/data/demo";
 import { listingTypeMeta, listingTypeLabel } from "@/lib/listing-types";
@@ -639,7 +640,14 @@ const ListingDetail = () => {
         description={seoDesc}
         canonical={`/listing/${listing.id}`}
         image={listing.image || undefined}
-        jsonLd={jsonLd}
+        jsonLd={[
+          jsonLd,
+          breadcrumbLd([
+            { name: "Accueil", url: "/" },
+            { name: "Découvrir", url: "/discover" },
+            { name: listing.title, url: `/listing/${listing.id}` },
+          ]),
+        ]}
       />
       <Navbar />
 
