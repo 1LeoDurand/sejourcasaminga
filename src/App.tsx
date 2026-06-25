@@ -61,6 +61,7 @@ const MyPoints = lazy(() => import("./pages/MyPoints.tsx"));
 const MemberProfile = lazy(() => import("./pages/MemberProfile.tsx"));
 const VerifyClaim = lazy(() => import("./pages/VerifyClaim.tsx"));
 const Verification = lazy(() => import("./pages/Verification.tsx"));
+const Legal = lazy(() => import("./pages/Legal.tsx"));
 const AdminVerifications = lazy(() => import("./pages/admin/AdminVerifications.tsx"));
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -110,6 +111,9 @@ const App = () => (
               <Route path="/hospitalite" element={<Hospitality />} />
               <Route path="/charte" element={<Charter />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/mentions-legales" element={<Legal doc="mentions" />} />
+              <Route path="/cgu" element={<Legal doc="cgu" />} />
+              <Route path="/confidentialite" element={<Legal doc="confidentialite" />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/places" element={<AdminPlaces />} />
               <Route path="/admin/listings" element={<AdminListings />} />

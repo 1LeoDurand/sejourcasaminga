@@ -10,6 +10,9 @@
   <url><loc>https://sejour.casaminga.com/charte</loc><priority>0.5</priority></url>
   <url><loc>https://sejour.casaminga.com/contact</loc><priority>0.5</priority></url>
   <url><loc>https://sejour.casaminga.com/statistiques</loc><priority>0.5</priority></url>
+  <url><loc>https://sejour.casaminga.com/mentions-legales</loc><priority>0.3</priority></url>
+  <url><loc>https://sejour.casaminga.com/cgu</loc><priority>0.3</priority></url>
+  <url><loc>https://sejour.casaminga.com/confidentialite</loc><priority>0.3</priority></url>
 
   <!-- Ressources : Documentaires -->
   <url><loc>https://sejour.casaminga.com/ressources/demain</loc><priority>0.6</priority></url>

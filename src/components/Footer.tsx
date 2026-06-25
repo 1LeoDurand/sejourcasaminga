@@ -39,6 +39,9 @@ const Footer = () => {
               <li><Link to="/communaute" className="hover:text-foreground transition-colors">{t("footer.community")}</Link></li>
               <li><Link to="/charte" className="hover:text-foreground transition-colors">{t("footer.charter")}</Link></li>
               <li><Link to="/contact" className="hover:text-foreground transition-colors">{t("footer.contact")}</Link></li>
+              <li><Link to="/mentions-legales" className="hover:text-foreground transition-colors">Mentions légales</Link></li>
+              <li><Link to="/cgu" className="hover:text-foreground transition-colors">CGU</Link></li>
+              <li><Link to="/confidentialite" className="hover:text-foreground transition-colors">Confidentialité</Link></li>
             </ul>
           </div>
         </div>
