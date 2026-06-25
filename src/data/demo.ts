@@ -78,17 +78,20 @@ export const DEMO_TESTIMONIALS = [
     author: "Marine & Romain",
     habitat: "Chez Jean-Marc, Écohameau du Plessis",
     avatar: avatar1,
+    rating: 5,
   },
   {
     text: "J'ai passé une semaine dans la chambre d'amis du Village Vertical. Éric m'a fait découvrir la sociocratie, j'en suis reparti avec des amis et une vision du possible.",
     author: "Thomas",
     habitat: "Chambre d'amis du Village Vertical",
     avatar: avatar2,
+    rating: 5,
   },
   {
     text: "Chez Thierry à Verfeil, c'est l'autoconstruction, la musique, les repas dehors. On a dormi dans une maison bâtie à la main. Ce n'est pas du tourisme, c'est de l'hospitalité.",
     author: "Amina",
     habitat: "Chez Thierry, Écohameau de Verfeil",
     avatar: avatar3,
+    rating: 5,
   },
 ];

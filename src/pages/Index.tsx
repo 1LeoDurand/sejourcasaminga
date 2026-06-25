@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight, Search, Shield, Users, Heart, Home, HandHeart, Compass,
-  Quote, MapPin, Loader2, ArrowLeftRight, Coins,
+  Quote, MapPin, Loader2, ArrowLeftRight, Coins, Star,
 } from "lucide-react";
 import ListingCard from "@/components/ListingCard";
 import { DEMO_TESTIMONIALS } from "@/data/demo";
@@ -17,6 +17,7 @@ import heroImage from "@/assets/hero-collective.webp";
 import placePlaceholder from "@/assets/place-placeholder.webp";
 import { useListings } from "@/hooks/use-listings";
 import { usePlaces } from "@/hooks/use-places";
+import { usePublicStats } from "@/hooks/use-stats";
 import { useTranslation } from "react-i18next";
 
 /* Steps & Pillars are built inside the component to enable i18n */
@@ -25,7 +26,15 @@ const Index = () => {
   const { t } = useTranslation();
   const { data: listings, isLoading: loadingListings } = useListings();
   const { data: places, isLoading: loadingPlaces } = usePlaces();
+  const { data: stats } = usePublicStats();
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const IMPACT = [
+    { value: stats?.habitats ?? (places?.length ?? 0), label: t("home.impactPlaces") },
+    { value: stats?.members ?? 0, label: t("home.impactMembers") },
+    { value: stats?.stays ?? (listings?.length ?? 0), label: t("home.impactStays") },
+    { value: `+${stats?.growth_pct ?? 0}%`, label: t("home.impactGrowth") },
+  ];
 
   const listingCount = listings?.length || 0;
   const placeCount = places?.length || 0;
@@ -319,14 +328,29 @@ const Index = () => {
           <p className="text-sm text-muted-foreground mb-8">{t("home.testimonialsSub")}</p>
           <div className="grid gap-4 md:grid-cols-3">
             {DEMO_TESTIMONIALS.map((tst, i) => (
-              <div key={i} className="rounded-2xl border bg-background p-5">
-                <Quote className="mb-2 h-5 w-5 text-primary/20" />
-                <p className="text-sm text-muted-foreground leading-relaxed italic mb-4">"{tst.text}"</p>
+              <div key={i} className="flex flex-col rounded-2xl border bg-background p-5">
+                <div className="mb-2 flex items-center justify-between">
+                  <Quote className="h-5 w-5 text-primary/20" />
+                  {(tst as any).rating && (
+                    <div className="flex gap-0.5" aria-label={`${(tst as any).rating} sur 5`}>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <Star
+                          key={n}
+                          className={`h-3.5 w-3.5 ${n <= (tst as any).rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <p className="mb-4 flex-1 text-sm italic leading-relaxed text-muted-foreground">"{tst.text}"</p>
                 <div className="flex items-center gap-2.5">
                   <img src={tst.avatar} alt={tst.author} className="h-8 w-8 rounded-full object-cover ring-1 ring-border" />
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-medium text-foreground">{tst.author}</p>
-                    <p className="text-[0.65rem] text-muted-foreground">{tst.habitat}</p>
+                    <p className="flex items-center gap-1 text-[0.65rem] text-muted-foreground">
+                      <MapPin className="h-2.5 w-2.5 shrink-0" />
+                      <span className="truncate">{tst.habitat}</span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -348,6 +372,22 @@ const Index = () => {
             <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs">{t("home.economicBadge1")}</Badge>
             <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs">{t("home.economicBadge2")}</Badge>
             <Badge className="rounded-full px-3 py-1 text-xs bg-primary text-primary-foreground">{t("home.economicBadge3")}</Badge>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ IMPACT ═══════════ */}
+      <section className="border-y bg-warm px-5 py-12 md:px-8 md:py-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-3">{t("home.impactEyebrow")}</p>
+          <h2 className="text-2xl md:text-3xl text-foreground leading-snug mb-8">{t("home.impactTitle")}</h2>
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+            {IMPACT.map((s) => (
+              <div key={s.label}>
+                <p className="font-serif text-3xl md:text-4xl font-semibold text-primary">{s.value}</p>
+                <p className="mt-1 text-xs md:text-sm text-muted-foreground">{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
