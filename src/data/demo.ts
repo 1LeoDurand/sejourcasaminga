@@ -72,6 +72,14 @@ export const PLACE_OFFERINGS = [
 
 // ═══════════ TESTIMONIALS (static editorial content) ═══════════
 
+/**
+ * PRE-LAUNCH FLAG — the testimonials below are PLACEHOLDERS (fictional members).
+ * They are shown on the home page while real testimonials are gathered.
+ * Before public launch: set this to `false` (or replace DEMO_TESTIMONIALS with
+ * real, consented testimonials) so no fictional reviews appear in production.
+ */
+export const SHOW_DEMO_TESTIMONIALS = true;
+
 export const DEMO_TESTIMONIALS = [
   {
     text: "On est arrivés chez Jean-Marc au Plessis avec nos enfants. Dès le premier soir, on était à table avec le collectif. Les gamins ont nourri les poules, fait du pain, dormi sous les étoiles.",

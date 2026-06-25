@@ -7,7 +7,7 @@ import {
   Quote, MapPin, Loader2, ArrowLeftRight, Coins, Star,
 } from "lucide-react";
 import ListingCard from "@/components/ListingCard";
-import { DEMO_TESTIMONIALS } from "@/data/demo";
+import { DEMO_TESTIMONIALS, SHOW_DEMO_TESTIMONIALS } from "@/data/demo";
 import { LISTING_TYPE_META, LISTING_TYPE_ORDER } from "@/lib/listing-types";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -33,7 +33,6 @@ const Index = () => {
     { value: stats?.habitats ?? (places?.length ?? 0), label: t("home.impactPlaces") },
     { value: stats?.members ?? 0, label: t("home.impactMembers") },
     { value: stats?.stays ?? (listings?.length ?? 0), label: t("home.impactStays") },
-    { value: `+${stats?.growth_pct ?? 0}%`, label: t("home.impactGrowth") },
   ];
 
   const listingCount = listings?.length || 0;
@@ -321,7 +320,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ═══════════ TESTIMONIALS ═══════════ */}
+      {/* ═══════════ TESTIMONIALS (placeholder — gated behind SHOW_DEMO_TESTIMONIALS) ═══════════ */}
+      {SHOW_DEMO_TESTIMONIALS && DEMO_TESTIMONIALS.length > 0 && (
       <section className="border-t bg-crema px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl md:text-3xl text-foreground mb-2">{t("home.testimonialsTitle")}</h2>
@@ -358,6 +358,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════ ECONOMIC CLARITY ═══════════ */}
       <section className="px-5 py-12 md:px-8 md:py-16">
@@ -381,7 +382,7 @@ const Index = () => {
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-3">{t("home.impactEyebrow")}</p>
           <h2 className="text-2xl md:text-3xl text-foreground leading-snug mb-8">{t("home.impactTitle")}</h2>
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 max-w-2xl mx-auto">
             {IMPACT.map((s) => (
               <div key={s.label}>
                 <p className="font-serif text-3xl md:text-4xl font-semibold text-primary">{s.value}</p>
