@@ -1059,7 +1059,10 @@
     "membershipLabel": "Annual membership",
     "membershipDesc": "Amount to pay by bank transfer before your application is validated.",
     "paymentTitle": "Payment by bank transfer",
-    "paymentInstructions": "Make a transfer for the amount shown above with the reference \"Casa Minga + your first name\".",
+    "paymentInstructions": "Make a transfer for the amount shown above, using your email address as the reference so we can match your payment to your account.",
+    "bankHolder": "Account holder",
+    "bankName": "Bank",
+    "paymentReference": "Reference to include",
     "bankPlaceholder": "Bank details to be completed (IBAN)",
     "paymentNote": "Payment confirmation is done manually by the team. No card data is collected.",
     "uploadTitle": "Identity document",
@@ -1071,7 +1074,7 @@
     "uploadSuccessDesc": "Your document has been received. Your application is now under review.",
     "uploadError": "Upload error",
     "uploadErrorGeneric": "An unexpected error occurred. Please try again.",
-    "rgpdNotice": "Your data is used only to verify your identity. Access is restricted to Casa Minga administrators. The document is deleted once the check is complete.",
+    "rgpdNotice": "By submitting your ID document, you consent to its processing by Casa Minga Séjours for the sole purpose of verifying your identity (legal basis: your consent). The document is stored securely and privately, accessible only to the moderation team, for the time needed to verify it, then deleted (within 3 months at the latest). You can exercise your rights of access, rectification and erasure at any time by writing to ecommunication@etik.com.",
     "fetchError": "Could not load your verification status. Please try again shortly."
   },
   "adminVerifications": {

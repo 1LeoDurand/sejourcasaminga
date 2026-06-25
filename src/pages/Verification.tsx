@@ -230,10 +230,29 @@ const Verification = () => {
                 <h2 className="font-semibold text-foreground">{t("verification.paymentTitle")}</h2>
                 <p className="text-sm text-muted-foreground">{t("verification.paymentInstructions")}</p>
 
-                {/* RIB/IBAN à fournir par Léo */}
-                <div className="rounded-lg border border-dashed border-border bg-muted/40 p-3 text-sm text-muted-foreground">
-                  {t("verification.bankPlaceholder")}
-                </div>
+                {/* Bank details (IBAN is not secret — it is shown to members so they can pay by transfer) */}
+                <dl className="rounded-lg border border-border bg-muted/40 p-3 text-sm space-y-1.5">
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">{t("verification.bankHolder")}</dt>
+                    <dd className="font-medium text-foreground text-right">DURAND LEO (EI)</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">IBAN</dt>
+                    <dd className="font-mono text-foreground text-right break-all">FR76 1027 8091 1300 0214 1210 150</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">BIC</dt>
+                    <dd className="font-mono text-foreground text-right">CMCIFR2A</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">{t("verification.bankName")}</dt>
+                    <dd className="font-medium text-foreground text-right">CCM Bassin de Thau</dd>
+                  </div>
+                  <div className="flex justify-between gap-3 border-t border-border pt-1.5">
+                    <dt className="text-muted-foreground">{t("verification.paymentReference")}</dt>
+                    <dd className="font-medium text-foreground text-right break-all">{user.email}</dd>
+                  </div>
+                </dl>
 
                 <p className="text-xs text-muted-foreground">{t("verification.paymentNote")}</p>
               </section>
@@ -273,8 +292,7 @@ const Verification = () => {
                     )}
                   </Button>
 
-                  {/* RGPD notice */}
-                  {/* Texte RGPD définitif à fournir par Léo */}
+                  {/* GDPR notice */}
                   <p className="text-xs text-muted-foreground border-t border-border pt-3">
                     {t("verification.rgpdNotice")}
                   </p>

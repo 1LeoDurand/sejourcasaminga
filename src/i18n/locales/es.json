@@ -1059,7 +1059,10 @@
     "membershipLabel": "Membresía anual",
     "membershipDesc": "Importe a pagar por transferencia bancaria antes de validar tu solicitud.",
     "paymentTitle": "Pago por transferencia",
-    "paymentInstructions": "Realiza una transferencia por el importe indicado arriba con la referencia «Casa Minga + tu nombre».",
+    "paymentInstructions": "Realiza una transferencia por el importe indicado arriba, indicando tu correo electrónico como referencia para que podamos asociar tu pago a tu cuenta.",
+    "bankHolder": "Titular",
+    "bankName": "Banco",
+    "paymentReference": "Referencia a indicar",
     "bankPlaceholder": "Datos bancarios por completar (IBAN)",
     "paymentNote": "La confirmación del pago la realiza manualmente el equipo. No se recopila ningún dato de tarjeta.",
     "uploadTitle": "Documento de identidad",
@@ -1071,7 +1074,7 @@
     "uploadSuccessDesc": "Hemos recibido tu documento. Tu solicitud está ahora en revisión.",
     "uploadError": "Error de envío",
     "uploadErrorGeneric": "Se ha producido un error inesperado. Inténtalo de nuevo.",
-    "rgpdNotice": "Tus datos se utilizan únicamente para verificar tu identidad. El acceso está restringido a los administradores de Casa Minga. El documento se elimina una vez realizado el control.",
+    "rgpdNotice": "Al enviar tu documento de identidad, consientes su tratamiento por Casa Minga Séjours con el único fin de verificar tu identidad (base legal: tu consentimiento). El documento se almacena de forma segura y privada, accesible solo para el equipo de moderación, durante el tiempo necesario para la verificación, y luego se elimina (como máximo en 3 meses). Puedes ejercer tus derechos de acceso, rectificación y supresión en cualquier momento escribiendo a ecommunication@etik.com.",
     "fetchError": "No se pudo cargar tu estado de verificación. Inténtalo de nuevo en unos instantes."
   },
   "adminVerifications": {

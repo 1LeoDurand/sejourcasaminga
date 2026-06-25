@@ -1059,7 +1059,10 @@
     "membershipLabel": "Adhésion annuelle",
     "membershipDesc": "Montant à régler par virement bancaire avant la validation de ton dossier.",
     "paymentTitle": "Paiement par virement",
-    "paymentInstructions": "Effectue un virement du montant indiqué ci-dessus avec la référence « Casa Minga + ton prénom ».",
+    "paymentInstructions": "Effectue un virement du montant indiqué ci-dessus en précisant ton e-mail en référence, afin que nous puissions associer ton paiement à ton compte.",
+    "bankHolder": "Titulaire",
+    "bankName": "Banque",
+    "paymentReference": "Référence à indiquer",
     "bankPlaceholder": "Coordonnées bancaires à compléter (RIB / IBAN)",
     "paymentNote": "La confirmation du paiement est effectuée manuellement par l'équipe. Aucune donnée de carte n'est collectée.",
     "uploadTitle": "Pièce d'identité",
@@ -1071,7 +1074,7 @@
     "uploadSuccessDesc": "Ta pièce a bien été reçue. Ton dossier est maintenant en cours d'examen.",
     "uploadError": "Erreur d'envoi",
     "uploadErrorGeneric": "Une erreur inattendue s'est produite. Réessaie.",
-    "rgpdNotice": "Tes données sont utilisées uniquement pour vérifier ton identité. L'accès est restreint aux administrateurs de Casa Minga. Le document est supprimé une fois le contrôle effectué.",
+    "rgpdNotice": "En soumettant ta pièce d'identité, tu consens à son traitement par Casa Minga Séjours dans le seul but de vérifier ton identité (base légale : ton consentement). Le document est conservé de façon sécurisée et privée, accessible uniquement à l'équipe de modération, le temps de la vérification, puis supprimé (au plus tard sous 3 mois). Tu peux exercer tes droits d'accès, de rectification et d'effacement à tout moment en écrivant à ecommunication@etik.com.",
     "fetchError": "Impossible de charger ton statut de vérification. Réessaie dans quelques instants."
   },
   "adminVerifications": {
