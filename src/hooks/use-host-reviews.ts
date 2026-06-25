@@ -50,6 +50,23 @@ export function useMyHostReviews(hostUserId: string | undefined) {
   });
 }
 
+/** Avis hôte→invité déjà laissé pour un séjour donné (anti-doublon / préremplissage) */
+export function useHostReviewForStay(stayRequestId: string | undefined) {
+  return useQuery({
+    queryKey: ["host-review-stay", stayRequestId],
+    enabled: !!stayRequestId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("host_reviews" as any)
+        .select("*")
+        .eq("stay_request_id", stayRequestId!)
+        .maybeSingle();
+      if (error) throw error;
+      return (data as HostReview | null) ?? null;
+    },
+  });
+}
+
 export interface CreateHostReviewInput {
   host_user_id: string;
   guest_user_id: string;
@@ -76,6 +93,9 @@ export function useCreateHostReview() {
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["host-reviews-guest", variables.guest_user_id] });
       qc.invalidateQueries({ queryKey: ["host-reviews-mine", variables.host_user_id] });
+      if (variables.stay_request_id) {
+        qc.invalidateQueries({ queryKey: ["host-review-stay", variables.stay_request_id] });
+      }
     },
   });
 }

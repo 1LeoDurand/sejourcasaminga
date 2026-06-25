@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Loader2, MapPin, Star, Quote, Award, MessageSquare, Languages as LanguagesIcon } from "lucide-react";
@@ -27,10 +28,18 @@ function StarRating({ rating }: { rating: number | null }) {
 }
 
 const MemberProfile = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data: profile, isLoading: loadingProfile } = useHostProfile(id);
   const { data: listings, isLoading: loadingListings } = useHostListings(id);
   const { data: reviews } = useGuestHostReviews(id);
+
+  // Average rating from received reviews that carry a score.
+  const ratedReviews = (reviews ?? []).filter((r) => typeof r.rating === "number" && r.rating > 0);
+  const avgRating =
+    ratedReviews.length > 0
+      ? ratedReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / ratedReviews.length
+      : null;
 
   if (loadingProfile) {
     return (
@@ -48,9 +57,9 @@ const MemberProfile = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="container px-5 py-20 text-center">
-          <h1 className="text-2xl text-foreground">Membre introuvable</h1>
+          <h1 className="text-2xl text-foreground">{t("memberProfile.notFound")}</h1>
           <Link to="/discover" className="mt-4 inline-block text-primary underline">
-            Explorer les séjours
+            {t("memberProfile.explore")}
           </Link>
         </div>
         <Footer />
@@ -58,7 +67,7 @@ const MemberProfile = () => {
     );
   }
 
-  const name = profile.display_name || "Membre";
+  const name = profile.display_name || t("memberProfile.member");
   const avatar = profile.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
   const memberSince = profile.created_at
     ? format(new Date(profile.created_at), "MMMM yyyy", { locale: fr })
@@ -69,7 +78,7 @@ const MemberProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={`${name} | Casa Minga`} description={`Le profil de ${name} sur Casa Minga.`} />
+      <SEO title={`${name} | Casa Minga`} description={t("memberProfile.seoDesc", { name })} />
       <Navbar />
 
       <div className="container px-5 py-8 max-w-5xl">
@@ -81,13 +90,24 @@ const MemberProfile = () => {
           </Avatar>
           <div className="min-w-0">
             <h1 className="text-2xl md:text-3xl text-foreground">{name}</h1>
+            {avgRating !== null && (
+              <div className="mt-1.5 flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  {avgRating.toFixed(1)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {t("memberProfile.reviewCount", { count: ratedReviews.length })}
+                </span>
+              </div>
+            )}
             <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
               {placeRegion && (
                 <span className="inline-flex items-center gap-1.5">
                   <MapPin className="h-4 w-4" /> {placeRegion}
                 </span>
               )}
-              {memberSince && <span>Membre depuis {memberSince}</span>}
+              {memberSince && <span>{t("memberProfile.memberSince", { date: memberSince })}</span>}
             </div>
             {languages.length > 0 && (
               <div className="mt-1.5 flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -121,16 +141,16 @@ const MemberProfile = () => {
         <div className="mt-8">
           <h2 className="text-lg text-foreground mb-3 flex items-center gap-2">
             <Award className="h-5 w-5 text-primary" />
-            Badges
+            {t("memberProfile.badges")}
           </h2>
           <div className="rounded-xl border border-dashed bg-card px-4 py-6 text-center">
-            <p className="text-sm text-muted-foreground">Bientôt</p>
+            <p className="text-sm text-muted-foreground">{t("memberProfile.soon")}</p>
           </div>
         </div>
 
         {/* ── Published stays ── */}
         <div className="mt-8">
-          <h2 className="text-lg text-foreground mb-4">Ses séjours</h2>
+          <h2 className="text-lg text-foreground mb-4">{t("memberProfile.stays")}</h2>
           {loadingListings ? (
             <div className="flex justify-center py-8">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -143,7 +163,7 @@ const MemberProfile = () => {
             </div>
           ) : (
             <div className="rounded-xl border border-dashed bg-card px-4 py-8 text-center">
-              <p className="text-sm text-muted-foreground">Aucun séjour publié pour l'instant.</p>
+              <p className="text-sm text-muted-foreground">{t("memberProfile.noStays")}</p>
             </div>
           )}
         </div>
@@ -152,12 +172,12 @@ const MemberProfile = () => {
         <div className="mt-8">
           <h2 className="text-lg text-foreground mb-4 flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary" />
-            Avis reçus
+            {t("memberProfile.reviewsReceived")}
           </h2>
           {reviews && reviews.length > 0 ? (
             <div className="space-y-4">
               {reviews.map((r) => {
-                const authorName = r.host?.display_name || "Hôte";
+                const authorName = r.host?.display_name || t("memberProfile.host");
                 const authorAvatar =
                   r.host?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=random`;
                 return (
@@ -188,7 +208,7 @@ const MemberProfile = () => {
             </div>
           ) : (
             <div className="rounded-xl border border-dashed bg-card px-4 py-8 text-center">
-              <p className="text-sm text-muted-foreground">Pas encore d'avis.</p>
+              <p className="text-sm text-muted-foreground">{t("memberProfile.noReviews")}</p>
             </div>
           )}
         </div>
