@@ -59,6 +59,24 @@ export function useMyListings(userId: string | undefined) {
   });
 }
 
+/** Published listings of a given host (read-only, for the public member profile) */
+export function useHostListings(hostId: string | undefined) {
+  return useQuery({
+    queryKey: ["host-listings", hostId],
+    enabled: !!hostId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("listings")
+        .select("*, places(*)")
+        .eq("host_id", hostId!)
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
 export function usePlaceListings(placeId: string | undefined) {
   return useQuery({
     queryKey: ["place-listings", placeId],

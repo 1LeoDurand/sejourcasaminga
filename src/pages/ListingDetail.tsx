@@ -170,9 +170,13 @@ function HostCard({
   return (
     <div className="mt-6 rounded-xl border bg-warm p-4">
       <div className="flex items-start gap-4">
-        <img src={avatar} alt={name} className="h-16 w-16 rounded-full object-cover ring-2 ring-border shrink-0" />
+        <Link to={`/membre/${hostId}`} className="shrink-0">
+          <img src={avatar} alt={name} className="h-16 w-16 rounded-full object-cover ring-2 ring-border transition-opacity hover:opacity-90" />
+        </Link>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground">Accueilli par {name}</p>
+          <Link to={`/membre/${hostId}`} className="text-sm font-medium text-foreground transition-colors hover:text-primary">
+            Accueilli par {name}
+          </Link>
           {memberSince && (
             <p className="text-xs text-muted-foreground mt-0.5">
               Membre depuis {memberSince} · {new Date().getFullYear() - memberSince} ans sur la plateforme
