@@ -169,7 +169,7 @@ export default function PublicStats() {
                 : newArrivals.data!.map((p) => {
                   const days = Math.floor((Date.now() - new Date(p.created_at).getTime()) / 86400000);
                   return (
-                    <Link key={p.id} to={`/habitat/${p.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition">
+                    <Link key={p.id} to={`/habitat/${(p as any).slug || p.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition">
                       {p.image && <img src={p.image} alt={p.name} className="h-12 w-12 rounded object-cover" loading="lazy" />}
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{p.name}</p>

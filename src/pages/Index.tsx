@@ -234,7 +234,7 @@ const Index = () => {
           ) : places && places.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {places.slice(0, 6).map((p) => (
-                <Link key={p.id} to={`/habitat/${p.id}`} className="group rounded-xl border bg-background overflow-hidden transition-shadow hover:shadow-md">
+                <Link key={p.id} to={`/habitat/${p.slug || p.id}`} className="group rounded-xl border bg-background overflow-hidden transition-shadow hover:shadow-md">
                   <div className="aspect-[16/9] overflow-hidden">
                     <img src={p.image || placePlaceholder} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                   </div>

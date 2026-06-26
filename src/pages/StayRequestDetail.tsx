@@ -189,7 +189,7 @@ const StayRequestDetail = () => {
                   {place && (
                     <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" />
-                      <Link to={`/habitat/${place.id}`} className="hover:text-foreground">
+                      <Link to={`/habitat/${place.slug || place.id}`} className="hover:text-foreground">
                         {place.name}{place.region ? ` · ${place.region}` : ""}
                       </Link>
                     </p>

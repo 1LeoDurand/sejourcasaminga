@@ -17,7 +17,7 @@ const HabitatCard = ({ place }: Props) => {
 
   return (
     <div className="group overflow-hidden rounded-xl border bg-card transition-all hover:shadow-lg">
-      <Link to={`/habitat/${place.id}`} className="block">
+      <Link to={`/habitat/${place.slug || place.id}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={place.image || placePlaceholder}

@@ -284,7 +284,7 @@ function DashboardHome({
           <>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {recommendations.map((p) => (
-                <Link key={p.id} to={`/habitat/${p.id}`} className="rounded-xl border bg-card overflow-hidden hover:shadow-md transition-shadow group relative">
+                <Link key={p.id} to={`/habitat/${(p as any).slug || p.id}`} className="rounded-xl border bg-card overflow-hidden hover:shadow-md transition-shadow group relative">
                   <div className="h-24 overflow-hidden relative">
                     <img src={p.image || placePlaceholder} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     {hasPrefs && p.matchPct > 0 && (
@@ -389,7 +389,7 @@ function ProfileTab({
       {myListings && myListings.length > 0 && (
         <section className="rounded-2xl border bg-card overflow-hidden">
           {myListings.slice(0, 1).map((l: any) => (
-            <Link key={l.id} to={`/listing/${l.id}`} className="block">
+            <Link key={l.id} to={`/listing/${l.slug || l.id}`} className="block">
               <div className="flex items-center gap-4 p-4">
                 <div className="h-24 w-32 rounded-xl bg-muted overflow-hidden shrink-0">
                   {l.image ? (
@@ -427,7 +427,7 @@ function ProfileTab({
           {myListings.length > 1 && (
             <div className="px-4 pb-4 space-y-2">
               {myListings.slice(1).map((l: any) => (
-                <Link key={l.id} to={`/listing/${l.id}`}
+                <Link key={l.id} to={`/listing/${l.slug || l.id}`}
                   className="flex items-center gap-3 rounded-xl border p-3 hover:shadow-sm transition-shadow">
                   <div className="h-14 w-18 rounded-lg bg-muted overflow-hidden shrink-0">
                     {l.image ? <img src={l.image} alt="" className="h-full w-full object-cover" /> : (

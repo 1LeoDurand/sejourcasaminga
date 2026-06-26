@@ -150,7 +150,7 @@ const ListingsMap = ({ listings }: Props) => {
           return (
             <Marker key={p.id} position={[p.lat, p.lon]}>
               <Popup>
-                <Link to={`/listing/${l.id}`} className="block w-48 no-underline">
+                <Link to={`/listing/${l.slug || l.id}`} className="block w-48 no-underline">
                   <img
                     src={img}
                     alt={l.title}

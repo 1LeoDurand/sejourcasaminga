@@ -268,7 +268,7 @@ const Favorites = () => {
                       className="group overflow-hidden rounded-xl border bg-card transition-all hover:shadow-md hover:-translate-y-0.5"
                     >
                       <div className="relative">
-                        <Link to={`/listing/${l.id}`}>
+                        <Link to={`/listing/${l.slug || l.id}`}>
                           <div className="aspect-[4/3] overflow-hidden">
                             <img src={img} alt={l.title} className="h-full w-full object-cover" />
                           </div>
@@ -303,7 +303,7 @@ const Favorites = () => {
                                 <StickyNote className="mr-2 h-4 w-4" /> {t("favorites.editNotes")}
                               </DropdownMenuItem>
                               <DropdownMenuItem asChild>
-                                <Link to={`/listing/${l.id}`}>
+                                <Link to={`/listing/${l.slug || l.id}`}>
                                   <Eye className="mr-2 h-4 w-4" /> {t("favorites.viewDetails")}
                                 </Link>
                               </DropdownMenuItem>
@@ -316,7 +316,7 @@ const Favorites = () => {
                       </div>
 
                       <div className="p-4">
-                        <Link to={`/listing/${l.id}`} className="block">
+                        <Link to={`/listing/${l.slug || l.id}`} className="block">
                           <h3 className="font-serif text-lg leading-snug line-clamp-2 group-hover:text-primary">
                             {l.title}
                           </h3>

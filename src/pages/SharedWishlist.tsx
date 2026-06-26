@@ -92,7 +92,7 @@ const SharedWishlist = () => {
                   const values: string[] = place?.values || [];
                   return (
                     <Link
-                      to={`/listing/${l.id}`}
+                      to={`/listing/${l.slug || l.id}`}
                       key={f.id}
                       className="group overflow-hidden rounded-xl border bg-card transition-all hover:shadow-md hover:-translate-y-0.5"
                     >

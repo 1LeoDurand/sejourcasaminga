@@ -431,7 +431,7 @@ const HabitatDetail = () => {
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-xl font-serif text-foreground">Séjours disponibles dans ce lieu</h2>
                 {hasListings && user && (
-                  <Link to={`/listing/${listings[0].id}`}>
+                  <Link to={`/listing/${listings[0].slug || listings[0].id}`}>
                     <Button size="sm">Proposer une visite</Button>
                   </Link>
                 )}

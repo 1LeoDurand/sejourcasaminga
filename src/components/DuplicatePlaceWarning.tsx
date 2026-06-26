@@ -6,6 +6,7 @@ import { AlertTriangle, MapPin, ExternalLink, Search } from "lucide-react";
 
 type Match = {
   id: string;
+  slug: string | null;
   name: string;
   city: string | null;
   region: string | null;
@@ -44,7 +45,7 @@ function tokens(s: string): string[] {
   return normalize(s).split(" ").filter((t) => t.length >= 3);
 }
 
-const SELECT_COLS = "id, name, city, region, image, is_imported, claim_status";
+const SELECT_COLS = "id, slug, name, city, region, image, is_imported, claim_status";
 
 export default function DuplicatePlaceWarning({ name, city, onDismiss, onBlockingChange }: Props) {
   const { t } = useTranslation();
@@ -202,7 +203,7 @@ export default function DuplicatePlaceWarning({ name, city, onDismiss, onBlockin
                 </p>
               </div>
               <Link
-                to={needsClaim ? `/habitat/${p.id}?claim=1` : `/habitat/${p.id}`}
+                to={needsClaim ? `/habitat/${p.slug || p.id}?claim=1` : `/habitat/${p.slug || p.id}`}
                 target="_blank"
                 className="text-xs font-medium text-primary hover:underline inline-flex items-center gap-1 shrink-0"
               >
