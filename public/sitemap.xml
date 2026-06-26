@@ -72,4 +72,28 @@
   <url><loc>https://sejour.casaminga.com/ressources/guide-accueillir-un-voyageur</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/ressources/guide-preparer-son-sejour</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/ressources/guide-organiser-une-reunion-collective</loc><priority>0.6</priority></url>
+
+  <!-- Lieux (généré au build) -->
+  <url><loc>https://sejour.casaminga.com/habitat/le-toit-vertical</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/kerterre-de-la-pointe</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/ecovillage-mbackombel</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/aldeia-da-terra</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/ecolieu-des-sources</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/kibboutz-lotan</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/saettedammen-cohousing</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/la-cabane-des-cantons</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/auroville-aspiration</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/habitat/cooperative-de-la-jonction</loc><priority>0.7</priority></url>
+
+  <!-- Séjours (généré au build) -->
+  <url><loc>https://sejour.casaminga.com/listing/chambre-amis-toit-vertical</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/sejour-yourte-ecolieu-sources</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/sejour-kibboutz-lotan</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/nuit-kerterre-crozon</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/immersion-case-mbackombel</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/sejour-roulotte-aldeia-terra</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/sejour-cabane-cantons</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/chambre-privee-auroville</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/chambre-cooperative-jonction</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/listing/echange-maison-saettedammen</loc><priority>0.7</priority></url>
 </urlset>
