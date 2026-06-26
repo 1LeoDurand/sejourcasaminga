@@ -164,4 +164,10 @@
   }
 }
 
+/* Floating chip animation for the hero "0 € de loyer" badge */
+@keyframes cmFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 

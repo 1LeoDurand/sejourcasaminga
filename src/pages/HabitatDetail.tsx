@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import placePlaceholder from "@/assets/place-placeholder.webp";
 import { useAuth } from "@/contexts/AuthContext";
 import PlaceClaimRequestForm from "@/components/PlaceClaimRequestForm";
@@ -26,6 +26,7 @@ import { trackEvent } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import ListingCard from "@/components/ListingCard";
+import PlaceGallery from "@/components/PlaceGallery";
 import HabitatEvents from "@/components/HabitatEvents";
 import CollapsibleBadges from "@/components/CollapsibleBadges";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -92,6 +93,7 @@ function useMemberPreferences(userIds: string[]) {
 
 const HabitatDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { data: place, isLoading } = usePlace(id);
   const { data: listings } = usePlaceListings(id);
@@ -105,11 +107,16 @@ const HabitatDetail = () => {
   const memberUserIds = (members || []).map((m: any) => m.user_id).filter(Boolean);
   const { data: memberPrefs } = useMemberPreferences(memberUserIds);
   const [liked, setLiked] = useState(false);
+  // selectedImage removed — gallery state now lives in PlaceGallery
 
   useEffect(() => {
     if (id) trackEvent("page_view", { page: "habitat_detail", reference_id: id });
   }, [id]);
-  const [selectedImage, setSelectedImage] = useState(0);
+  // SEO: canonicalise the URL to the slug (redirect raw-UUID visits to /habitat/{slug})
+  useEffect(() => {
+    const slug = (place as any)?.slug;
+    if (slug && id && id !== slug) navigate(`/habitat/${slug}`, { replace: true });
+  }, [place, id, navigate]);
 
 
   if (isLoading) {
@@ -177,7 +184,7 @@ const HabitatDetail = () => {
     "name": place.name,
     "description": seoDesc,
     "image": images[0] || undefined,
-    "url": `https://sejour.casaminga.com/habitat/${place.id}`,
+    "url": `https://sejour.casaminga.com/habitat/${place.slug || place.id}`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": place.city || undefined,
@@ -192,14 +199,14 @@ const HabitatDetail = () => {
       <SEO
         title={seoTitle}
         description={seoDesc}
-        canonical={`/habitat/${place.id}`}
+        canonical={`/habitat/${place.slug || place.id}`}
         image={images[0]}
         jsonLd={[
           jsonLd,
           breadcrumbLd([
             { name: "Accueil", url: "/" },
             { name: "Découvrir", url: "/discover" },
-            { name: place.name, url: `/habitat/${place.id}` },
+            { name: place.name, url: `/habitat/${place.slug || place.id}` },
           ]),
         ]}
       />
@@ -218,20 +225,9 @@ const HabitatDetail = () => {
           )}
         </div>
 
-        {/* Hero images */}
-        <div className="mb-8 grid gap-2 md:grid-cols-[2fr_1fr]">
-          <div className="overflow-hidden rounded-xl">
-            <img src={images[selectedImage]} alt={place.name} className="h-80 w-full object-cover md:h-[420px]" />
-          </div>
-          {images.length > 1 && (
-            <div className="flex gap-2 md:flex-col">
-              {images.slice(1, 3).map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i + 1)} className="flex-1 overflow-hidden rounded-xl">
-                  <img src={img} alt="" className="h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
+        {/* Hero images — Airbnb-style gallery (mosaic + fullscreen viewer, up to 15 photos) */}
+        <div className="mb-8">
+          <PlaceGallery images={images} name={place.name} />
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_380px]">

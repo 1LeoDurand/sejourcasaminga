@@ -157,7 +157,7 @@ const Onboarding = () => {
                 icon={Home}
                 title="Je veux créer ma fiche lieu"
                 description="Présentez votre habitat collectif sur Casa Minga en quelques minutes."
-                onClick={() => { finishOnboarding(); navigate("/create-place/quick?from=onboarding"); }}
+                onClick={() => setStep("join")}
                 accent="soleil"
               />
               <ChoiceCard

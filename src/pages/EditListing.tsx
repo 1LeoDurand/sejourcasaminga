@@ -22,6 +22,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useListing } from "@/hooks/use-listings";
+import { usePlace } from "@/hooks/use-places";
+import PointsValueField from "@/components/PointsValueField";
+import { suggestPointsPerNight } from "@/lib/points-valuation";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { RELATIONSHIP_LABELS } from "@/data/demo";
@@ -37,7 +40,12 @@ const EditListing = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: listing, isLoading } = useListing(id);
+  const { data: place } = usePlace((listing as any)?.place_id);
   const qc = useQueryClient();
+
+  // Linked place drives the points suggestion (attractiveness + shared amenities).
+  const amenitiesCount = (place as any)?.shared_amenities?.length ?? 0;
+  const attractionLevel = (place as any)?.attraction_level ?? "standard";
 
   const [form, setForm] = useState({
     title: "",
@@ -125,7 +133,16 @@ const EditListing = () => {
     if (!id) return;
     setSaving(true);
     try {
-      const { error } = await supabase.from("listings").update(form).eq("id", id);
+      const payload = {
+        ...form,
+        points_suggested: suggestPointsPerNight({
+          capacity: form.capacity,
+          listingType: form.listing_type,
+          amenitiesCount,
+          attractionLevel,
+        }),
+      };
+      const { error } = await supabase.from("listings").update(payload as any).eq("id", id);
       if (error) throw error;
       qc.invalidateQueries({ queryKey: ["listing", id] });
       qc.invalidateQueries({ queryKey: ["my-listings"] });
@@ -226,8 +243,14 @@ const EditListing = () => {
             {form.accepted_exchange_types.includes("points") && (
               <div>
                 <Label>Points / nuit</Label>
-                <Input type="number" min={0} value={form.points_per_night} onChange={(e) => set("points_per_night", Math.max(parseInt(e.target.value) || 0, 0))} />
-                <p className="mt-1 text-xs text-muted-foreground">Coût si le séjour est réglé en points.</p>
+                <PointsValueField
+                  capacity={form.capacity}
+                  listingType={form.listing_type}
+                  amenitiesCount={amenitiesCount}
+                  attractionLevel={attractionLevel}
+                  value={form.points_per_night}
+                  onChange={(v) => set("points_per_night", v)}
+                />
               </div>
             )}
           </section>

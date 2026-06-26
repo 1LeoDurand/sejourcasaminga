@@ -16,6 +16,7 @@ import { HABITAT_TYPES, VALUE_TAGS, VIBE_OPTIONS, HOSPITALITY_TYPES, HOSPITALITY
 import PhotoManager from "@/components/PhotoManager";
 import PlaceLivePreview from "@/components/PlaceLivePreview";
 import DuplicatePlaceWarning from "@/components/DuplicatePlaceWarning";
+import AttractionLevelField from "@/components/AttractionLevelField";
 
 const ENVIRONMENT_TYPES = [
   { value: "urban", label: "Urbain" },
@@ -48,6 +49,7 @@ const CreatePlace = () => {
     inhabitants: 0,
     year_founded: undefined as number | undefined,
     environment_type: "",
+    attraction_level: "standard",
     hosting_status: "no",
     hosting_style: "",
     hospitality_manager: "",
@@ -126,6 +128,7 @@ const CreatePlace = () => {
         inhabitants: form.inhabitants,
         year_founded: form.year_founded || null,
         environment_type: form.environment_type || null,
+        attraction_level: form.attraction_level || "standard",
         hosting_status: form.hosting_status,
         hosting_style: form.hosting_style || null,
         hospitality_manager: form.hospitality_manager || null,
@@ -238,6 +241,7 @@ const CreatePlace = () => {
                   set("image", photos[0] || "");
                 }}
                 folder={`places/${tempPlaceId}`}
+                maxPhotos={15}
               />
             </div>
           </section>
@@ -327,6 +331,8 @@ const CreatePlace = () => {
                 </SelectContent>
               </Select>
             </div>
+
+            <AttractionLevelField value={form.attraction_level} onChange={(v) => set("attraction_level", v)} />
 
             <div>
               <Label>Ambiance générale</Label>

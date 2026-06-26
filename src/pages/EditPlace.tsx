@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, ArrowLeft, Save } from "lucide-react";
 import PhotoManager from "@/components/PhotoManager";
 import VideoEmbedField from "@/components/VideoEmbedField";
+import AttractionLevelField from "@/components/AttractionLevelField";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -49,6 +50,7 @@ const EditPlace = () => {
     inhabitants: 0,
     year_founded: undefined as number | undefined,
     environment_type: "",
+    attraction_level: "standard",
     hosting_status: "no",
     hosting_style: "",
     hospitality_manager: "",
@@ -96,6 +98,7 @@ const EditPlace = () => {
         inhabitants: place.inhabitants || 0,
         year_founded: p.year_founded || undefined,
         environment_type: p.environment_type || "",
+        attraction_level: p.attraction_level || "standard",
         hosting_status: p.hosting_status || "no",
         hosting_style: p.hosting_style || "",
         hospitality_manager: p.hospitality_manager || "",
@@ -237,6 +240,7 @@ const EditPlace = () => {
                 set("image", photos[0] || "");
               }}
               folder={`places/${id}`}
+              maxPhotos={15}
             />
           </section>
 
@@ -276,6 +280,7 @@ const EditPlace = () => {
               <Label>Adresse (optionnel)</Label>
               <Input value={form.address_text} onChange={(e) => set("address_text", e.target.value)} placeholder="Visible uniquement après confirmation" />
             </div>
+            <AttractionLevelField value={form.attraction_level} onChange={(v) => set("attraction_level", v)} />
           </section>
 
           {/* ─── Vie collective ─── */}

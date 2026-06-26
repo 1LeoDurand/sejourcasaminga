@@ -59,6 +59,9 @@ const AdminEmails = lazy(() => import("./pages/admin/AdminEmails.tsx"));
 const Referrals = lazy(() => import("./pages/Referrals.tsx"));
 const MyPoints = lazy(() => import("./pages/MyPoints.tsx"));
 const MemberProfile = lazy(() => import("./pages/MemberProfile.tsx"));
+const Friends = lazy(() => import("./pages/Friends.tsx"));
+const Groups = lazy(() => import("./pages/Groups.tsx"));
+const GroupDetail = lazy(() => import("./pages/GroupDetail.tsx"));
 const VerifyClaim = lazy(() => import("./pages/VerifyClaim.tsx"));
 const Verification = lazy(() => import("./pages/Verification.tsx"));
 const Legal = lazy(() => import("./pages/Legal.tsx"));
@@ -138,6 +141,9 @@ const App = () => (
               <Route path="/referrals" element={<Referrals />} />
               <Route path="/points" element={<MyPoints />} />
               <Route path="/membre/:id" element={<MemberProfile />} />
+              <Route path="/amis" element={<Friends />} />
+              <Route path="/groupes" element={<Groups />} />
+              <Route path="/groupes/:slug" element={<GroupDetail />} />
               <Route path="/verification" element={<Verification />} />
               <Route path="/admin/verifications" element={<AdminVerifications />} />
               <Route path="/verify-claim" element={<VerifyClaim />} />

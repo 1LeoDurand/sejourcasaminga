@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import listingPlaceholder from "@/assets/listing-placeholder.webp";
 import { useState, useEffect } from "react";
@@ -19,8 +19,10 @@ import {
   ArrowLeft, MapPin, Users, Home, Shield, Heart, Mail,
   ChevronRight, Eye, Loader2, Send, Pencil, Clock,
   Star, X, ZoomIn, CheckCircle2, MessageSquare, Sparkles,
-  ChevronDown, HelpCircle, ListChecks, BadgeCheck,
+  ChevronDown, HelpCircle, ListChecks, BadgeCheck, Coins,
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { suggestPointsPerNight } from "@/lib/points-valuation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -433,10 +435,16 @@ function SimilarListings({ placeId, currentId }: { placeId: string; currentId: s
 const ListingDetail = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const createRequest = useCreateExchangeRequest();
 
   const { data: listing, isLoading } = useListing(id);
+  // SEO: canonicalise to the slug (redirect raw-UUID visits to /listing/{slug})
+  useEffect(() => {
+    const slug = (listing as any)?.slug;
+    if (slug && id && id !== slug) navigate(`/listing/${slug}`, { replace: true });
+  }, [listing, id, navigate]);
   const place = listing?.places || null;
   const { data: hostProfile } = useHostProfile(listing?.host_id);
 
@@ -545,6 +553,15 @@ const ListingDetail = () => {
     return Array.isArray(raw) && raw.length > 0 ? raw : ["free", "reciprocal", "points", "other"];
   })();
 
+  // Clear points/night indicator (only when this listing actually accepts points).
+  const showPoints = acceptedModes.includes("points") && pointsPerNight > 0;
+  const estimatedPoints = suggestPointsPerNight({
+    capacity: listing.capacity ?? 0,
+    listingType: listing.listing_type,
+    amenitiesCount: (place as any)?.shared_amenities?.length ?? 0,
+    attractionLevel: (place as any)?.attraction_level ?? "standard",
+  });
+
   const handleGoToPreview = (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
@@ -606,7 +623,7 @@ const ListingDetail = () => {
     "name": listing.title,
     "description": seoDesc,
     "image": allImages[0] || undefined,
-    "url": `https://sejour.casaminga.com/listing/${listing.id}`,
+    "url": `https://sejour.casaminga.com/listing/${listing.slug || listing.id}`,
     "maximumAttendeeCapacity": listing.capacity || 1,
     "address": place ? {
       "@type": "PostalAddress",
@@ -617,7 +634,7 @@ const ListingDetail = () => {
     "containedInPlace": place ? {
       "@type": "Place",
       "name": place.name,
-      "url": `https://sejour.casaminga.com/habitat/${place.id}`,
+      "url": `https://sejour.casaminga.com/habitat/${place.slug || place.id}`,
     } : undefined,
   };
 
@@ -638,14 +655,14 @@ const ListingDetail = () => {
       <SEO
         title={seoTitle}
         description={seoDesc}
-        canonical={`/listing/${listing.id}`}
+        canonical={`/listing/${listing.slug || listing.id}`}
         image={listing.image || undefined}
         jsonLd={[
           jsonLd,
           breadcrumbLd([
             { name: "Accueil", url: "/" },
             { name: "Découvrir", url: "/discover" },
-            { name: listing.title, url: `/listing/${listing.id}` },
+            { name: listing.title, url: `/listing/${listing.slug || listing.id}` },
           ]),
         ]}
       />
@@ -717,6 +734,28 @@ const ListingDetail = () => {
             <MapPin className="h-4 w-4" />
             {place.region || place.city || ""}
           </p>
+        )}
+
+        {/* Points / night — clear indicator with an optional estimated-value tooltip */}
+        {showPoints && (
+          <div className="mt-3 inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 text-lg font-semibold text-foreground">
+              <Coins className="h-4 w-4 text-primary" />
+              {t("points.perNight", { value: pointsPerNight })}
+            </span>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button type="button" className="text-muted-foreground hover:text-foreground" aria-label={t("points.tooltipTitle")}>
+                  <HelpCircle className="h-4 w-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <p className="font-medium">{t("points.tooltipTitle")}</p>
+                <p className="text-xs">{t("points.tooltipBody")}</p>
+                <p className="mt-1 text-xs">{t("points.suggestedShort", { value: estimatedPoints })}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
         )}
 
         {/* Phase 2 — Carte hôte enrichie */}

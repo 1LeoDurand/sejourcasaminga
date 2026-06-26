@@ -37,6 +37,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useMyConversations } from "@/hooks/use-conversations";
 import { useMyExchangeRequests } from "@/hooks/use-exchange-requests";
 import { useMyListings } from "@/hooks/use-listings";
+import { usePendingRequests } from "@/hooks/use-friends";
 import { useUserPreferences } from "@/hooks/use-user-preferences";
 import { computeCompletion } from "@/lib/profile-completion";
 import { cn } from "@/lib/utils";
@@ -111,6 +112,8 @@ function MenuContent({ close }: { close: () => void }) {
   const { data: favorites } = useFavorites(userId);
   const { data: conversations } = useMyConversations(userId);
   const { data: requests } = useMyExchangeRequests(userId);
+  const { data: friendRequests } = usePendingRequests();
+  const incomingFriends = friendRequests?.incoming.length || 0;
 
   const completion = useMemo(
     () =>
@@ -160,6 +163,13 @@ function MenuContent({ close }: { close: () => void }) {
       badgeVariant: unreadMessages > 0 ? "destructive" : "default",
     },
     { icon: Coins, label: "Mes points", to: "/points" },
+    {
+      icon: Users,
+      label: "Mes amis",
+      to: "/amis",
+      badge: incomingFriends || null,
+      badgeVariant: incomingFriends > 0 ? "destructive" : "default",
+    },
     { icon: Sparkles, label: "Recommandations", to: "/discover" },
     { icon: Star, label: "Mes préférences", to: "/edit-profile" },
   ];

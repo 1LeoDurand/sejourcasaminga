@@ -15,6 +15,7 @@ import { useHostListings } from "@/hooks/use-listings";
 import { useGuestHostReviews } from "@/hooks/use-host-reviews";
 import { useIsMemberVerified } from "@/hooks/use-verification";
 import MemberBadges from "@/components/MemberBadges";
+import FriendButton from "@/components/FriendButton";
 
 function StarRating({ rating }: { rating: number | null }) {
   if (!rating) return null;
@@ -102,7 +103,10 @@ const MemberProfile = () => {
             <AvatarFallback className="text-xl">{name.slice(0, 1).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h1 className="text-2xl md:text-3xl text-foreground">{name}</h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl md:text-3xl text-foreground">{name}</h1>
+              <FriendButton userId={id} />
+            </div>
             {avgRating !== null && (
               <div className="mt-1.5 flex items-center gap-2">
                 <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground">

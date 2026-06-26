@@ -15,7 +15,7 @@ import SearchModal from "@/components/SearchModal";
 import SEO from "@/components/SEO";
 import heroImage from "@/assets/hero-collective.webp";
 import placePlaceholder from "@/assets/place-placeholder.webp";
-import { useListings } from "@/hooks/use-listings";
+import { useListings, listingUrl } from "@/hooks/use-listings";
 import { usePlaces } from "@/hooks/use-places";
 import { usePublicStats } from "@/hooks/use-stats";
 import { useTranslation } from "react-i18next";
@@ -37,6 +37,7 @@ const Index = () => {
 
   const listingCount = listings?.length || 0;
   const placeCount = places?.length || 0;
+  const featured = listings?.[0];
 
   const TRUST = [
     { icon: Shield, text: t("home.trustVerified") },
@@ -54,55 +55,109 @@ const Index = () => {
       />
       <Navbar />
 
-      {/* ═══════════ HERO ═══════════ */}
-      <section className="relative overflow-hidden bg-foreground">
-        <img
-          src={heroImage}
-          alt="Vie collective en habitat participatif"
-          className="absolute inset-0 h-full w-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-foreground/20" />
+      {/* ═══════════ HERO — Moderne convivial ═══════════ */}
+      <section className="bg-background" style={{ fontFamily: "'Hanken Grotesque', system-ui, sans-serif" }}>
+        <div className="mx-auto grid max-w-7xl items-start gap-10 px-5 pb-12 pt-8 md:grid-cols-[minmax(0,600px)_1fr] md:gap-14 md:px-16 md:pb-16 md:pt-12">
+          {/* ── Colonne gauche ── */}
+          <div className="md:pt-6">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#FBEAC2] px-4 py-2 text-[13.5px] font-bold text-[#9A6A1C]">
+              <span className="h-2 w-2 rounded-full bg-[#C85A33]" />
+              {t("home.heroBadge", { count: listingCount })}
+            </span>
 
-        <div className="relative z-10 px-5 pt-14 pb-12 md:px-8 md:pt-24 md:pb-20 max-w-3xl mx-auto">
-          <h1 className="text-[2.25rem] leading-[1.1] tracking-tight text-white md:text-6xl">
-            {t("home.heroTitle")}
-            <span className="block text-soleil mt-1">{t("home.heroTitleAccent")}</span>
-          </h1>
+            <h1
+              style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif" }}
+              className="mt-6 text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#2E211A] md:text-[64px]"
+            >
+              {t("home.heroTitle")}
+              <br />
+              <span className="text-[#C85A33]">{t("home.heroTitleAccent")}</span>
+            </h1>
 
-          <p className="mt-5 max-w-lg text-[0.95rem] leading-relaxed text-white/75 md:text-lg">
-            {t("home.heroSubtitle")}
-          </p>
+            <p className="mt-6 max-w-[500px] text-[18px] leading-[1.55] text-[#6B5A4C]">
+              {t("home.heroSubtitle")}
+            </p>
 
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            className="mt-7 flex w-full items-center gap-3.5 rounded-2xl bg-white p-4 text-left shadow-xl ring-1 ring-white/10 transition-shadow hover:shadow-2xl md:max-w-lg"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-              <Search className="h-5 w-5 text-primary" />
+            {/* Barre de recherche */}
+            <div className="mt-8 flex max-w-[540px] items-center gap-2.5 rounded-[20px] border border-[#F2E7D2] bg-white p-2 shadow-[0_20px_44px_rgba(120,70,30,0.12)]">
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="flex min-w-0 flex-1 items-center gap-2.5 text-left"
+              >
+                <span className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[14px] bg-[#FBEFD6]">
+                  <Search className="h-5 w-5 text-[#C85A33]" />
+                </span>
+                <span className="min-w-0 flex-1 px-1">
+                  <span className="block text-[16px] font-bold text-[#2E211A]">{t("home.findStay")}</span>
+                  <span className="mt-0.5 block truncate text-[13px] text-[#9A876C]">{t("home.findStayHint")}</span>
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="shrink-0 rounded-[14px] bg-[#C85A33] px-5 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#B04A28]"
+              >
+                {t("common.search")}
+              </button>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-foreground">{t("home.findStay")}</p>
-              <p className="text-xs text-muted-foreground truncate">{t("home.findStayHint")}</p>
-            </div>
-            <ArrowRight className="h-4 w-4 text-primary shrink-0" />
-          </button>
 
-          <div className="mt-6 flex items-center gap-4">
-            <Link to="/auth?tab=signup">
-              <Button size="lg" className="rounded-full font-medium text-sm px-7 h-12 shadow-lg">
-                {t("common.signUpFree")}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/comment-ca-marche" className="text-xs text-white/70 hover:text-white underline underline-offset-4 transition-colors">
-              {t("home.howItWorksLink")}
-            </Link>
+            {/* Preuve sociale */}
+            <div className="mt-8 flex items-center gap-3.5">
+              <div className="flex items-center">
+                {["from-[#E8B98F] to-[#C85A33]", "from-[#F4CC63] to-[#E0A03C]", "from-[#EFE3CE] to-[#C9B79A]"].map((g, i) => (
+                  <span
+                    key={i}
+                    className={`h-9 w-9 rounded-full border-[2.5px] border-background bg-gradient-to-br ${g} ${i > 0 ? "-ml-3" : ""}`}
+                  />
+                ))}
+                <span className="-ml-3 flex h-9 w-9 items-center justify-center rounded-full border-[2.5px] border-background bg-[#2E211A] text-[12px] font-bold text-[#F4CC63]">
+                  +18
+                </span>
+              </div>
+              <p className="text-[15px] font-semibold text-[#6B5A4C]">{t("home.heroJoin", { count: placeCount })}</p>
+            </div>
           </div>
 
-          <p className="mt-6 text-xs text-white/70">
-            {t("home.stayCount", { count: listingCount })} · {t("home.placeCount", { count: placeCount })}
-          </p>
+          {/* ── Colonne droite : image + cartes flottantes ── */}
+          <div className="relative h-[340px] sm:h-[440px] md:h-[600px]">
+            <div className="absolute inset-0 overflow-hidden rounded-[28px] shadow-[0_30px_70px_rgba(120,70,30,0.2)]">
+              <img src={heroImage} alt={t("home.heroImageAlt")} className="h-full w-full object-cover" />
+            </div>
+
+            {/* Puce « 0 € de loyer » */}
+            <div className="absolute right-5 top-5 flex animate-[cmFloat_6s_ease-in-out_infinite] items-center gap-2 rounded-[14px] bg-white px-3.5 py-2.5 shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
+              <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[9px] bg-[#C85A33] text-white">
+                <ArrowLeftRight className="h-3.5 w-3.5" />
+              </span>
+              <span className="text-[13.5px] font-bold text-[#2E211A]">{t("home.heroRentFree")}</span>
+            </div>
+
+            {/* Carte fiche-lieu mise en avant */}
+            {featured && (
+              <Link
+                to={listingUrl(featured.id, featured.slug)}
+                className="absolute inset-x-5 bottom-5 flex items-center gap-3.5 rounded-[18px] bg-white/95 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.16)] backdrop-blur-sm transition-transform hover:-translate-y-0.5"
+              >
+                <img
+                  src={featured.image || (featured as any).places?.image || placePlaceholder}
+                  alt=""
+                  className="h-[52px] w-[52px] shrink-0 rounded-[13px] object-cover"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[15px] font-bold text-[#2E211A]">
+                    {(featured as any).places?.name || featured.title}
+                  </p>
+                  <p className="mt-0.5 truncate text-[13px] text-[#8A7458]">
+                    {t("home.heroCardSub", { count: featured.capacity || 2 })}
+                  </p>
+                </div>
+                <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#FBEAC2] px-3 py-1.5 text-[13px] font-bold text-[#9A6A1C]">
+                  <Star className="h-3 w-3 fill-current" /> 4,9
+                </span>
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 

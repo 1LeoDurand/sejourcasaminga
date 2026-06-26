@@ -14,6 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { HABITAT_TYPES } from "@/data/demo";
 import PhotoManager from "@/components/PhotoManager";
 import DuplicatePlaceWarning from "@/components/DuplicatePlaceWarning";
+import AttractionLevelField from "@/components/AttractionLevelField";
 import SEO from "@/components/SEO";
 
 const CreatePlaceQuick = () => {
@@ -28,6 +29,7 @@ const CreatePlaceQuick = () => {
   const [city, setCity] = useState("");
   const [region, setRegion] = useState("");
   const [shortDesc, setShortDesc] = useState("");
+  const [attractionLevel, setAttractionLevel] = useState("standard");
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [tempPlaceId] = useState(() => crypto.randomUUID());
@@ -43,6 +45,7 @@ const CreatePlaceQuick = () => {
         city,
         region,
         short_desc: shortDesc,
+        attraction_level: attractionLevel || "standard",
         image: images[0] || "",
         images,
         created_by: user.id,
@@ -162,6 +165,8 @@ const CreatePlaceQuick = () => {
               <p className="text-xs text-muted-foreground mt-1">{shortDesc.length}/160</p>
             </div>
 
+            <AttractionLevelField value={attractionLevel} onChange={setAttractionLevel} />
+
             <div>
               <Label>Photo principale *</Label>
               <p className="text-xs text-muted-foreground mb-2">
@@ -171,6 +176,7 @@ const CreatePlaceQuick = () => {
                 photos={images}
                 onChange={setImages}
                 folder={`places/${tempPlaceId}`}
+                maxPhotos={15}
               />
             </div>
           </div>

@@ -16,6 +16,8 @@ import { useProfile } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
 import { RELATIONSHIP_LABELS } from "@/data/demo";
 import { LISTING_TYPE_META, LISTING_TYPE_ORDER } from "@/lib/listing-types";
+import PointsValueField from "@/components/PointsValueField";
+import { suggestPointsPerNight } from "@/lib/points-valuation";
 import type { Database } from "@/integrations/supabase/types";
 
 // All supported exchange modes with their French labels
@@ -48,7 +50,12 @@ const CreateListing = () => {
   const [listingType, setListingType] = useState<ListingType>("private_room");
   const [relationship, setRelationship] = useState<CollectiveRelationship>("personal");
   const [capacity, setCapacity] = useState("2");
-  const [pointsPerNight, setPointsPerNight] = useState("10");
+  const [pointsPerNight, setPointsPerNight] = useState(10);
+
+  // Linked place drives the points suggestion (attractiveness + shared amenities).
+  const selectedPlace = (myPlaces ?? []).find((pm: any) => pm.place_id === placeId)?.places as any;
+  const amenitiesCount = selectedPlace?.shared_amenities?.length ?? 0;
+  const attractionLevel = selectedPlace?.attraction_level ?? "standard";
   // Default: all modes accepted
   const [acceptedExchangeTypes, setAcceptedExchangeTypes] = useState<string[]>(["free", "reciprocal", "points", "other"]);
   const [autonomyLevel, setAutonomyLevel] = useState("");
@@ -81,7 +88,13 @@ const CreateListing = () => {
         listing_type: listingType,
         collective_relationship: relationship,
         capacity: parseInt(capacity) || 2,
-        points_per_night: Math.max(parseInt(pointsPerNight) || 0, 0),
+        points_per_night: Math.max(pointsPerNight, 0),
+        points_suggested: suggestPointsPerNight({
+          capacity: parseInt(capacity) || 2,
+          listingType,
+          amenitiesCount,
+          attractionLevel,
+        }),
         accepted_exchange_types: acceptedExchangeTypes,
         autonomy_level: autonomyLevel,
         collective_access: collectiveAccess,
@@ -229,9 +242,15 @@ const CreateListing = () => {
           </div>
           {acceptedExchangeTypes.includes("points") && (
             <div>
-              <Label htmlFor="points-per-night">Points / nuit</Label>
-              <Input id="points-per-night" type="number" min="0" value={pointsPerNight} onChange={(e) => setPointsPerNight(e.target.value)} />
-              <p className="mt-1 text-xs text-muted-foreground">Coût en points si un voyageur règle son séjour en points.</p>
+              <Label>Points / nuit</Label>
+              <PointsValueField
+                capacity={parseInt(capacity) || 2}
+                listingType={listingType}
+                amenitiesCount={amenitiesCount}
+                attractionLevel={attractionLevel}
+                value={pointsPerNight}
+                onChange={setPointsPerNight}
+              />
             </div>
           )}
           <div>

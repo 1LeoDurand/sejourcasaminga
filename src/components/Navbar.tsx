@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Compass, Home, LogIn, LayoutDashboard, LogOut, Bell, MessageSquare, ArrowLeftRight } from "lucide-react";
+import { Menu, X, Compass, Home, LogIn, LayoutDashboard, LogOut, Bell, MessageSquare, ArrowLeftRight, Users } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo.png";
@@ -44,6 +44,9 @@ const Navbar = () => {
           </Link>
           <Link to="/ressources" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t("nav.resources")}
+          </Link>
+          <Link to="/groupes" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            {t("groups.navLink")}
           </Link>
           <LanguageSwitcher />
           <ThemeToggle />
@@ -158,7 +161,13 @@ const Navbar = () => {
               { to: "/discover", label: t("nav.exploreStays"), icon: Compass },
               { to: "/comment-ca-marche", label: t("nav.howItWorks"), icon: Compass },
               { to: "/ressources", label: t("nav.resources"), icon: Compass },
-              ...(user ? [{ to: "/dashboard", label: t("common.myAccount"), icon: LayoutDashboard }] : []),
+              { to: "/groupes", label: t("groups.navLink"), icon: Users },
+              ...(user
+                ? [
+                    { to: "/dashboard", label: t("common.myAccount"), icon: LayoutDashboard },
+                    { to: "/amis", label: t("friends.navLink"), icon: Users },
+                  ]
+                : []),
             ].map((link) => (
               <Link key={link.to} to={link.to} onClick={() => setOpen(false)}>
                 <Button variant={location.pathname === link.to ? "secondary" : "ghost"} className="w-full justify-start h-11" size="sm">
