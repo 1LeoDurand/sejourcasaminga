@@ -32,6 +32,7 @@ const HowItWorks = lazy(() => import("./pages/HowItWorks.tsx"));
 const Resources = lazy(() => import("./pages/Resources.tsx"));
 const ResourceDetail = lazy(() => import("./pages/ResourceDetail.tsx"));
 const About = lazy(() => import("./pages/About.tsx"));
+const Author = lazy(() => import("./pages/Author.tsx"));
 const Hospitality = lazy(() => import("./pages/Hospitality.tsx"));
 const Charter = lazy(() => import("./pages/Charter.tsx"));
 const Contact = lazy(() => import("./pages/Contact.tsx"));
@@ -111,6 +112,7 @@ const App = () => (
               <Route path="/ressources" element={<Resources />} />
               <Route path="/ressources/:slug" element={<ResourceDetail />} />
               <Route path="/a-propos" element={<About />} />
+              <Route path="/auteur" element={<Author />} />
               <Route path="/hospitalite" element={<Hospitality />} />
               <Route path="/charte" element={<Charter />} />
               <Route path="/contact" element={<Contact />} />

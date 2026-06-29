@@ -11,6 +11,8 @@ import { ArrowLeft, ExternalLink, Loader2, BookOpen, Clock } from "lucide-react"
 import { useResource, useResources } from "@/hooks/use-resources";
 import { faqJsonLdFromHtml } from "@/lib/faq-jsonld";
 import { readingTimeMinutes } from "@/lib/reading-time";
+import { extractSummary } from "@/lib/article-summary";
+import AuthorBox from "@/components/AuthorBox";
 
 // Build schema.org JSON-LD adapted to the resource type (+ breadcrumb) for rich SEO.
 function buildResourceJsonLd(r: {
@@ -119,6 +121,9 @@ const ResourceDetail = () => {
   })();
 
   const isArticleLike = resource?.type === "article" || resource?.type === "guide";
+  const { summary: articleSummary, content: articleBody } = isArticleLike
+    ? extractSummary(resource?.content)
+    : { summary: null, content: resource?.content ?? "" };
   const readMinutes = isArticleLike ? readingTimeMinutes(resource?.content) : 0;
   const publishedLabel = resource?.created_at
     ? new Date(resource.created_at).toLocaleDateString(i18n.language, {
@@ -236,10 +241,19 @@ const ResourceDetail = () => {
             className="w-full h-72 md:h-96 object-cover rounded-xl mb-8"
           />
 
+          {articleSummary && (
+            <div className="mb-8 rounded-xl border-l-4 border-primary bg-muted/60 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
+                {t("resources.summaryLabel")}
+              </p>
+              <p className="text-foreground/90 leading-relaxed">{articleSummary}</p>
+            </div>
+          )}
+
           {resource.content ? (
             <div
               className="prose prose-stone max-w-none prose-headings:font-serif prose-h2:text-xl prose-a:text-primary"
-              dangerouslySetInnerHTML={{ __html: resource.content }}
+              dangerouslySetInnerHTML={{ __html: isArticleLike ? articleBody : resource.content }}
             />
           ) : (
             resource.description && (
@@ -269,6 +283,8 @@ const ResourceDetail = () => {
               </Button>
             </div>
           )}
+
+          {isArticleLike && <AuthorBox />}
 
           {similar.length > 0 && (
             <section className="mt-14 pt-8 border-t">

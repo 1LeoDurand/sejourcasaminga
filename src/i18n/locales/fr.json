@@ -790,6 +790,15 @@
     "linkResources": "Voir les ressources",
     "linkHow": "Comment ça marche"
   },
+  "author": {
+    "name": "Léo Durand",
+    "role": "Fondateur de Casa Minga",
+    "tagline": "Fondateur de Casa Minga — il écrit sur l'habitat collectif et le voyage autrement.",
+    "metaDesc": "Léo Durand, fondateur de Casa Minga : il écrit sur l'habitat participatif, les écolieux et le voyage autrement.",
+    "linkAbout": "En savoir plus sur Casa Minga",
+    "linkContact": "Le contacter",
+    "bio": "Léo Durand est le fondateur de Casa Minga. Il s'intéresse depuis des années aux manières d'habiter et de voyager autrement : habitats participatifs, écolieux, colocations durables, et toutes les formes de vie collective qui cherchent un équilibre entre intimité et partage. Casa Minga est né d'une conviction simple : on comprend mieux ces modes de vie en les rencontrant de l'intérieur, en séjournant chez celles et ceux qui les pratiquent, qu'en lisant des théories à distance.\n\nÀ travers les articles et guides de cette bibliothèque, il cherche à rendre accessibles des sujets parfois techniques — statuts juridiques, financement, gouvernance, matériaux — sans perdre de vue l'expérience humaine qui les sous-tend. Le ton se veut honnête : il parle autant des réussites que des limites réelles de ces projets. Quand il ne rédige pas, il voyage, photographie les lieux et les gens qu'il croise, et tisse le réseau d'entraide entre habitats que Casa Minga veut faire grandir."
+  },
   "resources": {
     "title": "Ressources",
     "subtitle": "Une bibliothèque d'inspirations autour de l'habitat collectif, des écolieux et des communs.",
@@ -815,6 +824,7 @@
     "related": "À découvrir aussi",
     "readingTime_one": "{{count}} min de lecture",
     "readingTime_other": "{{count}} min de lecture",
+    "summaryLabel": "L'essentiel",
     "discoverBtn": "Découvrir / Où regarder"
   },
   "listing": {

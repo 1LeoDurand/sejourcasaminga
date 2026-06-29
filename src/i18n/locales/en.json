@@ -790,6 +790,15 @@
     "linkResources": "See resources",
     "linkHow": "How it works"
   },
+  "author": {
+    "name": "Léo Durand",
+    "role": "Founder of Casa Minga",
+    "tagline": "Founder of Casa Minga — he writes about collective living and travelling differently.",
+    "metaDesc": "Léo Durand, founder of Casa Minga: he writes about participatory housing, ecovillages and travelling differently.",
+    "linkAbout": "More about Casa Minga",
+    "linkContact": "Get in touch",
+    "bio": "Léo Durand is the founder of Casa Minga. For years he has been drawn to other ways of living and travelling: participatory housing, ecovillages, lasting shared homes, and all the forms of collective life that look for a balance between privacy and sharing. Casa Minga grew from a simple conviction: you understand these ways of living far better by meeting them from the inside — by staying with the people who practise them — than by reading theory from a distance.\n\nThrough the articles and guides in this library, he tries to make sometimes-technical topics approachable — legal structures, financing, governance, materials — without losing sight of the human experience behind them. The tone aims to be honest: he writes about the successes as much as the real limits of these projects. When he isn't writing, he travels, photographs the places and people he meets, and helps grow the network of mutual aid between homes that Casa Minga is building."
+  },
   "resources": {
     "title": "Resources",
     "subtitle": "A library of inspirations around collective living, ecovillages and the commons.",
@@ -815,6 +824,7 @@
     "related": "Discover also",
     "readingTime_one": "{{count}} min read",
     "readingTime_other": "{{count}} min read",
+    "summaryLabel": "In short",
     "discoverBtn": "Discover / Where to watch"
   },
   "listing": {

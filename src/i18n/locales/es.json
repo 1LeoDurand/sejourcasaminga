@@ -790,6 +790,15 @@
     "linkResources": "Ver los recursos",
     "linkHow": "¿Cómo funciona?"
   },
+  "author": {
+    "name": "Léo Durand",
+    "role": "Fundador de Casa Minga",
+    "tagline": "Fundador de Casa Minga — escribe sobre la vida colectiva y otra forma de viajar.",
+    "metaDesc": "Léo Durand, fundador de Casa Minga: escribe sobre hábitat participativo, ecoaldeas y otra forma de viajar.",
+    "linkAbout": "Más sobre Casa Minga",
+    "linkContact": "Contactar",
+    "bio": "Léo Durand es el fundador de Casa Minga. Desde hace años le interesan otras formas de habitar y de viajar: hábitats participativos, ecoaldeas, viviendas compartidas duraderas y todas las formas de vida colectiva que buscan un equilibrio entre intimidad y lo común. Casa Minga nació de una convicción sencilla: se entienden mejor estos modos de vida encontrándolos desde dentro, alojándose con quienes los practican, que leyendo teorías a distancia.\n\nA través de los artículos y guías de esta biblioteca, intenta hacer accesibles temas a veces técnicos —estatutos jurídicos, financiación, gobernanza, materiales— sin perder de vista la experiencia humana que los sostiene. El tono quiere ser honesto: habla tanto de los logros como de los límites reales de estos proyectos. Cuando no escribe, viaja, fotografía los lugares y las personas que encuentra, y teje la red de ayuda mutua entre hábitats que Casa Minga quiere hacer crecer."
+  },
   "resources": {
     "title": "Recursos",
     "subtitle": "Una biblioteca de inspiraciones en torno al hábitat colectivo, las ecoaldeas y los comunes.",
@@ -815,6 +824,7 @@
     "related": "Descubre también",
     "readingTime_one": "{{count}} min de lectura",
     "readingTime_other": "{{count}} min de lectura",
+    "summaryLabel": "En resumen",
     "discoverBtn": "Descubrir / Dónde ver"
   },
   "listing": {
