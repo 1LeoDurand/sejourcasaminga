@@ -73,6 +73,14 @@
   <url><loc>https://sejour.casaminga.com/ressources/guide-preparer-son-sejour</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/ressources/guide-organiser-une-reunion-collective</loc><priority>0.6</priority></url>
 
+  <!-- Ressources : Mois 2 — juridique, argent, rénovation, eau, séjour, voyage famille -->
+  <url><loc>https://sejour.casaminga.com/ressources/statuts-juridiques-habitat-participatif</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/gerer-argent-habitat-collectif</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/renover-bati-ancien-habitat-collectif</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/eau-habitat-collectif-autonomie</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/sejourner-dans-un-ecolieu</loc><priority>0.7</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/voyage-famille-lieux-collectifs</loc><priority>0.6</priority></url>
+
   <!-- Lieux (généré au build) -->
   <url><loc>https://sejour.casaminga.com/habitat/le-toit-vertical</loc><priority>0.7</priority></url>
   <url><loc>https://sejour.casaminga.com/habitat/kerterre-de-la-pointe</loc><priority>0.7</priority></url>
