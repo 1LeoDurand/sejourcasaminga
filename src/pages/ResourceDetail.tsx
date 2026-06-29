@@ -7,8 +7,10 @@ import { breadcrumbLd } from "@/lib/structured-data";
 import ResourceCover from "@/components/ResourceCover";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ExternalLink, Loader2, BookOpen } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, BookOpen, Clock } from "lucide-react";
 import { useResource, useResources } from "@/hooks/use-resources";
+import { faqJsonLdFromHtml } from "@/lib/faq-jsonld";
+import { readingTimeMinutes } from "@/lib/reading-time";
 
 // Build schema.org JSON-LD adapted to the resource type (+ breadcrumb) for rich SEO.
 function buildResourceJsonLd(r: {
@@ -19,6 +21,8 @@ function buildResourceJsonLd(r: {
   author_or_director: string | null;
   year: number | null;
   cover_image: string | null;
+  created_at: string;
+  lang?: string | null;
 }): Record<string, unknown>[] {
   const url = `${SITE_URL}/ressources/${r.slug}`;
   const image = r.cover_image || undefined;
@@ -69,7 +73,8 @@ function buildResourceJsonLd(r: {
       url,
       image,
       mainEntityOfPage: url,
-      datePublished: r.year ? `${r.year}-01-01` : undefined,
+      inLanguage: r.lang ?? "fr",
+      datePublished: r.created_at || (r.year ? `${r.year}-01-01` : undefined),
       author: { "@type": "Organization", name: r.author_or_director || "Casa Minga" },
       publisher: {
         "@type": "Organization",
@@ -89,11 +94,40 @@ function buildResourceJsonLd(r: {
 }
 
 const ResourceDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { data: resource, isLoading } = useResource(slug);
   const { data: sameType } = useResources(resource?.type);
-  const similar = (sameType ?? []).filter((x) => x.slug !== resource?.slug).slice(0, 3);
+  const { data: allResources } = useResources();
+
+  // Related resources: same type first, then complete with shared-tag matches
+  // across all types (dedup by slug, current excluded), up to 6.
+  const currentTags = new Set(resource?.tags ?? []);
+  const byTags = (allResources ?? []).filter(
+    (x) => (x.tags ?? []).some((tg) => currentTags.has(tg)),
+  );
+  const similar = (() => {
+    const seen = new Set<string>();
+    const out: typeof byTags = [];
+    for (const r of [...(sameType ?? []), ...byTags]) {
+      if (!r || r.slug === resource?.slug || seen.has(r.slug)) continue;
+      seen.add(r.slug);
+      out.push(r);
+      if (out.length >= 6) break;
+    }
+    return out;
+  })();
+
+  const isArticleLike = resource?.type === "article" || resource?.type === "guide";
+  const readMinutes = isArticleLike ? readingTimeMinutes(resource?.content) : 0;
+  const publishedLabel = resource?.created_at
+    ? new Date(resource.created_at).toLocaleDateString(i18n.language, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
+
   const typeLabel: Record<string, string> = {
     livre: t("resources.tBook"),
     film: t("resources.tFilm"),
@@ -147,7 +181,11 @@ const ResourceDetail = () => {
         canonical={`/ressources/${resource.slug}`}
         image={resource.cover_image ?? undefined}
         type="article"
-        jsonLd={buildResourceJsonLd(resource)}
+        jsonLd={(() => {
+          const base = buildResourceJsonLd(resource);
+          const faq = isArticleLike ? faqJsonLdFromHtml(resource.content) : null;
+          return faq ? [...base, faq] : base;
+        })()}
       />
       <Navbar />
       <main className="flex-1">
@@ -176,7 +214,19 @@ const ResourceDetail = () => {
             {resource.title}
           </h1>
           {resource.author_or_director && (
-            <p className="text-muted-foreground italic mb-6">{resource.author_or_director}</p>
+            <p className="text-muted-foreground italic mb-2">{resource.author_or_director}</p>
+          )}
+          {isArticleLike && (readMinutes > 0 || publishedLabel) && (
+            <p className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+              {readMinutes > 0 && (
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {t("resources.readingTime", { count: readMinutes })}
+                </span>
+              )}
+              {readMinutes > 0 && publishedLabel && <span aria-hidden="true">·</span>}
+              {publishedLabel && <span>{publishedLabel}</span>}
+            </p>
           )}
 
           <ResourceCover

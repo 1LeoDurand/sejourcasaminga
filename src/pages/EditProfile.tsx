@@ -19,6 +19,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { computeCompletion, completionColor, COMPLETION_LABELS, type CompletionField } from "@/lib/profile-completion";
 import { Progress } from "@/components/ui/progress";
+import SEO from "@/components/SEO";
 
 const EditProfile = () => {
   const { t } = useTranslation();
@@ -195,6 +196,7 @@ const EditProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Modifier mon profil | Casa Minga" noindex />
       <Navbar />
       <div className="container max-w-xl py-8 px-4">
         <button onClick={() => navigate(-1)} className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">

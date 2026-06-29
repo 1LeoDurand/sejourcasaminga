@@ -1,4 +1,5 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import SEO from "@/components/SEO";
 import placePlaceholder from "@/assets/place-placeholder.webp";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -80,6 +81,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Tableau de bord | Casa Minga" noindex />
       <Navbar />
 
       {/* Tab bar */}

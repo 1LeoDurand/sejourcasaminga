@@ -14,6 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { useExchangeRequest } from "@/hooks/use-exchange-requests";
 import { useCreateStayReview, useMyStayReview } from "@/hooks/use-stay-reviews";
 import { useQuery } from "@tanstack/react-query";
+import SEO from "@/components/SEO";
 
 const MAX_PHOTOS = 5;
 const MAX_TEXT = 300;
@@ -166,6 +167,7 @@ const PostStayReview = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEO title="Laisser un avis de séjour | Casa Minga" noindex />
       <Navbar />
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-8">
         <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-4">

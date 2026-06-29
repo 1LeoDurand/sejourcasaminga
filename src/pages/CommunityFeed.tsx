@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 type ActivityType = "new_habitat" | "event" | "story";
 
@@ -196,7 +197,7 @@ const FeedCard = ({ item }: { item: ActivityItem }) => {
         {photos.length > 0 && (
           <div className={`grid gap-1.5 ${photos.length === 1 ? "grid-cols-1" : photos.length === 2 ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-4"}`}>
             {photos.map((url, i) => (
-              <img key={i} src={url} alt="" loading="lazy" className="aspect-square w-full rounded-md object-cover" />
+              <img key={i} src={url} alt={placeName ? `Photo d'un séjour à ${placeName}` : "Photo partagée par un membre"} loading="lazy" className="aspect-square w-full rounded-md object-cover" />
             ))}
           </div>
         )}
@@ -276,6 +277,7 @@ const CommunityFeed = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Communauté — récits et entraide | Casa Minga" description="Suis les récits de voyage et d'accueil de la communauté Casa Minga : échanges entre habitats participatifs, écolieux et colocations durables." />
       <Navbar />
       <main className="container max-w-6xl px-4 py-10">
         <header className="mb-8 max-w-2xl">

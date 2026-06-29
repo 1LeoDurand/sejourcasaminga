@@ -813,6 +813,8 @@
     "notFoundText": "Este recurso no existe o ya no está publicado.",
     "backToList": "Todos los recursos",
     "related": "Descubre también",
+    "readingTime_one": "{{count}} min de lectura",
+    "readingTime_other": "{{count}} min de lectura",
     "discoverBtn": "Descubrir / Dónde ver"
   },
   "listing": {

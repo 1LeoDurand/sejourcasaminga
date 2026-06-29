@@ -813,6 +813,8 @@
     "notFoundText": "This resource doesn't exist or is no longer published.",
     "backToList": "All resources",
     "related": "Discover also",
+    "readingTime_one": "{{count}} min read",
+    "readingTime_other": "{{count}} min read",
     "discoverBtn": "Discover / Where to watch"
   },
   "listing": {

@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import SEO from "@/components/SEO";
 
 const ConversationDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -71,6 +72,7 @@ const ConversationDetail = () => {
 
   return (
     <div className="flex flex-col h-screen bg-background">
+      <SEO title="Messagerie | Casa Minga" noindex />
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b bg-background sticky top-0 z-10">
         <button onClick={() => navigate("/dashboard?tab=messages")} className="p-1">

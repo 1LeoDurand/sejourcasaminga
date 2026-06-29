@@ -25,6 +25,7 @@ import { useListing } from "@/hooks/use-listings";
 import { usePlace } from "@/hooks/use-places";
 import PointsValueField from "@/components/PointsValueField";
 import { suggestPointsPerNight } from "@/lib/points-valuation";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { RELATIONSHIP_LABELS } from "@/data/demo";
@@ -167,6 +168,7 @@ const EditListing = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Modifier mon séjour | Casa Minga" noindex />
       <Navbar />
       <div className="container max-w-2xl py-8 px-4">
         <button onClick={() => navigate(-1)} className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">

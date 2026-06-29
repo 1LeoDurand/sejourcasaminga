@@ -18,6 +18,7 @@ import { RELATIONSHIP_LABELS } from "@/data/demo";
 import { LISTING_TYPE_META, LISTING_TYPE_ORDER } from "@/lib/listing-types";
 import PointsValueField from "@/components/PointsValueField";
 import { suggestPointsPerNight } from "@/lib/points-valuation";
+import SEO from "@/components/SEO";
 import type { Database } from "@/integrations/supabase/types";
 
 // All supported exchange modes with their French labels
@@ -158,6 +159,7 @@ const CreateListing = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO title="Proposer un séjour | Casa Minga" noindex />
       <Navbar />
       <div className="container max-w-xl py-8 px-4">
         <button onClick={() => navigate(-1)} className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle2, XCircle, Mail } from "lucide-react";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 
@@ -64,6 +65,7 @@ const Unsubscribe = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-warm p-4">
+      <SEO title="Se désabonner des e-mails | Casa Minga" noindex />
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2">
           <img src={logo} alt="Casa Minga" className="h-10 w-10 object-contain" />

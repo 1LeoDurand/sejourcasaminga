@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock, Loader2, CheckCircle } from "lucide-react";
 import logo from "@/assets/logo.png";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -80,6 +81,7 @@ const ResetPassword = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-warm p-4">
+      <SEO title="Réinitialiser le mot de passe | Casa Minga" noindex />
       <div className="w-full max-w-md">
         <Link to="/" className="mb-8 flex items-center justify-center gap-2">
           <img src={logo} alt="Casa Minga" className="h-10 w-10 object-contain" />

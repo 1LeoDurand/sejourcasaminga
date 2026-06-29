@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import SEO from "@/components/SEO";
 import {
   useMyVerification,
   useMembershipPrice,
@@ -218,6 +219,7 @@ const Verification = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEO title="Vérification de profil | Casa Minga" noindex />
       <Navbar />
 
       <main className="flex-1">

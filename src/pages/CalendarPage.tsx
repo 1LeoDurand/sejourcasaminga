@@ -18,6 +18,7 @@ import { EVENT_TYPES } from "@/components/HabitatEvents";
 import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isWithinInterval, isBefore, startOfDay, isSameDay } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "@/hooks/use-toast";
+import SEO from "@/components/SEO";
 
 const statusOptions = [
   { value: "available", label: "Disponible", color: "bg-olive/20 text-olive border-olive/30", dot: "bg-olive" },
@@ -118,6 +119,7 @@ const CalendarPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Mon calendrier | Casa Minga" noindex />
       <Navbar />
       <div className="max-w-2xl mx-auto px-4 py-6">
         {/* Header */}

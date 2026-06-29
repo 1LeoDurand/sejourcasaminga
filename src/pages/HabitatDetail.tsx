@@ -11,7 +11,7 @@ import {
   MapPin, Users, Heart, ArrowLeft, ExternalLink,
   Check, X as XIcon, Leaf, Baby, Dog, Accessibility, ChefHat,
   Loader2, Pencil, Calendar, TreePine, Home, Handshake,
-  UserRound, Users2, Sparkles, Mail, Star, MessageSquare,
+  UserRound, Users2, Sparkles, Mail, Star, MessageSquare, ChevronRight,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -212,6 +212,13 @@ const HabitatDetail = () => {
       />
       <Navbar />
       <div className="container py-8">
+        <nav aria-label="Fil d'Ariane" className="mb-4 flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
+          <ChevronRight className="h-3 w-3" aria-hidden="true" />
+          <Link to="/discover" className="hover:text-foreground transition-colors">Découvrir</Link>
+          <ChevronRight className="h-3 w-3" aria-hidden="true" />
+          <span className="text-foreground truncate max-w-[12rem]">{place.name}</span>
+        </nav>
         <div className="mb-6 flex items-center justify-between">
           <Link to="/discover" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-4 w-4" /> Retour aux résultats
@@ -683,7 +690,7 @@ const HabitatDetail = () => {
                 onClick={() => setLightbox(null)}
                 className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out"
               >
-                <img src={lightbox} alt="" className="max-h-[90vh] max-w-full rounded-lg" />
+                <img src={lightbox} alt={`Photo d'un séjour à ${place.name}`} className="max-h-[90vh] max-w-full rounded-lg" />
               </div>
             )}
 

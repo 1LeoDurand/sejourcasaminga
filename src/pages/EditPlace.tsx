@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SEO from "@/components/SEO";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -192,6 +193,7 @@ const EditPlace = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Modifier ma fiche lieu | Casa Minga" noindex />
       <Navbar />
       <div className="container max-w-2xl py-8 px-4">
         <button onClick={() => navigate(-1)} className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">

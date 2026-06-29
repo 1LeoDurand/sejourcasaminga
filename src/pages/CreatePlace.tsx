@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SEO from "@/components/SEO";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -168,6 +169,7 @@ const CreatePlace = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO title="Créer une fiche lieu | Casa Minga" noindex />
       <Navbar />
       <div className="container max-w-6xl py-8 px-4">
         <button onClick={() => navigate(-1)} className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
