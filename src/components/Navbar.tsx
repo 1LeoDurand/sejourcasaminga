@@ -31,7 +31,7 @@ const Navbar = () => {
       <div className="flex h-14 items-center justify-between px-4 md:px-8 max-w-7xl mx-auto">
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <img src={logo} alt="Casa Minga" className="h-9 w-9 rounded-lg object-contain" />
-          <span className="font-sans text-lg font-semibold text-foreground tracking-tight">Casa Minga</span>
+          <span className="font-serif text-[18px] font-bold text-foreground tracking-[-0.02em]">Casa Minga</span>
         </Link>
 
         {/* Desktop nav */}
@@ -130,7 +130,7 @@ const Navbar = () => {
                 <Button variant="ghost" size="sm" className="text-sm">{t("common.signIn")}</Button>
               </Link>
               <Link to="/auth?tab=signup">
-                <Button size="sm" className="text-sm font-medium">{t("common.signUpFree")}</Button>
+                <Button size="sm" className="rounded-full text-sm font-bold">{t("common.signUpFree")}</Button>
               </Link>
             </>
           )}
@@ -144,7 +144,7 @@ const Navbar = () => {
             <AccountDropdown />
           ) : (
             <Link to="/auth?tab=signup">
-              <Button size="sm" className="text-xs h-8 px-4 rounded-full font-medium">{t("common.signUp")}</Button>
+              <Button size="sm" className="text-xs h-8 px-4 rounded-full font-bold">{t("common.signUp")}</Button>
             </Link>
           )}
           <button onClick={() => setOpen(!open)} className="p-2 text-foreground" aria-label="Menu">

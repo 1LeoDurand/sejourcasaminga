@@ -18,7 +18,7 @@ import {
 import {
   ArrowLeft, MapPin, Users, Home, Shield, Heart, Mail,
   ChevronRight, Eye, Loader2, Send, Pencil, Clock,
-  Star, X, ZoomIn, CheckCircle2, MessageSquare, Sparkles,
+  Star, X, ZoomIn, MessageSquare,
   ChevronDown, HelpCircle, ListChecks, BadgeCheck, Coins,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -49,6 +49,7 @@ import AlsoViewedListings from "@/components/AlsoViewedListings";
 // ─── Phase 1 : Galerie photos ────────────────────────────────────────────────
 
 function PhotoGallery({ images, title }: { images: string[]; title: string }) {
+  const { t } = useTranslation();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   if (images.length === 0) return null;
@@ -62,16 +63,18 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
     <>
       {/* Mosaïque */}
       <div className="container px-5">
-        <div className={`grid gap-2 rounded-2xl overflow-hidden ${images.length === 1 ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"}`}>
+        <div className={`grid gap-2.5 rounded-3xl overflow-hidden ${
+          images.length === 1 ? "grid-cols-1" : images.length <= 3 ? "grid-cols-[2fr_1fr]" : "grid-cols-[2fr_1fr_1fr]"
+        }`}>
           {/* Image principale */}
           <div
-            className={`relative cursor-pointer group ${images.length > 1 ? "col-span-2 md:col-span-2 row-span-2" : ""}`}
+            className={`relative cursor-pointer group ${images.length > 1 ? "row-span-2 h-64 md:h-[430px]" : "h-64 md:h-96"}`}
             onClick={() => open(0)}
           >
             <img
               src={images[0]}
               alt={title}
-              className="w-full h-64 md:h-96 object-cover transition-transform group-hover:scale-[1.01]"
+              className="w-full h-full object-cover transition-transform group-hover:scale-[1.01]"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
               <ZoomIn className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
@@ -79,30 +82,31 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
           </div>
 
           {/* Images secondaires */}
-          {images.slice(1, 5).map((src, idx) => (
-            <div key={idx} className="relative cursor-pointer group overflow-hidden" onClick={() => open(idx + 1)}>
-              <img
-                src={src}
-                alt={`${title} ${idx + 2}`}
-                className="w-full h-32 md:h-48 object-cover transition-transform group-hover:scale-[1.02]"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-              {/* Overlay "+N" sur la dernière vignette si plus de 5 images */}
-              {idx === 3 && images.length > 5 && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="text-white text-lg font-semibold">+{images.length - 5}</span>
-                </div>
-              )}
-            </div>
-          ))}
+          {(() => {
+            const thumbs = images.slice(1, 5);
+            const lastIdx = thumbs.length - 1;
+            // With a single thumb, stretch it to match the main image height
+            const thumbClass = thumbs.length === 1 ? "row-span-2 h-64 md:h-[430px]" : "h-[124px] md:h-[210px]";
+            return thumbs.map((src, idx) => (
+              <div key={idx} className={`relative cursor-pointer group overflow-hidden ${thumbClass}`} onClick={() => open(idx + 1)}>
+                <img
+                  src={src}
+                  alt={`${title} ${idx + 2}`}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-[1.02]"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                {/* Dernière vignette affichée : overlay "Voir les N photos" (remplace le compteur sous la grille) */}
+                {idx === lastIdx && (
+                  <div className="absolute inset-0 bg-[#2E211A]/55 flex items-center justify-center">
+                    <span className="text-[15px] font-bold text-[#FFF7EE]">
+                      {t("listing.seeAllPhotos", { count: images.length })}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ));
+          })()}
         </div>
-
-        {/* Compteur */}
-        {images.length > 1 && (
-          <p className="text-xs text-muted-foreground mt-1.5 text-right">
-            {images.length} photos
-          </p>
-        )}
       </div>
 
       {/* Lightbox */}
@@ -172,28 +176,32 @@ function HostCard({
   const memberSince = createdAt
     ? new Date(createdAt).getFullYear()
     : null;
+  const metaLine = [memberSince ? `Membre depuis ${memberSince}` : null, hostingStyle]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <div className="mt-6 rounded-xl border bg-warm p-4">
-      <div className="flex items-start gap-4">
+    <div className="mt-6 rounded-[20px] bg-[#FFFDF9] dark:bg-card p-5 shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
+      <div className="flex items-center gap-4">
         <Link to={`/membre/${hostId}`} className="shrink-0">
-          <img src={avatar} alt={name} className="h-16 w-16 rounded-full object-cover ring-2 ring-border transition-opacity hover:opacity-90" />
+          <img src={avatar} alt={name} className="h-[58px] w-[58px] rounded-full object-cover ring-2 ring-[#FBEFD6] dark:ring-border transition-opacity hover:opacity-90" />
         </Link>
         <div className="flex-1 min-w-0">
-          <Link to={`/membre/${hostId}`} className="inline-flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-primary">
+          <Link to={`/membre/${hostId}`} className="inline-flex items-center gap-1 text-[15.5px] font-bold text-foreground transition-colors hover:text-primary">
             Accueilli par {name}
             {isVerified && (
               <BadgeCheck className="h-4 w-4 text-primary" aria-label={t("memberProfile.verifiedBadge")} />
             )}
           </Link>
-          {memberSince && (
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Membre depuis {memberSince} · {new Date().getFullYear() - memberSince} ans sur la plateforme
-            </p>
-          )}
-          {hostingStyle && <p className="text-xs text-muted-foreground mt-1">{hostingStyle}</p>}
+          {metaLine && <p className="text-xs text-muted-foreground mt-0.5">{metaLine}</p>}
           {experience && <p className="text-xs text-muted-foreground">{experience}</p>}
         </div>
+        <Link
+          to={`/membre/${hostId}`}
+          className="hidden sm:inline-flex shrink-0 items-center rounded-full border-[1.5px] border-border px-4 py-2 text-xs font-bold text-foreground transition-colors hover:bg-muted/50"
+        >
+          Voir le profil
+        </Link>
       </div>
 
       <TrustBadges
@@ -338,15 +346,14 @@ function ReviewsSection({ placeId, listingTitle }: { placeId: string; listingTit
 function HighlightsSection({ highlights }: { highlights: string[] | null }) {
   if (!highlights || highlights.length === 0) return null;
   return (
-    <div className="mt-8 rounded-2xl border bg-warm p-5">
-      <h2 className="text-lg text-foreground mb-4 flex items-center gap-2">
-        <Sparkles className="h-5 w-5 text-primary" />
+    <div className="cm-stripes mt-8 rounded-[20px] p-6">
+      <h2 className="text-[19px] font-bold text-foreground mb-4">
         Ce que vous allez adorer
       </h2>
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {highlights.map((h, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-            <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+          <li key={i} className="flex items-start gap-2 text-sm font-medium text-foreground">
+            <span className="text-olive font-extrabold">✓</span>
             <span>{h}</span>
           </li>
         ))}
@@ -447,6 +454,11 @@ const ListingDetail = () => {
   }, [listing, id, navigate]);
   const place = listing?.places || null;
   const { data: hostProfile } = useHostProfile(listing?.host_id);
+  const { data: placeReviews = [] } = useStayReviews(place?.id, 20);
+  const ratedReviews = placeReviews.filter((r) => r.rating);
+  const avgRating = ratedReviews.length > 0
+    ? ratedReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / ratedReviews.length
+    : null;
 
   // Availabilities flagged "unavailable" also block the request form (client-side UX guard).
   const { data: listingAvails = [] } = useListingAvailabilities(listing?.id);
@@ -545,6 +557,12 @@ const ListingDetail = () => {
     reciprocal: "Échange réciproque",
     points: `Réglé en points (${pointsPerNight} pts/nuit)`,
     other: "Autre arrangement",
+  };
+  const EXCHANGE_SHORT_LABELS: Record<string, string> = {
+    free: "Gratuit",
+    reciprocal: "Réciproque",
+    points: "Points",
+    other: "Autre",
   };
 
   // Modes the host accepts; fall back to all for old listings without the column
@@ -717,23 +735,31 @@ const ListingDetail = () => {
        <div className="lg:grid lg:grid-cols-[1fr_22rem] lg:gap-10 lg:items-start">
         <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <Badge className="bg-primary/10 text-primary border-0 text-xs inline-flex items-center gap-1">
+          <Badge className="rounded-full bg-primary/10 text-primary border-0 px-3 py-1.5 text-[12.5px] font-bold inline-flex items-center gap-1">
             {TypeIcon && <TypeIcon className="h-3.5 w-3.5" />}
             {typeLabel}
           </Badge>
-          <Badge variant="secondary" className="text-xs">{relLabel}</Badge>
+          <Badge className="rounded-full bg-olive/15 text-olive border-0 px-3 py-1.5 text-[12.5px] font-bold">{relLabel}</Badge>
+          {avgRating !== null && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-[#FBEAC2] px-3 py-1.5 text-[12.5px] font-bold text-[#9A6A1C]">
+              <Star className="h-3 w-3 fill-current" /> {avgRating.toFixed(1).replace(".", ",")} · {ratedReviews.length} avis
+            </span>
+          )}
         </div>
 
-        <h1 className="text-2xl md:text-3xl text-foreground">{listing.title}</h1>
+        <h1 className="font-serif text-3xl md:text-[38px] font-extrabold tracking-[-0.03em] leading-[1.05] text-foreground">{listing.title}</h1>
         {typeMeta && (
           <p className="mt-1.5 text-sm text-muted-foreground">{typeMeta.shortDescription}</p>
         )}
 
         {place && (
-          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            {place.region || place.city || ""}
-          </p>
+          <Link
+            to={`/habitat/${place.slug || place.id}`}
+            className="mt-1.5 flex items-center gap-1.5 text-[15px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <MapPin className="h-4 w-4 text-primary shrink-0" />
+            {[place.region || place.city, place.name, `${place.type}, ${place.inhabitants || "?"} habitant·es`].filter(Boolean).join(" · ")}
+          </Link>
         )}
 
         {/* Points / night — clear indicator with an optional estimated-value tooltip */}
@@ -768,28 +794,14 @@ const ListingDetail = () => {
           createdAt={(hostProfile as any)?.created_at}
         />
 
-        {/* Place context */}
-        {place && (
-          <Link to={`/habitat/${place.slug || place.id}`} className="mt-4 flex items-center gap-3 rounded-xl border p-4 transition-colors hover:bg-muted/50">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <Home className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground">{place.name}</p>
-              <p className="text-xs text-muted-foreground">{place.type} · {place.inhabitants || "?"} habitant·es</p>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
-          </Link>
-        )}
-
         {/* Highlights */}
         <HighlightsSection highlights={(listing as any).highlights} />
 
         {/* Description */}
         {listing.description && (
           <div id="section-stay" className="mt-8 scroll-mt-28">
-            <h2 className="text-lg text-foreground mb-2">Le séjour</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{listing.description}</p>
+            <h2 className="font-serif text-[22px] font-bold text-foreground mb-2">Le séjour</h2>
+            <p className="text-[15px] leading-[1.7] text-[#5B4A3C] dark:text-muted-foreground whitespace-pre-line">{listing.description}</p>
           </div>
         )}
 
@@ -985,30 +997,50 @@ const ListingDetail = () => {
 
         {/* Carte de demande — sticky desktop */}
         <aside className="hidden lg:block">
-          <div className="lg:sticky lg:top-24 rounded-2xl border bg-card p-5 shadow-sm">
-            <p className="text-sm font-semibold text-foreground">{t("listing.asideTitle")}</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {t("listing.asideText", { host: hostName })}
-            </p>
-            <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Users className="h-3.5 w-3.5" /> {t("listing.capacity", { count: listing.capacity || 1 })}
-            </div>
-            <div className="mt-4">
-              {user ? (
-                listing.host_id === user.id ? (
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link to={`/edit-listing/${listing.id}`}><Pencil className="mr-1.5 h-4 w-4" /> {t("listing.editStay")}</Link>
-                  </Button>
+          <div className="lg:sticky lg:top-24 rounded-[22px] bg-[#FFFDF9] dark:bg-card overflow-hidden shadow-[0_4px_12px_rgba(120,70,30,0.08),0_20px_44px_rgba(120,70,30,0.1)]">
+            <div className="cm-weave h-2" />
+            <div className="p-6">
+              <p className="font-serif text-xl font-bold text-foreground">{t("listing.asideTitle")}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("listing.asideText", { host: hostName })}
+              </p>
+
+              <div className="mt-4 space-y-2 text-[13.5px]">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">{t("listing.capacity", { count: listing.capacity || 1 })}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Échange</span>
+                  <span className="text-foreground font-medium">
+                    {acceptedModes.map((m) => EXCHANGE_SHORT_LABELS[m] ?? m).join(" ou ")}
+                  </span>
+                </div>
+                {showPoints && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Points</span>
+                    <span className="font-bold text-primary">{t("points.perNight", { value: pointsPerNight })}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4">
+                {user ? (
+                  listing.host_id === user.id ? (
+                    <Button variant="outline" className="w-full rounded-full font-bold" asChild>
+                      <Link to={`/edit-listing/${listing.id}`}><Pencil className="mr-1.5 h-4 w-4" /> {t("listing.editStay")}</Link>
+                    </Button>
+                  ) : (
+                    <Button size="lg" className="w-full rounded-full bg-primary font-bold py-[15px]" onClick={() => { setShowPreview(false); setShowRequestForm(true); }}>
+                      <Send className="mr-2 h-4 w-4" /> {t("listing.sendRequest")}
+                    </Button>
+                  )
                 ) : (
-                  <Button size="lg" className="w-full" onClick={() => { setShowPreview(false); setShowRequestForm(true); }}>
-                    <Send className="mr-2 h-4 w-4" /> {t("listing.sendRequest")}
+                  <Button size="lg" className="w-full rounded-full bg-primary font-bold py-[15px]" asChild>
+                    <Link to="/auth?tab=signup">{t("listing.signupToContact")}</Link>
                   </Button>
-                )
-              ) : (
-                <Button size="lg" className="w-full" asChild>
-                  <Link to="/auth?tab=signup">{t("listing.signupToContact")}</Link>
-                </Button>
-              )}
+                )}
+              </div>
+              <p className="mt-3 text-center text-xs text-[#9A876C]">{t("listing.noPayment")}</p>
             </div>
           </div>
         </aside>
@@ -1044,14 +1076,11 @@ const ListingDetail = () => {
   );
 };
 
-function DetailBlock({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
+function DetailBlock({ label, value }: { icon?: React.ElementType; label: string; value: string }) {
   return (
-    <div className="rounded-xl border bg-card p-4">
-      <div className="flex items-center gap-2 mb-1.5">
-        <Icon className="h-4 w-4 text-primary" />
-        <span className="text-xs font-medium text-foreground">{label}</span>
-      </div>
-      <p className="text-xs text-muted-foreground leading-relaxed">{value}</p>
+    <div className="rounded-2xl bg-[#FFFDF9] dark:bg-card p-[18px] shadow-[0_2px_6px_rgba(120,70,30,0.05)]">
+      <span className="text-[13px] font-bold text-primary">{label}</span>
+      <p className="mt-1.5 text-[13.5px] text-[#5B4A3C] dark:text-muted-foreground leading-relaxed">{value}</p>
     </div>
   );
 }

@@ -265,6 +265,8 @@
     "claimApproved": "Approuvée",
     "claimRejected": "Refusée",
     "points": "Points",
+    "pointsLong": "points d'hospitalité",
+    "exploreAll": "Tout explorer",
     "inviteFriends": "Inviter des amis",
     "alignedHabitats": "Habitats alignés avec vos valeurs",
     "refinePrefs": "Affiner mes préférences",
@@ -300,6 +302,7 @@
     "receivedToHandle_other": "{{count}} demandes reçues à traiter",
     "sentPending_one": "{{count}} demande envoyée en attente",
     "sentPending_other": "{{count}} demandes envoyées en attente",
+    "follow": "Suivre",
     "allCaughtUp": "Rien à traiter pour l'instant 🎉",
     "recommendedForYou": "Recommandés pour vous",
     "setPrefsText": "Renseigne tes préférences pour recevoir des recommandations sur mesure.",
@@ -843,7 +846,9 @@
     "noDates": "L'hôte n'a pas encore renseigné de dates précises. Envoyez une demande avec vos dates souhaitées : il vous répondra directement.",
     "moreMonths": "Voir les mois suivants",
     "seeStays": "Voir les séjours",
-    "contact": "Contacter"
+    "contact": "Contacter",
+    "noPayment": "Aucun paiement — jamais d'argent échangé",
+    "seeAllPhotos": "Voir les {{count}} photos"
   },
   "memberProfile": {
     "reviewCount_one": "{{count}} avis",

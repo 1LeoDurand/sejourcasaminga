@@ -56,7 +56,7 @@ const Index = () => {
       <Navbar />
 
       {/* ═══════════ HERO — Moderne convivial ═══════════ */}
-      <section className="bg-background" style={{ fontFamily: "'Hanken Grotesque', system-ui, sans-serif" }}>
+      <section className="bg-background">
         <div className="mx-auto grid max-w-7xl items-start gap-10 px-5 pb-12 pt-8 md:grid-cols-[minmax(0,600px)_1fr] md:gap-14 md:px-16 md:pb-16 md:pt-12">
           {/* ── Colonne gauche ── */}
           <div className="md:pt-6">
@@ -65,10 +65,7 @@ const Index = () => {
               {t("home.heroBadge", { count: listingCount })}
             </span>
 
-            <h1
-              style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif" }}
-              className="mt-6 text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#2E211A] md:text-[64px]"
-            >
+            <h1 className="mt-6 font-serif text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#2E211A] md:text-[64px]">
               {t("home.heroTitle")}
               <br />
               <span className="text-[#C85A33]">{t("home.heroTitleAccent")}</span>
@@ -181,7 +178,7 @@ const Index = () => {
       <section className="px-5 py-10 md:px-8 md:py-16 max-w-6xl mx-auto">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl text-foreground">{t("home.availableStays")}</h2>
+            <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground">{t("home.availableStays")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{t("home.availableStaysSub")}</p>
           </div>
           <Link to="/discover" className="hidden md:flex">
@@ -222,7 +219,7 @@ const Index = () => {
       {/* ═══════════ PLACES ═══════════ */}
       <section className="border-y bg-crema px-5 py-10 md:px-8 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl text-foreground">{t("home.discoverPlaces")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground">{t("home.discoverPlaces")}</h2>
           <p className="mt-1 text-sm text-muted-foreground mb-6">
             {t("home.discoverPlacesSub")}
           </p>
@@ -260,7 +257,7 @@ const Index = () => {
       {/* ═══════════ HOW IT WORKS ═══════════ */}
       <section className="px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl text-foreground">{t("home.howItWorks")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground">{t("home.howItWorks")}</h2>
           <p className="mt-1 text-sm text-muted-foreground mb-10">
             {t("home.howItWorksSub")}
           </p>
@@ -286,7 +283,7 @@ const Index = () => {
       {/* ═══════════ 5 WAYS TO STAY ═══════════ */}
       <section className="px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl text-foreground">{t("home.waysTitle")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground">{t("home.waysTitle")}</h2>
           <p className="mt-1 text-sm text-muted-foreground mb-8">{t("home.waysSub")}</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {LISTING_TYPE_ORDER.map((key) => {
@@ -307,23 +304,23 @@ const Index = () => {
       </section>
 
       {/* ═══════════ EXCHANGE MODEL — reciprocal or points ═══════════ */}
-      <section className="border-y bg-warm px-5 py-12 md:px-8 md:py-16">
+      <section className="cm-stripes border-y px-5 py-14 md:py-16">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-3">{t("home.exchangeModelEyebrow")}</p>
-          <h2 className="text-2xl md:text-3xl text-foreground leading-snug">{t("home.exchangeModelTitle")}</h2>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary mb-3">{t("home.exchangeModelEyebrow")}</p>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground leading-snug">{t("home.exchangeModelTitle")}</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 text-left">
-            <div className="rounded-xl border bg-card p-6">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-azur/10 text-azur">
+            <div className="rounded-[20px] bg-[#FFFDF9] dark:bg-card p-7 shadow-[0_2px_6px_rgba(120,70,30,0.06),0_12px_32px_rgba(120,70,30,0.07)]">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-[13px] bg-azur/10 text-azur">
                 <ArrowLeftRight className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-semibold text-foreground">{t("home.reciprocalTitle")}</h3>
+              <h3 className="text-[17px] font-bold text-foreground">{t("home.reciprocalTitle")}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{t("home.reciprocalBody")}</p>
             </div>
-            <div className="rounded-xl border bg-card p-6">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="rounded-[20px] bg-[#FFFDF9] dark:bg-card p-7 shadow-[0_2px_6px_rgba(120,70,30,0.06),0_12px_32px_rgba(120,70,30,0.07)]">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-[13px] bg-primary/10 text-primary">
                 <Coins className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-semibold text-foreground">{t("home.pointsTitle")}</h3>
+              <h3 className="text-[17px] font-bold text-foreground">{t("home.pointsTitle")}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{t("home.pointsBody")}</p>
             </div>
           </div>
@@ -333,7 +330,7 @@ const Index = () => {
       {/* ═══════════ PILLARS ═══════════ */}
       <section className="border-y bg-warm px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl text-foreground mb-6">{t("home.pillarsTitle")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground mb-6">{t("home.pillarsTitle")}</h2>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               { icon: Home, title: t("home.pillar1Title"), body: t("home.pillar1Body"), category: t("home.pillar1Category"), accent: "text-primary/8" },
@@ -357,7 +354,7 @@ const Index = () => {
       <section className="px-5 py-12 md:px-8 md:py-20">
         <div className="max-w-xl mx-auto">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-4">{t("home.storyEyebrow")}</p>
-          <h2 className="text-2xl md:text-3xl text-foreground leading-snug">
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground leading-snug">
             {t("home.storyTitleLine1")}
             <br />
             {t("home.storyTitleLine2")}
@@ -379,7 +376,7 @@ const Index = () => {
       {SHOW_DEMO_TESTIMONIALS && DEMO_TESTIMONIALS.length > 0 && (
       <section className="border-t bg-crema px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl text-foreground mb-2">{t("home.testimonialsTitle")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground mb-2">{t("home.testimonialsTitle")}</h2>
           <p className="text-sm text-muted-foreground mb-8">{t("home.testimonialsSub")}</p>
           <div className="grid gap-4 md:grid-cols-3">
             {DEMO_TESTIMONIALS.map((tst, i) => (
@@ -419,7 +416,7 @@ const Index = () => {
       <section className="px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-4">{t("home.economicEyebrow")}</p>
-          <h2 className="text-2xl md:text-3xl text-foreground leading-snug">{t("home.economicTitle")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground leading-snug">{t("home.economicTitle")}</h2>
           <div className="mt-6 space-y-4 text-sm text-muted-foreground leading-relaxed">
             <p>{t("home.economicP1")}</p>
             <p>{t("home.economicP2")}</p>
@@ -436,7 +433,7 @@ const Index = () => {
       <section className="border-y bg-warm px-5 py-12 md:px-8 md:py-16">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary mb-3">{t("home.impactEyebrow")}</p>
-          <h2 className="text-2xl md:text-3xl text-foreground leading-snug mb-8">{t("home.impactTitle")}</h2>
+          <h2 className="text-2xl md:text-[30px] tracking-[-0.025em] text-foreground leading-snug mb-8">{t("home.impactTitle")}</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 max-w-2xl mx-auto">
             {IMPACT.map((s) => (
               <div key={s.label}>
@@ -449,22 +446,22 @@ const Index = () => {
       </section>
 
       {/* ═══════════ FINAL CTA ═══════════ */}
-      <section className="bg-primary px-5 py-14 md:py-20">
+      <section className="cm-weave-on-primary px-5 py-20 md:py-[88px]">
         <div className="max-w-lg mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl text-primary-foreground leading-snug">
+          <h2 className="mx-auto max-w-[600px] font-serif text-3xl font-extrabold leading-[1.1] tracking-[-0.025em] text-[#FFF7EE] md:text-[40px]">
             {t("home.finalCtaTitle")}
           </h2>
-          <p className="mt-3 text-sm text-primary-foreground/70 leading-relaxed">
+          <p className="mt-3 text-[15px] text-[#FFF7EE]/80 leading-relaxed">
             {t("home.finalCtaText")}
           </p>
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/auth?tab=signup">
-              <Button size="lg" className="bg-white text-foreground hover:bg-white/90 rounded-full font-medium px-8 shadow-lg">
+              <Button size="lg" className="bg-[#FFF7EE] text-foreground hover:bg-[#FFF7EE]/90 rounded-full font-bold px-8 shadow-lg">
                 {t("common.signUpFree")}
               </Button>
             </Link>
             <Link to="/discover">
-              <Button size="lg" className="bg-white/20 text-white border border-white/50 hover:bg-white/30 rounded-full font-medium px-8">
+              <Button size="lg" className="bg-white/15 text-[#FFF7EE] border-[1.5px] border-white/45 hover:bg-white/25 rounded-full font-bold px-8">
                 {t("nav.exploreStays")}
               </Button>
             </Link>

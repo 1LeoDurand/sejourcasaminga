@@ -84,39 +84,21 @@ const Dashboard = () => {
       <SEO title="Tableau de bord | Casa Minga" noindex />
       <Navbar />
 
-      {/* Tab bar */}
-      <div className="sticky top-14 z-40 bg-background/95 backdrop-blur-sm border-b border-border/60">
-        <div className="max-w-3xl mx-auto flex">
-          {tabs.map(({ key, label, icon: Icon, count }) => (
-            <button
-              key={key}
-              onClick={() => setTab(key)}
-              className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-medium transition-colors relative ${
-                activeTab === key ? "text-primary" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon className="h-4 w-4" />
-              <span className="hidden sm:inline">{label}</span>
-              {count != null && count > 0 && (
-                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-                  {count}
-                </span>
-              )}
-              {activeTab === key && (
-                <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary rounded-full" />
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
+      <DashboardHeader
+        userId={user.id}
+        displayName={displayName}
+        profile={profile}
+        myPlaces={myPlaces}
+        pointBalance={pointBalance}
+        tabs={tabs}
+        activeTab={activeTab}
+        setTab={setTab}
+      />
 
       <div className="max-w-3xl mx-auto px-4 py-6">
         <DashboardHome
           user={user}
-          displayName={displayName}
-          profile={profile}
           requests={requests}
-          pointBalance={pointBalance}
           onGoToExchanges={() => setTab("exchanges")}
         />
         <GuidedBanners
@@ -151,41 +133,88 @@ const Dashboard = () => {
   );
 };
 
-/* ─── Consolidated home (above tabs) ─── */
-function DashboardHome({
-  user, displayName, profile, requests, pointBalance, onGoToExchanges,
+/* ─── Warm header banner: avatar + greeting + points pill + pill tabs ─── */
+function DashboardHeader({
+  userId, displayName, profile, myPlaces, pointBalance, tabs, activeTab, setTab,
 }: {
-  user: any; displayName: string; profile: any; requests: any[] | undefined;
-  pointBalance: any; onGoToExchanges: () => void;
+  userId: string; displayName: string; profile: any; myPlaces: any; pointBalance: any;
+  tabs: { key: Tab; label: string; icon: React.ElementType; count?: number }[];
+  activeTab: Tab; setTab: (t: Tab) => void;
 }) {
   const { t } = useTranslation();
-  const { data: prefs } = useUserPreferences(user.id);
-  const { data: recommendations, isLoading: recsLoading, hasPrefs } = useSmartRecommendations(user.id, 4);
+  const firstPlace = myPlaces?.[0]?.places;
+  const placeLabel = firstPlace ? [firstPlace.name, firstPlace.city].filter(Boolean).join(", ") : null;
 
-  // Loading skeleton until the profile is available.
-  if (!profile) {
-    return (
-      <div className="mb-6 space-y-3 animate-pulse">
-        <div className="h-7 w-48 rounded bg-muted" />
-        <div className="rounded-2xl border bg-card p-5 space-y-3">
-          <div className="h-4 w-40 rounded bg-muted" />
-          <div className="h-2 w-full rounded-full bg-muted" />
-          <div className="grid grid-cols-2 gap-3">
-            <div className="h-16 rounded-xl bg-muted" />
-            <div className="h-16 rounded-xl bg-muted" />
+  return (
+    <div>
+      <div className="cm-stripes px-5 py-7 md:px-8">
+        <div className="max-w-3xl mx-auto flex flex-col gap-5">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="h-16 w-16 shrink-0 rounded-full ring-[3px] ring-[#FFFDF9] dark:ring-card shadow-[0_4px_10px_rgba(120,70,30,0.15)] bg-primary/10 flex items-center justify-center overflow-hidden">
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <User className="h-7 w-7 text-primary" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <h1 className="flex items-center gap-2 font-serif text-[27px] font-extrabold text-foreground">
+                  {t("dashboard.greeting", { name: displayName })}
+                  <VerifiedBadge userId={userId} />
+                </h1>
+                {placeLabel && (
+                  <p className="text-[13.5px] font-medium text-muted-foreground">{placeLabel}</p>
+                )}
+              </div>
+            </div>
+
+            <Link
+              to="/points"
+              className="flex items-center gap-2 rounded-full bg-[#FFFDF9] dark:bg-card px-[18px] py-2.5 shadow-[0_2px_6px_rgba(120,70,30,0.08)]"
+            >
+              <Star className="h-4 w-4 text-soleil fill-soleil" />
+              <span className="text-base font-extrabold text-foreground">{pointBalance?.balance ?? 0}</span>
+              <span className="text-[12.5px] text-muted-foreground">{t("dashboard.pointsLong")}</span>
+            </Link>
+          </div>
+
+          {/* Tab pills */}
+          <div className="flex items-center gap-2 overflow-x-auto">
+            {tabs.map(({ key, label, count }) => (
+              <button
+                key={key}
+                onClick={() => setTab(key)}
+                className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[13.5px] transition-colors ${
+                  activeTab === key
+                    ? "bg-[#2E211A] text-[#FFF7EE] font-bold"
+                    : "bg-[#FFFDF9] dark:bg-card text-[#5B4A3C] dark:text-muted-foreground font-semibold shadow-sm"
+                }`}
+              >
+                {label}
+                {count != null && count > 0 && (
+                  <span className="inline-flex items-center justify-center h-[19px] min-w-[19px] rounded-full bg-primary text-white text-[11px] font-bold">
+                    {count}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </div>
-    );
-  }
+      <div className="cm-weave h-1.5" />
+    </div>
+  );
+}
 
-  const completion = computeCompletion({
-    avatar_url: profile.avatar_url,
-    bio: profile.bio,
-    preferred_values: prefs?.preferred_values,
-    languages: profile.languages,
-    preferred_regions: prefs?.preferred_regions,
-  });
+/* ─── Consolidated home (above tabs): pending actions + recommendations ─── */
+function DashboardHome({
+  user, requests, onGoToExchanges,
+}: {
+  user: any; requests: any[] | undefined; onGoToExchanges: () => void;
+}) {
+  const { t } = useTranslation();
+  const { data: recommendations, isLoading: recsLoading, hasPrefs } = useSmartRecommendations(user.id, 4);
 
   const list = requests || [];
   const receivedPending = list.filter((r: any) => r.to_member_id === user.id && r.status === "pending").length;
@@ -194,71 +223,52 @@ function DashboardHome({
 
   return (
     <div className="mb-6 space-y-4">
-      {/* Greeting */}
-      <div className="flex flex-wrap items-center gap-2.5">
-        <h1 className="text-2xl font-serif text-foreground">{t("dashboard.greeting", { name: displayName })}</h1>
-        <VerifiedBadge userId={user.id} />
-      </div>
-
-      {/* Snapshot: completion gauge + points + pending actions */}
-      <section className="rounded-2xl border bg-card p-5 space-y-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          {/* Completion gauge */}
-          <Link to="/edit-profile" className="block rounded-xl border bg-background/60 p-4 hover:shadow-sm transition-shadow">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">{t("dashboard.profilePct", { pct: completion.pct })}</span>
-            </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-              <div className={`h-2 rounded-full transition-all ${completionColor(completion.pct)}`} style={{ width: `${completion.pct}%` }} />
-            </div>
-            {completion.pct < 100 && (
-              <p className="mt-2 text-xs text-primary">{t("dashboard.complete")} →</p>
-            )}
-          </Link>
-
-          {/* Points balance */}
-          <Link to="/points" className="block rounded-xl border bg-background/60 p-4 hover:shadow-sm transition-shadow">
-            <div className="flex items-center gap-2 mb-1">
-              <Star className="h-4 w-4 text-soleil fill-soleil" />
-              <span className="text-sm font-medium text-foreground">{t("dashboard.points")}</span>
-            </div>
-            <p className="text-2xl font-bold text-foreground leading-tight">{pointBalance?.balance ?? 0}</p>
-          </Link>
-        </div>
-
-        {/* Pending actions recap */}
-        <div className="rounded-xl bg-muted/40 p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-foreground">{t("dashboard.pendingActions")}</span>
-          </div>
-          {hasActions ? (
-            <div className="space-y-1.5">
-              {receivedPending > 0 && (
-                <button onClick={onGoToExchanges} className="flex w-full items-center gap-2 text-left text-sm text-foreground hover:text-primary">
-                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary" />
+      {/* "À traiter" card */}
+      <section className="rounded-[20px] bg-[#FFFDF9] dark:bg-card p-5 shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
+        <p className="text-sm font-extrabold text-foreground mb-3">{t("dashboard.pendingActions")}</p>
+        {hasActions ? (
+          <div className="space-y-2">
+            {receivedPending > 0 && (
+              <button onClick={onGoToExchanges} className="flex w-full items-center gap-3 rounded-[14px] bg-[#FBEFD6] px-4 py-3 text-left">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+                <span className="flex-1 text-[13.5px] font-semibold text-foreground">
                   {t("dashboard.receivedToHandle", { count: receivedPending })}
-                </button>
-              )}
-              {sentPending > 0 && (
-                <Link to="/stay-requests" className="flex items-center gap-2 text-sm text-foreground hover:text-primary">
-                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary" />
+                </span>
+                <span className="rounded-full bg-primary text-white text-[12.5px] font-bold px-4 py-2">
+                  {t("common.viewAll")}
+                </span>
+              </button>
+            )}
+            {sentPending > 0 && (
+              <Link to="/stay-requests" className="flex items-center gap-3 rounded-[14px] bg-olive/10 px-4 py-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-olive/20 text-olive">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+                <span className="flex-1 text-[13.5px] font-semibold text-foreground">
                   {t("dashboard.sentPending", { count: sentPending })}
-                </Link>
-              )}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">{t("dashboard.allCaughtUp")}</p>
-          )}
-        </div>
+                </span>
+                <span className="rounded-full border-[1.5px] border-olive/30 text-olive text-[12.5px] font-bold px-4 py-2">
+                  {t("dashboard.follow")}
+                </span>
+              </Link>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">{t("dashboard.allCaughtUp")}</p>
+        )}
       </section>
 
       {/* Matchmaking: recommended places */}
       <section>
-        <div className="flex items-center gap-2 mb-3">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <h2 className="text-base font-serif text-foreground">{t("dashboard.recommendedForYou")}</h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-serif text-lg font-bold text-foreground">{t("dashboard.recommendedForYou")}</h2>
+          {recommendations && recommendations.length > 0 && (
+            <Link to="/discover" className="text-[13px] font-semibold text-primary">
+              {t("dashboard.exploreAll")} →
+            </Link>
+          )}
         </div>
 
         {!hasPrefs ? (
@@ -271,7 +281,7 @@ function DashboardHome({
         ) : recsLoading ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="animate-pulse rounded-xl border bg-card overflow-hidden">
+              <div key={i} className="animate-pulse rounded-2xl bg-[#FFFDF9] dark:bg-card overflow-hidden">
                 <div className="h-24 bg-muted" />
                 <div className="p-2.5 space-y-1.5"><div className="h-3 w-3/4 rounded bg-muted" /><div className="h-2 w-1/2 rounded bg-muted" /></div>
               </div>
@@ -283,33 +293,26 @@ function DashboardHome({
             <Link to="/discover"><Button size="sm" variant="outline">{t("dashboard.exploreAllHabitats")}</Button></Link>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {recommendations.map((p) => (
-                <Link key={p.id} to={`/habitat/${(p as any).slug || p.id}`} className="rounded-xl border bg-card overflow-hidden hover:shadow-md transition-shadow group relative">
-                  <div className="h-24 overflow-hidden relative">
-                    <img src={p.image || placePlaceholder} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    {hasPrefs && p.matchPct > 0 && (
-                      <span className="absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur-sm px-2 py-0.5 text-[10px] font-semibold text-primary border border-primary/20">
-                        <Sparkles className="h-2.5 w-2.5" />{t("dashboard.matchBadge", { pct: p.matchPct })}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-2.5">
-                    <p className="font-serif text-xs text-foreground line-clamp-1">{p.name}</p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1">
-                      <MapPin className="h-2.5 w-2.5" />{[p.city, p.region].filter(Boolean).join(", ") || "France"}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-            <Link to="/discover">
-              <Button variant="ghost" size="sm" className="mt-3 w-full text-primary">
-                {t("dashboard.exploreAllHabitats")} <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-              </Button>
-            </Link>
-          </>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {recommendations.map((p) => (
+              <Link key={p.id} to={`/habitat/${(p as any).slug || p.id}`} className="rounded-2xl bg-[#FFFDF9] dark:bg-card shadow-[0_2px_6px_rgba(120,70,30,0.06)] overflow-hidden hover:shadow-md transition-shadow group relative">
+                <div className="h-24 overflow-hidden relative">
+                  <img src={p.image || placePlaceholder} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  {hasPrefs && p.matchPct > 0 && (
+                    <span className="absolute top-1.5 left-1.5 inline-flex items-center rounded-full bg-[#FBEAC2] px-2 py-[3px] text-[10px] font-extrabold text-[#9A6A1C]">
+                      {t("dashboard.matchBadge", { pct: p.matchPct })}
+                    </span>
+                  )}
+                </div>
+                <div className="p-2.5">
+                  <p className="font-serif text-[12.5px] font-bold text-foreground line-clamp-1">{p.name}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1">
+                    <MapPin className="h-2.5 w-2.5" />{[p.city, p.region].filter(Boolean).join(", ") || "France"}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         )}
       </section>
     </div>
@@ -354,7 +357,7 @@ function ProfileTab({
   return (
     <div className="space-y-6">
       {/* Profile card - HomeExchange style */}
-      <section className="rounded-2xl border bg-card p-5">
+      <section className="rounded-[20px] bg-[#FFFDF9] dark:bg-card p-5 shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
         <div className="flex items-start gap-4">
           <div className="h-24 w-24 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0 ring-3 ring-primary/20">
             {profile?.avatar_url ? (
@@ -387,100 +390,89 @@ function ProfileTab({
         </div>
       </section>
 
-      {/* My listing card - HomeExchange style */}
-      {myListings && myListings.length > 0 && (
-        <section className="rounded-2xl border bg-card overflow-hidden">
-          {myListings.slice(0, 1).map((l: any) => (
-            <Link key={l.id} to={`/listing/${l.slug || l.id}`} className="block">
-              <div className="flex items-center gap-4 p-4">
-                <div className="h-24 w-32 rounded-xl bg-muted overflow-hidden shrink-0">
+      {/* Complétion + Mon annonce — grille 2 colonnes */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {/* Profile completion card */}
+        {completionPct < 100 && (
+          <section className="rounded-[20px] bg-[#FFFDF9] dark:bg-card p-5 shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
+            <p className="text-sm font-extrabold text-foreground mb-3">{t("dashboard.profilePct", { pct: completionPct })}</p>
+            <div className="h-[9px] w-full overflow-hidden rounded-full bg-[#F0E7D6]">
+              <div className="h-full rounded-full bg-gradient-to-r from-olive to-[hsl(85_30%_50%)] transition-all" style={{ width: `${completionPct}%` }} />
+            </div>
+            <div className="mt-3 space-y-2">
+              {completionSteps.map((step) => (
+                <div key={step.label} className="flex items-center gap-2 text-xs">
+                  <span className={step.done ? "text-olive font-bold" : "text-primary"}>{step.done ? "✓" : "○"}</span>
+                  <span className={`flex-1 ${step.done ? "text-muted-foreground line-through" : "text-foreground"}`}>{step.label}</span>
+                  {!step.done && <span className="font-bold text-primary">+{step.pts} pts</span>}
+                </div>
+              ))}
+            </div>
+            <Link to="/edit-profile">
+              <Button size="sm" className="mt-3 w-full rounded-full font-bold" variant="outline">
+                <Pencil className="mr-1.5 h-3.5 w-3.5" /> {t("dashboard.complete")}
+              </Button>
+            </Link>
+          </section>
+        )}
+
+        {/* My listing card - "mon annonce" */}
+        {myListings && myListings.length > 0 && (
+          <section className="rounded-[20px] bg-[#FFFDF9] dark:bg-card overflow-hidden shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
+            {myListings.slice(0, 1).map((l: any) => (
+              <Link key={l.id} to={`/listing/${l.slug || l.id}`} className="block">
+                <div className="h-[110px] w-full overflow-hidden bg-muted">
                   {l.image ? (
                     <img src={l.image} alt="" className="h-full w-full object-cover" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center"><Home className="h-6 w-6 text-muted-foreground/40" /></div>
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-serif text-base text-foreground">{l.title}</p>
-                  <p className="text-sm text-muted-foreground mt-0.5">{l.places?.name || l.places?.city || "France"}</p>
-                  <Badge variant="outline" className={`mt-2 text-xs ${l.published ? "bg-olive/15 text-olive border-olive/25" : "bg-muted text-muted-foreground"}`}>
-                    <span className={`inline-block h-1.5 w-1.5 rounded-full mr-1.5 ${l.published ? "bg-olive" : "bg-muted-foreground"}`} />
-                    {l.published ? t("dashboard.published") : t("dashboard.draft")}
-                  </Badge>
+                <div className="p-4">
+                  <p className="font-serif text-[15.5px] font-bold text-foreground">{l.title}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground flex items-center gap-1.5">
+                    {l.places?.name || l.places?.city || "France"}
+                    {l.published && <span className="inline-flex items-center gap-1 text-olive"><span className="h-1.5 w-1.5 rounded-full bg-olive" /> {t("dashboard.published")}</span>}
+                  </p>
                 </div>
-              </div>
-            </Link>
-          ))}
-
-          {/* "Gérer votre calendrier" button */}
-          <div className="px-4 pb-4">
-            <Link to="/calendar">
-              <Button
-                className="w-full rounded-full bg-soleil hover:bg-soleil/90 text-soleil-foreground font-semibold text-sm py-5"
-                size="lg"
-              >
-                <Calendar className="mr-2 h-4 w-4" />
-                {t("dashboard.manageCalendar")}
-              </Button>
-            </Link>
-          </div>
-
-          {/* More listings */}
-          {myListings.length > 1 && (
-            <div className="px-4 pb-4 space-y-2">
-              {myListings.slice(1).map((l: any) => (
-                <Link key={l.id} to={`/listing/${l.slug || l.id}`}
-                  className="flex items-center gap-3 rounded-xl border p-3 hover:shadow-sm transition-shadow">
-                  <div className="h-14 w-18 rounded-lg bg-muted overflow-hidden shrink-0">
-                    {l.image ? <img src={l.image} alt="" className="h-full w-full object-cover" /> : (
-                      <div className="h-full w-full flex items-center justify-center"><MapPin className="h-4 w-4 text-muted-foreground/40" /></div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-serif text-sm text-foreground">{l.title}</p>
-                    <p className="text-xs text-muted-foreground">{l.places?.name}</p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0" />
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* Profile completion card */}
-      {completionPct < 100 && (
-        <section className="rounded-2xl bg-gradient-to-r from-primary/8 to-soleil/8 border border-primary/15 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold text-foreground">{t("dashboard.completeProfile")}</h3>
-            <span className="ml-auto text-xs font-bold text-primary">{completionPct}%</span>
-          </div>
-          <div className="w-full bg-border/50 rounded-full h-2 mb-3">
-            <div className="bg-gradient-to-r from-primary to-soleil h-2 rounded-full transition-all" style={{ width: `${completionPct}%` }} />
-          </div>
-          <div className="space-y-2">
-            {completionSteps.filter((s) => !s.done).map((step) => (
-              <div key={step.label} className="flex items-center gap-2 text-xs text-muted-foreground">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary/40" />
-                <span className="flex-1">{step.label}</span>
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-soleil/10 text-soleil-foreground border-soleil/20">
-                  +{step.pts} pts
-                </Badge>
-              </div>
+              </Link>
             ))}
-          </div>
-          <Link to="/edit-profile">
-            <Button size="sm" className="mt-3 w-full" variant="outline">
-              <Pencil className="mr-1.5 h-3.5 w-3.5" /> {t("dashboard.complete")}
-            </Button>
-          </Link>
-        </section>
-      )}
+
+            <div className="px-4 pb-4">
+              <Link to="/calendar">
+                <Button className="w-full rounded-full bg-soleil hover:bg-soleil/90 text-soleil-foreground font-bold text-[13px] py-[11px]">
+                  {t("dashboard.manageCalendar")}
+                </Button>
+              </Link>
+            </div>
+
+            {/* More listings */}
+            {myListings.length > 1 && (
+              <div className="px-4 pb-4 space-y-2">
+                {myListings.slice(1).map((l: any) => (
+                  <Link key={l.id} to={`/listing/${l.slug || l.id}`}
+                    className="flex items-center gap-3 rounded-xl bg-background/60 p-3 hover:shadow-sm transition-shadow">
+                    <div className="h-14 w-18 rounded-lg bg-muted overflow-hidden shrink-0">
+                      {l.image ? <img src={l.image} alt="" className="h-full w-full object-cover" /> : (
+                        <div className="h-full w-full flex items-center justify-center"><MapPin className="h-4 w-4 text-muted-foreground/40" /></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-serif text-sm text-foreground">{l.title}</p>
+                      <p className="text-xs text-muted-foreground">{l.places?.name}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+      </div>
 
       {/* Points & Referral */}
-      <section className="rounded-2xl border bg-card overflow-hidden">
-        <div className="p-5 border-b">
+      <section className="rounded-[20px] bg-[#FFFDF9] dark:bg-card overflow-hidden shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
+        <div className="p-5 border-b border-border/60">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-soleil/15 flex items-center justify-center">
               <Star className="h-5 w-5 text-soleil" />
@@ -557,7 +549,7 @@ function ProfileTab({
           <div className="space-y-3">
             {myPlaces.map((pm: any) => (
               <Link key={pm.id} to={`/habitat/${pm.place_id}`}
-                className="flex items-center gap-3 rounded-xl border bg-card p-3 hover:shadow-sm transition-shadow">
+                className="flex items-center gap-3 rounded-xl bg-[#FFFDF9] dark:bg-card p-3 shadow-[0_2px_6px_rgba(120,70,30,0.05)] hover:shadow-md transition-shadow">
                 <div className="h-16 w-20 rounded-lg bg-muted overflow-hidden shrink-0">
                   {pm.places?.image ? (
                     <img src={pm.places.image} alt="" className="h-full w-full object-cover" />
@@ -587,7 +579,7 @@ function ProfileTab({
       {/* Account */}
       <section>
         <h3 className="text-base font-serif text-foreground mb-3">{t("dashboard.myAccount")}</h3>
-        <div className="rounded-xl border bg-card divide-y divide-border overflow-hidden">
+        <div className="rounded-[20px] bg-[#FFFDF9] dark:bg-card divide-y divide-border/60 overflow-hidden shadow-[0_2px_6px_rgba(120,70,30,0.06)]">
           <Link to="/favorites" className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/50 transition-colors">
             <Heart className="h-4 w-4 text-rosa" /><span className="text-sm text-foreground flex-1">{t("dashboard.favorites")}</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40" />

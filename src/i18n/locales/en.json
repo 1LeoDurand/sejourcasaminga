@@ -265,6 +265,8 @@
     "claimApproved": "Approved",
     "claimRejected": "Rejected",
     "points": "Points",
+    "pointsLong": "hospitality points",
+    "exploreAll": "Explore all",
     "inviteFriends": "Invite friends",
     "alignedHabitats": "Habitats aligned with your values",
     "refinePrefs": "Refine my preferences",
@@ -300,6 +302,7 @@
     "receivedToHandle_other": "{{count}} received requests to handle",
     "sentPending_one": "{{count}} sent request pending",
     "sentPending_other": "{{count}} sent requests pending",
+    "follow": "Follow",
     "allCaughtUp": "Nothing to handle right now 🎉",
     "recommendedForYou": "Recommended for you",
     "setPrefsText": "Set your preferences to get tailored recommendations.",
@@ -843,7 +846,9 @@
     "noDates": "The host hasn't set specific dates yet. Send a request with your preferred dates and they'll get back to you.",
     "moreMonths": "See following months",
     "seeStays": "See stays",
-    "contact": "Contact"
+    "contact": "Contact",
+    "noPayment": "No payment — money never changes hands",
+    "seeAllPhotos": "See all {{count}} photos"
   },
   "memberProfile": {
     "reviewCount_one": "{{count}} review",

@@ -10,8 +10,8 @@ const Footer = () => {
         <div className="grid gap-8 md:grid-cols-4">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <img src={logo} alt="Casa Minga" className="h-8 w-8 object-contain" />
-              <span className="font-serif text-lg text-foreground">Casa Minga</span>
+              <img src={logo} alt="Casa Minga" className="h-8 w-8 rounded-[10px] object-contain" />
+              <span className="font-serif text-lg font-bold text-foreground">Casa Minga</span>
             </Link>
             <p className="text-sm text-muted-foreground">{t("footer.tagline")}</p>
           </div>

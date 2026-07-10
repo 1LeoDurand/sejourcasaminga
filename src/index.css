@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -60,6 +60,7 @@
     --rosa-foreground: 36 33% 97%;
     --crema: 36 35% 95%;
     --crema-foreground: 20 15% 15%;
+    --paper: 40 56% 98%;
   }
 
   .dark {
@@ -104,6 +105,7 @@
     --rosa-foreground: 20 12% 10%;
     --crema: 20 12% 14%;
     --crema-foreground: 36 20% 90%;
+    --paper: 20 12% 14%;
   }
 }
 
@@ -116,18 +118,18 @@
     @apply bg-background text-foreground font-sans;
   }
 
-  /* Brand signature: headings use Poppins (font-serif slot), body stays Inter */
+  /* Brand signature: headings use Bricolage Grotesque (font-serif slot), body stays Hanken Grotesk */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-semibold tracking-tight text-foreground;
+    @apply font-serif font-bold tracking-tight text-foreground;
     font-feature-settings: "ss01", "cv11";
   }
 
   h1 {
-    @apply text-3xl md:text-5xl leading-[1.1] tracking-[-0.02em];
+    @apply text-3xl md:text-5xl leading-[1.1] tracking-[-0.03em];
   }
 
   h2 {
-    @apply text-2xl md:text-3xl leading-[1.15] tracking-[-0.015em];
+    @apply text-2xl md:text-3xl leading-[1.15] tracking-[-0.025em];
   }
 
   h3 {
@@ -168,6 +170,31 @@
 @keyframes cmFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+/* Woven-pattern utilities (pure CSS, no assets) — brand motif for separators and warm sections */
+.cm-weave {
+  background:
+    repeating-linear-gradient(45deg,  rgba(200,90,51,0.35) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(122,134,79,0.28) 0 6px, transparent 6px 12px),
+    #F5EDE0;
+}
+.dark .cm-weave {
+  background:
+    repeating-linear-gradient(45deg,  rgba(200,90,51,0.15) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(122,134,79,0.15) 0 6px, transparent 6px 12px),
+    hsl(20 12% 16%);
+}
+
+.cm-stripes {
+  background: repeating-linear-gradient(90deg, rgba(46,33,26,0.035) 0 2px, transparent 2px 12px), hsl(36 40% 93%);
+}
+.dark .cm-stripes {
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 12px), hsl(20 12% 16%);
+}
+
+.cm-weave-on-primary {
+  background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 8px, transparent 8px 20px), hsl(var(--primary));
 }
 
 
