@@ -25,17 +25,17 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const SITE_NAME = 'Casa Minga'
+const SITE_NAME = 'Casa Minga Séjours'
 const SITE_URL = 'https://sejour.casaminga.com'
 const FROM_ADDRESS = `${SITE_NAME} <noreply@sejour.casaminga.com>`
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirmez votre adresse email — Casa Minga',
-  invite: "Vous avez été invité·e — Casa Minga",
-  magiclink: 'Votre lien de connexion — Casa Minga',
-  recovery: 'Réinitialisez votre mot de passe — Casa Minga',
-  email_change: 'Confirmez votre nouvel email — Casa Minga',
-  reauthentication: 'Votre code de vérification — Casa Minga',
+  signup: 'Confirmez votre adresse email — Casa Minga Séjours',
+  invite: "Vous avez été invité·e — Casa Minga Séjours",
+  magiclink: 'Votre lien de connexion — Casa Minga Séjours',
+  recovery: 'Réinitialisez votre mot de passe — Casa Minga Séjours',
+  email_change: 'Confirmez votre nouvel email — Casa Minga Séjours',
+  reauthentication: 'Votre code de vérification — Casa Minga Séjours',
 }
 
 const EMAIL_TEMPLATES: Record<string, React.ComponentType<Record<string, unknown>>> = {
@@ -125,7 +125,7 @@ Deno.serve(async (req) => {
       message_id: messageId,
       to: recipientEmail,
       from: FROM_ADDRESS,
-      subject: EMAIL_SUBJECTS[emailType] ?? 'Notification — Casa Minga',
+      subject: EMAIL_SUBJECTS[emailType] ?? 'Notification — Casa Minga Séjours',
       html,
       text,
       purpose: 'transactional',
