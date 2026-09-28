@@ -1,0 +1,73 @@
+# Build the SPA and upload dist/ to the Infomaniak static hosting of
+# sejour.casaminga.com on every push to master (or by hand from the Actions tab).
+#
+# Secrets (set by Léo in GitHub, never in the repo): FTP_SERVER, FTP_USERNAME,
+# FTP_PASSWORD. The FTP account is restricted to web/sejour.casaminga.com, so
+# its root is the site folder itself.
+name: Deploy sejour.casaminga.com
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-sejour
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Public values: they ship in the JS bundle anyway (publishable key, not service_role).
+      VITE_SUPABASE_URL: https://giekhaohqksirsadkfnt.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_4_7gK7EZzjmxd2bmxx7vsQ_pW444z8W
+      VITE_SUPABASE_PROJECT_ID: giekhaohqksirsadkfnt
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # prebuild regenerates public/sitemap.xml (habitats/listings) before vite build.
+      - run: npm run build
+
+      - name: Check the build output
+        run: |
+          test -f dist/index.html
+          test -f dist/.htaccess
+          ls dist/assets | head
+
+      # Guard: refuse to upload unless the FTP root really is the sejour site
+      # (shared hosting with ~20 sites: never upload to the wrong folder).
+      - name: Check the remote folder is the sejour site
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq lftp > /dev/null
+          lftp -u "$FTP_USERNAME,$FTP_PASSWORD" -e "set ftp:ssl-force true; set ssl:verify-certificate yes; cls -1a; bye" "$FTP_SERVER" > remote.txt
+          echo "Remote root:"; cat remote.txt
+          grep -qx "index.html" remote.txt || { echo "::error::index.html not found at FTP root: wrong folder?"; exit 1; }
+          grep -qx ".htaccess" remote.txt || { echo "::error::.htaccess not found at FTP root: wrong folder?"; exit 1; }
+          grep -qx "images/" remote.txt || grep -qx "images" remote.txt || { echo "::error::images/ not found at FTP root: wrong folder?"; exit 1; }
+
+      # Incremental upload: a state file on the server tracks what was sent.
+      # Only files this action uploaded itself can ever be deleted (clean slate off).
+      - name: Upload dist/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          server-dir: ./
+          dangerous-clean-slate: false
+          log-level: standard
