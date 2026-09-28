@@ -96,6 +96,9 @@
   <url><loc>https://sejour.casaminga.com/ressources/podcast-2030-glorieuses</loc><priority>0.6</priority></url>
 
   <!-- Ressources : articles de l'agent de rédaction -->
+  <url><loc>https://sejour.casaminga.com/ressources/trouver-un-terrain-habitat-collectif</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/energie-habitat-partage</loc><priority>0.6</priority></url>
+  <url><loc>https://sejour.casaminga.com/ressources/jardin-verger-poulailler-habitat-collectif</loc><priority>0.6</priority></url>
   <url><loc>https://sejour.casaminga.com/ressources/ecolieux-oasis-france</loc><priority>0.7</priority></url>
 
   <!-- Lieux (généré au build) -->
