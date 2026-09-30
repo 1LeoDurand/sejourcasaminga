@@ -63,6 +63,7 @@
     "blog": "Blog",
     "charter": "Charte de l'hospitalité",
     "contact": "Contact",
+    "help": "Aide",
     "copyright": "© 2026 Casa Minga — La maison des communs. Fait avec soin pour les collectifs qui partagent."
   },
   "home": {
@@ -801,6 +802,29 @@
     "linkAbout": "En savoir plus sur Casa Minga",
     "linkContact": "Le contacter",
     "bio": "Léo Durand est le fondateur de Casa Minga. Il s'intéresse depuis des années aux manières d'habiter et de voyager autrement : habitats participatifs, écolieux, colocations durables, et toutes les formes de vie collective qui cherchent un équilibre entre intimité et partage. Casa Minga est né d'une conviction simple : on comprend mieux ces modes de vie en les rencontrant de l'intérieur, en séjournant chez celles et ceux qui les pratiquent, qu'en lisant des théories à distance.\n\nÀ travers les articles et guides de cette bibliothèque, il cherche à rendre accessibles des sujets parfois techniques — statuts juridiques, financement, gouvernance, matériaux — sans perdre de vue l'expérience humaine qui les sous-tend. Le ton se veut honnête : il parle autant des réussites que des limites réelles de ces projets. Quand il ne rédige pas, il voyage, photographie les lieux et les gens qu'il croise, et tisse le réseau d'entraide entre habitats que Casa Minga veut faire grandir."
+  },
+  "aide": {
+    "title": "Centre d'aide",
+    "subtitle": "Des réponses claires pour créer ta fiche, demander un séjour et comprendre les points d'hospitalité.",
+    "searchPlaceholder": "Rechercher dans l'aide…",
+    "results": "{{count}} résultat(s)",
+    "noResults": "Aucun article ne correspond. Essaie d'autres mots ou écris-nous.",
+    "articleCount_one": "{{count}} article",
+    "articleCount_other": "{{count}} articles",
+    "popular": "Les plus consultés",
+    "empty": "Le centre d'aide est en cours de rédaction. Reviens bientôt.",
+    "emptyCategory": "Aucun article dans cette catégorie pour le moment.",
+    "notFound": "Pas trouvé ce que tu cherches ?",
+    "contactUs": "Écris-nous",
+    "helpful": "Cet article t'a aidé ?",
+    "yes": "Oui",
+    "no": "Non",
+    "thanks": "Merci pour ton retour.",
+    "related": "Dans la même catégorie",
+    "updated": "Mis à jour le {{date}}",
+    "unavailableTitle": "Aide momentanément indisponible",
+    "unavailableText": "Nous ne parvenons pas à charger le centre d'aide. Réessaie plus tard ou écris-nous.",
+    "helpLink": "Aide"
   },
   "resources": {
     "title": "Ressources",

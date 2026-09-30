@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, ArrowLeft, Save, Camera, User, Sparkles, Check, X, BadgeCheck } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile, useUpdateProfile } from "@/hooks/use-profile";
 import { useUserPreferences, useUpsertUserPreferences, HABITAT_TYPE_OPTIONS, STAY_DURATION_OPTIONS } from "@/hooks/use-user-preferences";
@@ -203,6 +204,7 @@ const EditProfile = () => {
           <ArrowLeft className="h-4 w-4" /> {t("editProfile.back")}
         </button>
 
+        <HelpLink slug="completer-mon-profil" className="mb-2" />
         <h1 className="text-2xl font-serif text-foreground mb-1">{t("editProfile.title")}</h1>
         <p className="text-sm text-muted-foreground mb-8">{t("editProfile.subtitle")}</p>
 

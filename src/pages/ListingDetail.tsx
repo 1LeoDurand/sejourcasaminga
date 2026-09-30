@@ -25,6 +25,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { suggestPointsPerNight } from "@/lib/points-valuation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import SEO from "@/components/SEO";
 import { breadcrumbLd } from "@/lib/structured-data";
 import ListingCard from "@/components/ListingCard";
@@ -747,6 +748,7 @@ const ListingDetail = () => {
           )}
         </div>
 
+        <HelpLink slug="envoyer-une-demande-de-sejour" className="mb-2" />
         <h1 className="font-serif text-3xl md:text-[38px] font-extrabold tracking-[-0.03em] leading-[1.05] text-foreground">{listing.title}</h1>
         {typeMeta && (
           <p className="mt-1.5 text-sm text-muted-foreground">{typeMeta.shortDescription}</p>

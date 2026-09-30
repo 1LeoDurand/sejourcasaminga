@@ -24,6 +24,10 @@ jobs:
       VITE_SUPABASE_URL: https://giekhaohqksirsadkfnt.supabase.co
       VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_4_7gK7EZzjmxd2bmxx7vsQ_pW444z8W
       VITE_SUPABASE_PROJECT_ID: giekhaohqksirsadkfnt
+      # Help center reads the ADMIN database (public anon key, same value as casaminga.com).
+      # Stored as GitHub secrets: without them the /aide pages show an "unavailable" state.
+      VITE_HELP_SUPABASE_URL: ${{ secrets.VITE_HELP_SUPABASE_URL }}
+      VITE_HELP_SUPABASE_ANON_KEY: ${{ secrets.VITE_HELP_SUPABASE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v4
 

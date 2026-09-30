@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/use-profile";
 import { useMyPlaces } from "@/hooks/use-places";
@@ -159,6 +160,7 @@ function DashboardHeader({
                 )}
               </div>
               <div className="min-w-0">
+                <HelpLink slug="gagner-des-points" className="mb-2" />
                 <h1 className="flex items-center gap-2 font-serif text-[27px] font-extrabold text-foreground">
                   {t("dashboard.greeting", { name: displayName })}
                   <VerifiedBadge userId={userId} />

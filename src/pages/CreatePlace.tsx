@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreatePlace, useJoinPlace } from "@/hooks/use-places";
 import { toast } from "@/hooks/use-toast";
@@ -176,6 +177,7 @@ const CreatePlace = () => {
           <ArrowLeft className="h-4 w-4" /> Retour
         </button>
 
+        <HelpLink slug="creer-la-fiche-de-mon-lieu" className="mb-2" />
         <h1 className="text-2xl font-serif text-foreground mb-1">Créer un lieu collectif</h1>
         <p className="text-sm text-muted-foreground mb-8">
           Décrivez votre habitat partagé pour le faire découvrir à la communauté Casa Minga. Plus votre fiche est complète, plus elle inspirera confiance.

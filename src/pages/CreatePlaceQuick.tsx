@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, ArrowLeft, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreatePlace, useJoinPlace } from "@/hooks/use-places";
 import { toast } from "@/hooks/use-toast";
@@ -89,6 +90,7 @@ const CreatePlaceQuick = () => {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-3">
             <Sparkles className="h-3 w-3" /> Étape 1 sur 2 — Création rapide
           </div>
+          <HelpLink slug="creer-la-fiche-de-mon-lieu" className="mb-2" />
           <h1 className="text-2xl sm:text-3xl font-serif text-foreground mb-2">
             Créez votre fiche lieu
           </h1>

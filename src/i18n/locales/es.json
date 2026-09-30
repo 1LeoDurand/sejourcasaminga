@@ -63,6 +63,7 @@
     "blog": "Blog",
     "charter": "Carta de hospitalidad",
     "contact": "Contacto",
+    "help": "Ayuda",
     "copyright": "© 2026 Casa Minga — La casa de los bienes comunes. Hecho con cariño para los colectivos que comparten."
   },
   "home": {
@@ -801,6 +802,29 @@
     "linkAbout": "Más sobre Casa Minga",
     "linkContact": "Contactar",
     "bio": "Léo Durand es el fundador de Casa Minga. Desde hace años le interesan otras formas de habitar y de viajar: hábitats participativos, ecoaldeas, viviendas compartidas duraderas y todas las formas de vida colectiva que buscan un equilibrio entre intimidad y lo común. Casa Minga nació de una convicción sencilla: se entienden mejor estos modos de vida encontrándolos desde dentro, alojándose con quienes los practican, que leyendo teorías a distancia.\n\nA través de los artículos y guías de esta biblioteca, intenta hacer accesibles temas a veces técnicos —estatutos jurídicos, financiación, gobernanza, materiales— sin perder de vista la experiencia humana que los sostiene. El tono quiere ser honesto: habla tanto de los logros como de los límites reales de estos proyectos. Cuando no escribe, viaja, fotografía los lugares y las personas que encuentra, y teje la red de ayuda mutua entre hábitats que Casa Minga quiere hacer crecer."
+  },
+  "aide": {
+    "title": "Centro de ayuda",
+    "subtitle": "Respuestas claras para crear tu ficha, solicitar una estancia y entender los puntos de hospitalidad.",
+    "searchPlaceholder": "Buscar en la ayuda…",
+    "results": "{{count}} resultado(s)",
+    "noResults": "Ningún artículo coincide. Prueba otras palabras o escríbenos.",
+    "articleCount_one": "{{count}} artículo",
+    "articleCount_other": "{{count}} artículos",
+    "popular": "Los más consultados",
+    "empty": "El centro de ayuda se está redactando. Vuelve pronto.",
+    "emptyCategory": "Aún no hay artículos en esta categoría.",
+    "notFound": "¿No encuentras lo que buscas?",
+    "contactUs": "Escríbenos",
+    "helpful": "¿Te ha ayudado este artículo?",
+    "yes": "Sí",
+    "no": "No",
+    "thanks": "Gracias por tu opinión.",
+    "related": "En la misma categoría",
+    "updated": "Actualizado el {{date}}",
+    "unavailableTitle": "Ayuda no disponible por el momento",
+    "unavailableText": "No podemos cargar el centro de ayuda ahora. Inténtalo más tarde o escríbenos.",
+    "helpLink": "Ayuda"
   },
   "resources": {
     "title": "Recursos",

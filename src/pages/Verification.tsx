@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Loader2, ShieldCheck, Clock, AlertCircle, CheckCircle2, Upload, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -227,6 +228,7 @@ const Verification = () => {
 
           {/* ---- Page title ---- */}
           <header>
+            <HelpLink slug="devenir-membre-verifie" className="mb-2" />
             <h1 className="font-serif text-3xl text-foreground">{t("verification.title")}</h1>
             <p className="mt-1 text-muted-foreground">{t("verification.subtitle")}</p>
           </header>

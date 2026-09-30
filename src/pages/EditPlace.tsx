@@ -13,6 +13,7 @@ import VideoEmbedField from "@/components/VideoEmbedField";
 import AttractionLevelField from "@/components/AttractionLevelField";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlace } from "@/hooks/use-places";
 import { supabase } from "@/integrations/supabase/client";
@@ -200,6 +201,7 @@ const EditPlace = () => {
           <ArrowLeft className="h-4 w-4" /> Retour
         </button>
 
+        <HelpLink slug="creer-la-fiche-de-mon-lieu" className="mb-2" />
         <h1 className="text-2xl font-serif text-foreground mb-1">Modifier le lieu</h1>
         <p className="text-sm text-muted-foreground mb-8">Mettez à jour les informations de votre lieu collectif.</p>
 

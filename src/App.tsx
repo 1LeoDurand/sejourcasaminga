@@ -66,6 +66,8 @@ const GroupDetail = lazy(() => import("./pages/GroupDetail.tsx"));
 const VerifyClaim = lazy(() => import("./pages/VerifyClaim.tsx"));
 const Verification = lazy(() => import("./pages/Verification.tsx"));
 const Legal = lazy(() => import("./pages/Legal.tsx"));
+const Aide = lazy(() => import("./pages/Aide.tsx"));
+const AideDetail = lazy(() => import("./pages/AideDetail.tsx"));
 const AdminVerifications = lazy(() => import("./pages/admin/AdminVerifications.tsx"));
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -116,6 +118,8 @@ const App = () => (
               <Route path="/hospitalite" element={<Hospitality />} />
               <Route path="/charte" element={<Charter />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/aide" element={<Aide />} />
+              <Route path="/aide/:segment" element={<AideDetail />} />
               <Route path="/mentions-legales" element={<Legal doc="mentions" />} />
               <Route path="/cgu" element={<Legal doc="cgu" />} />
               <Route path="/confidentialite" element={<Legal doc="confidentialite" />} />

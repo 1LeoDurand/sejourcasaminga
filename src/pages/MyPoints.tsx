@@ -5,6 +5,7 @@ import { fr } from "date-fns/locale";
 import { Coins, Sparkles, TrendingUp, TrendingDown, Gift, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -44,6 +45,7 @@ const MyPoints = () => {
 
       <div className="container px-5 py-8 max-w-3xl">
         <div className="mb-6">
+          <HelpLink slug="gagner-des-points" className="mb-2" />
           <h1 className="text-2xl md:text-3xl text-foreground">{t("myPoints.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {t("myPoints.intro")}

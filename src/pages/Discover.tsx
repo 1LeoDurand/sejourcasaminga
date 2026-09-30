@@ -22,6 +22,7 @@ import { lazy, Suspense } from "react";
 const ListingsMap = lazy(() => import("@/components/ListingsMap"));
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HelpLink from "@/components/HelpLink";
 import SEO from "@/components/SEO";
 import { useListings } from "@/hooks/use-listings";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -514,6 +515,7 @@ const Discover = () => {
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
+            <HelpLink slug="sejour-sejourner" className="mb-2" />
             <h1 className="font-serif text-3xl md:text-4xl text-foreground">
               Maisons &amp; appartements à échanger
             </h1>
