@@ -22,7 +22,7 @@ const LanguageSwitcher = ({ compact = false }: { compact?: boolean }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+        className="inline-flex min-h-8 min-w-8 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
         aria-label="Language"
       >
         <Globe className="h-3.5 w-3.5" />
