@@ -198,7 +198,7 @@ function MenuContent({ close }: { close: () => void }) {
       <div className="px-4 py-3 border-b">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={profile?.avatar_url || undefined} />
+            <AvatarImage src={profile?.avatar_url || undefined} alt="" />
             <AvatarFallback>
               {(profile?.display_name || user?.email || "?").slice(0, 1).toUpperCase()}
             </AvatarFallback>
@@ -323,7 +323,7 @@ export function AccountDropdown() {
       aria-label="Ouvrir le menu compte"
     >
       <Avatar className="h-8 w-8">
-        <AvatarImage src={profile?.avatar_url || undefined} />
+        <AvatarImage src={profile?.avatar_url || undefined} alt="" />
         <AvatarFallback className="text-xs">
           {(profile?.display_name || user.email || "?").slice(0, 1).toUpperCase()}
         </AvatarFallback>

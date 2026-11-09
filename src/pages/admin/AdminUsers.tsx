@@ -81,7 +81,7 @@ export default function AdminUsers() {
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={u.avatar_url ?? undefined} />
+                        <AvatarImage src={u.avatar_url ?? undefined} alt="" />
                         <AvatarFallback>{u.display_name?.[0] ?? "?"}</AvatarFallback>
                       </Avatar>
                       <div>
