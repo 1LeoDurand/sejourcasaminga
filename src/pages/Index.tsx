@@ -236,7 +236,7 @@ const Index = () => {
                     <img src={p.image || placePlaceholder} alt={p.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                   </div>
                   <div className="p-4">
-                    <Badge variant="outline" className="text-[0.6rem] mb-1.5">{p.type}</Badge>
+                    <Badge variant="outline" className="text-[0.65rem] mb-1.5">{p.type}</Badge>
                     <h3 className="font-serif text-base text-foreground group-hover:text-primary transition-colors">{p.name}</h3>
                     <p className="mt-1 text-xs text-muted-foreground flex items-center gap-1">
                       <MapPin className="h-3 w-3" /> {p.region || p.city || ""}

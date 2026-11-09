@@ -329,7 +329,7 @@ const Favorites = () => {
                         {values.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {values.slice(0, 3).map((v) => (
-                              <Badge key={v} variant="secondary" className="text-[0.6rem]">
+                              <Badge key={v} variant="secondary" className="text-[0.65rem]">
                                 {v}
                               </Badge>
                             ))}
