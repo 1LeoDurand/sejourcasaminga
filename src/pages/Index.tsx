@@ -57,9 +57,9 @@ const Index = () => {
 
       {/* ═══════════ HERO — Moderne convivial ═══════════ */}
       <section className="bg-background">
-        <div className="mx-auto grid max-w-7xl items-start gap-10 px-5 pb-12 pt-8 md:grid-cols-[minmax(0,600px)_1fr] md:gap-14 md:px-16 md:pb-16 md:pt-12">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-10 px-5 pb-12 pt-8 lg:grid-cols-[minmax(0,600px)_minmax(0,1fr)] md:gap-14 md:px-16 md:pb-16 md:pt-12">
           {/* ── Colonne gauche ── */}
-          <div className="md:pt-6">
+          <div className="lg:pt-6">
             <span className="inline-flex items-center gap-2 rounded-full bg-[#FBEAC2] px-4 py-2 text-[13.5px] font-bold text-[#9A6A1C]">
               <span className="h-2 w-2 rounded-full bg-[#C85A33]" />
               {t("home.heroBadge", { count: listingCount })}
