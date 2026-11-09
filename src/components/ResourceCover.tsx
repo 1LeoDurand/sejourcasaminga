@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BookOpen, Film, Clapperboard, Mic, FileText, Compass, LucideIcon } from "lucide-react";
 
 const TYPE_ICON: Record<string, LucideIcon> = {
@@ -24,8 +25,10 @@ export default function ResourceCover({
   type: string;
   className?: string;
 }) {
-  if (image) {
-    return <img src={image} alt={title} className={className} loading="lazy" />;
+  // Fall back to the typed placeholder when a (third-party) cover fails to load.
+  const [failed, setFailed] = useState(false);
+  if (image && !failed) {
+    return <img src={image} alt={title} className={className} loading="lazy" onError={() => setFailed(true)} />;
   }
   const Icon = TYPE_ICON[type] || FileText;
   return (
