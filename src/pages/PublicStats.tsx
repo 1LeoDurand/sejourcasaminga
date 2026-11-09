@@ -21,8 +21,8 @@ const PIE_COLORS = ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--seco
 function KpiCard({ icon: Icon, value, label, suffix }: { icon: any; value: number | string; label: string; suffix?: string }) {
   return (
     <Card className="border-primary/10">
-      <CardContent className="p-6">
-        <div className="flex items-center gap-3 mb-2">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
           <div className="rounded-full bg-primary/10 p-2 text-primary"><Icon className="h-5 w-5" /></div>
           <p className="text-sm text-muted-foreground">{label}</p>
         </div>
@@ -72,7 +72,7 @@ export default function PublicStats() {
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-12 grid lg:grid-cols-2 gap-8">
+        <div className="container mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Regional distribution */}
           <Card>
             <CardHeader>
