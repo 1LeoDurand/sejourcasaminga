@@ -34,8 +34,8 @@ const Navbar = () => {
           <span className="font-serif text-[18px] font-bold text-foreground tracking-[-0.02em]">Casa Minga</span>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
+        {/* Desktop nav: from lg only, its links need 781px next to the logo */}
+        <div className="hidden lg:flex items-center gap-6">
           <Link to="/discover" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             {t("nav.explore")}
           </Link>
@@ -137,9 +137,12 @@ const Navbar = () => {
         </div>
 
         {/* Mobile */}
-        <div className="flex items-center gap-1 md:hidden">
-          <ThemeToggle />
-          <LanguageSwitcher compact />
+        <div className="flex items-center gap-1 lg:hidden">
+          {/* Below 360px the bar overflows: theme and language move into the menu panel */}
+          <div className="flex items-center gap-1 max-[359px]:hidden">
+            <ThemeToggle />
+            <LanguageSwitcher compact />
+          </div>
           {user ? (
             <AccountDropdown />
           ) : (
@@ -154,7 +157,7 @@ const Navbar = () => {
       </div>
 
       {open && (
-        <div className="md:hidden border-t bg-background px-4 py-5 animate-fade-in">
+        <div className="lg:hidden border-t bg-background px-4 py-5 animate-fade-in">
           <div className="flex flex-col gap-1">
             {[
               { to: "/", label: t("nav.home"), icon: Home },
@@ -176,6 +179,10 @@ const Navbar = () => {
                 </Button>
               </Link>
             ))}
+            <div className="flex items-center gap-2 px-1 pt-2 min-[360px]:hidden">
+              <ThemeToggle />
+              <LanguageSwitcher />
+            </div>
             <div className="my-3 border-t" />
             {user ? (
               <Button variant="outline" className="w-full h-11" size="sm" onClick={() => { handleSignOut(); setOpen(false); }}>
