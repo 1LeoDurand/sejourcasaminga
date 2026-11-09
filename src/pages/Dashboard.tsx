@@ -151,7 +151,7 @@ function DashboardHeader({
       <div className="cm-stripes px-5 py-7 md:px-8">
         <div className="max-w-3xl mx-auto flex flex-col gap-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5">
+            <div className="flex min-w-0 max-w-full items-center gap-3.5">
               <div className="h-16 w-16 shrink-0 rounded-full ring-[3px] ring-[#FFFDF9] dark:ring-card shadow-[0_4px_10px_rgba(120,70,30,0.15)] bg-primary/10 flex items-center justify-center overflow-hidden">
                 {profile?.avatar_url ? (
                   <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
@@ -161,7 +161,7 @@ function DashboardHeader({
               </div>
               <div className="min-w-0">
                 <HelpLink slug="gagner-des-points" className="mb-2" />
-                <h1 className="flex items-center gap-2 font-serif text-[27px] font-extrabold text-foreground">
+                <h1 className="flex flex-wrap items-center gap-x-2 gap-y-1 font-serif text-[27px] font-extrabold text-foreground [overflow-wrap:anywhere]">
                   {t("dashboard.greeting", { name: displayName })}
                   <VerifiedBadge userId={userId} />
                 </h1>
@@ -370,7 +370,7 @@ function ProfileTab({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between">
-              <h2 className="text-xl font-serif text-foreground">{displayName}</h2>
+              <h2 className="text-xl font-serif text-foreground [overflow-wrap:anywhere]">{displayName}</h2>
               {/* Rating placeholder */}
             </div>
             <Link to="/edit-profile" className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 mt-1">
