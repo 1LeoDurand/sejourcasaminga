@@ -252,7 +252,7 @@ const ResourceDetail = () => {
 
           {resource.content ? (
             <div
-              className="prose prose-stone max-w-none prose-headings:font-serif prose-h2:text-xl prose-a:text-primary"
+              className="prose prose-stone max-w-none prose-headings:font-serif prose-h2:text-xl prose-a:text-primary prose-table:block prose-table:overflow-x-auto"
               dangerouslySetInnerHTML={{ __html: isArticleLike ? articleBody : resource.content }}
             />
           ) : (
