@@ -63,7 +63,7 @@ const HowItWorks = () => {
               </Button>
             </Link>
             <Link to="/discover">
-              <Button size="lg" variant="outline" className="rounded-full border-white/30 text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" className="rounded-full border-white/30 bg-transparent text-white hover:bg-white/10">
                 {t("howItWorks.ctaExplore")}
               </Button>
             </Link>
@@ -166,7 +166,7 @@ const HowItWorks = () => {
               </Button>
             </Link>
             <Link to="/discover">
-              <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/15 hover:text-white rounded-full">
+              <Button size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/15 hover:text-white rounded-full">
                 {t("howItWorks.finalCtaExplore")}
               </Button>
             </Link>
