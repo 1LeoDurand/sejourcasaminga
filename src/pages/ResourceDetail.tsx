@@ -302,7 +302,7 @@ const ResourceDetail = () => {
                       type={s.type}
                       className="w-full h-28 object-cover"
                     />
-                    <p className="p-3 text-sm font-medium text-foreground group-hover:text-primary line-clamp-2">
+                    <p className="p-3 text-sm font-medium text-foreground group-hover:text-primary">
                       {s.title}
                     </p>
                   </Link>
