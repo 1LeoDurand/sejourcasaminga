@@ -16,7 +16,7 @@
     "learnMore": "Learn more",
     "readArticle": "Read article",
     "viewAll": "View all",
-    "signUpFree": "Sign up — it's free",
+    "signUpFree": "Sign up, it's free",
     "signIn": "Sign in",
     "signOut": "Sign out",
     "signUp": "Sign up",
@@ -64,7 +64,7 @@
     "charter": "Hospitality charter",
     "contact": "Contact",
     "help": "Help",
-    "copyright": "© 2026 Casa Minga — The house of the commons. Made with care for collectives who share."
+    "copyright": "© 2026 Casa Minga · The house of the commons. Made with care for collectives who share."
   },
   "home": {
     "heroTitle": "Swap your home.",
@@ -97,9 +97,9 @@
     "howItWorks": "How it works",
     "howItWorksSub": "Four simple steps to swap your place and travel differently.",
     "waysTitle": "Five ways to stay",
-    "waysSub": "From a simple home swap to full immersion in a collective — pick what suits you.",
+    "waysSub": "From a simple home swap to full immersion in a collective: pick what suits you.",
     "exchangeModelEyebrow": "How we exchange",
-    "exchangeModelTitle": "Reciprocal, or in points — never in money",
+    "exchangeModelTitle": "Reciprocal, or in points, never in money",
     "reciprocalTitle": "Reciprocal exchange",
     "reciprocalBody": "You host in turn: everyone opens their door, no payment involved.",
     "pointsTitle": "Hospitality points",
@@ -162,7 +162,7 @@
     "email": "Email",
     "password": "Password",
     "login": "Sign in",
-    "signup": "Sign up — it's free",
+    "signup": "Sign up, it's free",
     "forgotPassword": "Forgot password?",
     "noAccount": "Don't have an account yet?",
     "signupHere": "Sign up",
@@ -225,7 +225,7 @@
     "earnPoints": "Earn points, exchange more",
     "recentActivity": "Recent activity",
     "referFriend": "Refer a friend",
-    "referText": "Share your code: you earn <strong>+50 pts</strong> and your referee <strong>+25 pts</strong> 🎁",
+    "referText": "Share your code: you earn <strong>+50 pts</strong> and your referee <strong>+25 pts</strong>",
     "codeGenerating": "Code being generated…",
     "successfulReferrals": "{{count}} successful referral(s)",
     "addPlace": "Add a place",
@@ -285,7 +285,7 @@
     "notNow": "Not now",
     "start": "Get started",
     "exploreFirst": "Explore first",
-    "bannerCompleteTitle": "Step 2 — Enrich the profile of {{name}}",
+    "bannerCompleteTitle": "Step 2: enrich the profile of {{name}}",
     "bannerCompleteText": "Values, governance, hosting… builds trust and improves exchanges.",
     "bannerCompleteCta": "Complete the profile",
     "bannerProposeTitle": "Would you like to offer a stay at {{name}}?",
@@ -296,7 +296,7 @@
     "bannerFirstStayTitle": "Offer your first stay",
     "bannerFirstStayText": "You're a member of a place: invite the community to come and stay.",
     "bannerFirstStayCta": "Create a stay listing",
-    "greeting": "Hello {{name}} 👋",
+    "greeting": "Hello {{name}}",
     "profilePct": "Profile {{pct}}% complete",
     "pendingActions": "To handle",
     "receivedToHandle_one": "{{count}} received request to handle",
@@ -304,11 +304,11 @@
     "sentPending_one": "{{count}} sent request pending",
     "sentPending_other": "{{count}} sent requests pending",
     "follow": "Follow",
-    "allCaughtUp": "Nothing to handle right now 🎉",
+    "allCaughtUp": "Nothing to handle right now",
     "recommendedForYou": "Recommended for you",
     "setPrefsText": "Set your preferences to get tailored recommendations.",
     "setPrefsCta": "Set your preferences",
-    "noRecs": "No recommendations yet — explore the habitats."
+    "noRecs": "No recommendations yet. Explore the habitats."
   },
   "discover": {
     "title": "Find a stay",
@@ -504,7 +504,7 @@
     "access": "Access to common spaces",
     "accessPlaceholder": "e.g.: Garden, kitchen, laundry",
     "interaction": "Interaction level",
-    "interactionPlaceholder": "e.g.: Optional — Friday drinks",
+    "interactionPlaceholder": "e.g.: Optional, Friday drinks",
     "availability": "Availability",
     "availabilityPlaceholder": "e.g.: Available July-August and weekends",
     "submit": "Publish the stay",
@@ -695,7 +695,7 @@
     "freeTitle": "Free until June 2026",
     "freeBody": "Casa Minga is currently free to allow the first places and members to join the network, create their listing and start offering stays.",
     "modelTitle": "A simple annual membership",
-    "modelBody": "Starting June 2026, Casa Minga will run on an annual membership allowing you to publish, receive requests and participate fully in the network — simply, with no per-night fees or per-stay commission.",
+    "modelBody": "Starting June 2026, Casa Minga will run on an annual membership allowing you to publish, receive requests and participate fully in the network. Simply, with no per-night fees or per-stay commission.",
     "stayTypesTitle": "What kind of stay can you offer?",
     "stayTypesSub": "Four formats, depending on your place and your desire.",
     "stay1Title": "Private room",
@@ -720,9 +720,9 @@
     "finalCtaExplore": "Explore places"
   },
   "about": {
-    "heroSubtitle": "A “minga” is collective work where everyone gives a little of themselves for the common good. That's where our name — and our whole project — comes from.",
+    "heroSubtitle": "A “minga” is collective work where everyone gives a little of themselves for the common good. That's where our name, and our whole project, comes from.",
     "reasonTitle": "Our purpose",
-    "reason1": "Everywhere, people are choosing to live differently: in cohousing, ecovillages, cooperatives or committed shared homes. These places brim with experience, know-how and a desire to share — yet they often remain isolated from one another.",
+    "reason1": "Everywhere, people are choosing to live differently: in cohousing, ecovillages, cooperatives or committed shared homes. These places brim with experience, know-how and a desire to share, yet they often remain isolated from one another.",
     "reason2": "Casa Minga connects these collectives. The platform lets you offer a stay in your home and be welcomed elsewhere, without money, in a spirit of exchange and reciprocity. You're not renting a room: you're opening your door to someone who shares the same way of seeing the world.",
     "valuesTitle": "Our values",
     "value1Title": "Trust above all",
@@ -739,16 +739,16 @@
   "hospitality": {
     "heroTitle": "Hospitality between collectives",
     "heroSubtitle": "A different idea of travel: not consuming a place, but being welcomed by the people who bring it to life.",
-    "intro1": "Conventional tourism puts distance between host and visitor: one serves, the other pays. The hospitality Casa Minga stands for is the opposite — equality, giving, encounter. We welcome one another between collectives because we share the same way of inhabiting the world.",
+    "intro1": "Conventional tourism puts distance between host and visitor: one serves, the other pays. The hospitality Casa Minga stands for is the opposite: equality, giving, encounter. We welcome one another between collectives because we share the same way of inhabiting the world.",
     "intro2": "This bond is anything but abstract: it's lived around a table, in a shared garden, during a collective work party or a simple conversation by the fire. It's in these moments that friendships, ideas and sometimes projects are born and spread from one place to another.",
     "pillarsTitle": "The three pillars",
     "pillar1Title": "Welcome, don't just host",
-    "pillar1Body": "Receiving a traveller isn't about providing a room. It's sharing a meal, an evening, the daily life of a place — and letting a real encounter happen.",
+    "pillar1Body": "Receiving a traveller isn't about providing a room. It's sharing a meal, an evening, the daily life of a place, and letting a real encounter happen.",
     "pillar2Title": "Reciprocity rather than money",
     "pillar2Body": "At Casa Minga, we welcome each other without payment. Host today, traveller tomorrow: the exchange circulates, and that's what builds a network of trust between collectives.",
     "pillar3Title": "Between peers who understand each other",
     "pillar3Body": "People living in ecovillages and cohousing share common questions. Welcoming one another means exchanging practices, finding inspiration and feeling understood.",
-    "ctaText": "This hospitality rests on shared commitments — discover them in our charter.",
+    "ctaText": "This hospitality rests on shared commitments. Discover them in our charter.",
     "ctaCharter": "Read the charter",
     "ctaExplore": "Explore habitats"
   },
@@ -788,7 +788,7 @@
   },
   "notFound": {
     "title": "This page got lost",
-    "message": "The page you're looking for doesn't exist or has been moved. No worries — here are a few ways to find your way back.",
+    "message": "The page you're looking for doesn't exist or has been moved. No worries, here are a few ways to find your way back.",
     "home": "Back to home",
     "linkDiscover": "Explore habitats",
     "linkResources": "See resources",
@@ -797,11 +797,11 @@
   "author": {
     "name": "Léo Durand",
     "role": "Founder of Casa Minga",
-    "tagline": "Founder of Casa Minga — he writes about collective living and travelling differently.",
+    "tagline": "Founder of Casa Minga, he writes about collective living and travelling differently.",
     "metaDesc": "Léo Durand, founder of Casa Minga: he writes about participatory housing, ecovillages and travelling differently.",
     "linkAbout": "More about Casa Minga",
     "linkContact": "Get in touch",
-    "bio": "Léo Durand is the founder of Casa Minga. For years he has been drawn to other ways of living and travelling: participatory housing, ecovillages, lasting shared homes, and all the forms of collective life that look for a balance between privacy and sharing. Casa Minga grew from a simple conviction: you understand these ways of living far better by meeting them from the inside — by staying with the people who practise them — than by reading theory from a distance.\n\nThrough the articles and guides in this library, he tries to make sometimes-technical topics approachable — legal structures, financing, governance, materials — without losing sight of the human experience behind them. The tone aims to be honest: he writes about the successes as much as the real limits of these projects. When he isn't writing, he travels, photographs the places and people he meets, and helps grow the network of mutual aid between homes that Casa Minga is building."
+    "bio": "Léo Durand is the founder of Casa Minga. For years he has been drawn to other ways of living and travelling: participatory housing, ecovillages, lasting shared homes, and all the forms of collective life that look for a balance between privacy and sharing. Casa Minga grew from a simple conviction: you understand these ways of living far better by meeting them from the inside (by staying with the people who practise them) than by reading theory from a distance.\n\nThrough the articles and guides in this library, he tries to make sometimes-technical topics approachable (legal structures, financing, governance, materials) without losing sight of the human experience behind them. The tone aims to be honest: he writes about the successes as much as the real limits of these projects. When he isn't writing, he travels, photographs the places and people he meets, and helps grow the network of mutual aid between homes that Casa Minga is building."
   },
   "aide": {
     "title": "Help center",
@@ -871,7 +871,7 @@
     "moreMonths": "See following months",
     "seeStays": "See stays",
     "contact": "Contact",
-    "noPayment": "No payment — money never changes hands",
+    "noPayment": "No payment, money never changes hands",
     "seeAllPhotos": "See all {{count}} photos"
   },
   "memberProfile": {
@@ -967,13 +967,13 @@
     "strongTitle": "This place already exists on Casa Minga",
     "strongBody": "Join or claim it rather than creating a duplicate. If it really is a different place, change the name or the city.",
     "mediumTitle": "A similar place may already exist",
-    "mediumBody": "Before creating a duplicate, check whether it's yours — you can claim it to become its official manager.",
+    "mediumBody": "Before creating a duplicate, check whether it's yours: you can claim it to become its official manager.",
     "claim": "Claim",
     "view": "View",
-    "dismiss": "None of these — it's a new place",
+    "dismiss": "None of these: it's a new place",
     "noLocation": "—",
-    "cityHint_one": "{{count}} other place exists in {{city}} — make sure yours isn't there.",
-    "cityHint_other": "{{count}} other places exist in {{city}} — make sure yours isn't there.",
+    "cityHint_one": "{{count}} other place exists in {{city}}. Make sure yours isn't there.",
+    "cityHint_other": "{{count}} other places exist in {{city}}. Make sure yours isn't there.",
     "cityLink": "See places in {{city}}"
   },
   "placeGallery": {
@@ -981,7 +981,7 @@
     "close": "Close",
     "prev": "Previous photo",
     "next": "Next photo",
-    "photoAlt": "{{name}} — photo {{index}}"
+    "photoAlt": "{{name}}, photo {{index}}"
   },
   "hostReview": {
     "cta": "Review {{name}}",
@@ -1012,7 +1012,7 @@
     "earnAvailability": "Add availability",
     "earnReferral": "Refer a friend",
     "earnHosting": "Host a points-based stay",
-    "giftNote": "You spend points to be hosted on a points-based stay — the cost is set by the host.",
+    "giftNote": "You spend points to be hosted on a points-based stay: the cost is set by the host.",
     "history": "History",
     "loading": "Loading…",
     "emptyTitle": "No activity yet",
@@ -1034,7 +1034,7 @@
     "allRegions": "All",
     "sortLabel": "Sort",
     "sortRecent": "Recent",
-    "sortAlpha": "A–Z",
+    "sortAlpha": "A-Z",
     "emptyTitle": "No favourites yet",
     "emptyHint": "Explore the places and add some to your favourites.",
     "discover": "Discover",
@@ -1086,7 +1086,7 @@
     "cost": "Cost:",
     "pointsValue_one": "{{count}} point",
     "pointsValue_other": "{{count}} points",
-    "debited": "— debited",
+    "debited": "(debited)",
     "editDates": "Edit dates",
     "cancelRequest": "Cancel request",
     "unconfirm": "Un-confirm",
@@ -1101,7 +1101,7 @@
     "toastCancelled": "Request cancelled",
     "toastCompleted": "Stay marked as completed",
     "reverted": "Request set back to pending",
-    "revertedRefund": "Request set back to pending — points refunded",
+    "revertedRefund": "Request set back to pending, points refunded",
     "datesUpdated": "Dates updated"
   },
   "stayRequests": {
@@ -1116,7 +1116,7 @@
     "filterCancelled": "Cancelled",
     "filterCompleted": "Completed",
     "emptyTitle": "You haven't requested a stay yet",
-    "emptyHint": "Find a habitat that inspires you and send your first request — that's how hosting begins.",
+    "emptyHint": "Find a habitat that inspires you and send your first request. That's how hosting begins.",
     "discover": "Discover stays",
     "noneInCategory": "No {{status}} requests.",
     "thisCategory": "in this category",

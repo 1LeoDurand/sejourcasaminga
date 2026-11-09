@@ -688,7 +688,7 @@ function ExchangeCard({ request, userId }: { request: any; userId: string }) {
         <div className="flex items-start justify-between gap-2 mb-2">
           <div>
             <p className="text-xs text-muted-foreground">
-              {format(new Date(request.start_date), "dd MMM yyyy", { locale: fr })} – {format(new Date(request.end_date), "dd MMM yyyy", { locale: fr })}
+              du {format(new Date(request.start_date), "dd MMM yyyy", { locale: fr })} au {format(new Date(request.end_date), "dd MMM yyyy", { locale: fr })}
             </p>
             <h3 className="font-serif text-base text-foreground mt-0.5">{request.listings?.title || t("dashboard.stay")}</h3>
           </div>

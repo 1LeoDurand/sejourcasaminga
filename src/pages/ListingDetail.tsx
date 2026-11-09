@@ -926,7 +926,7 @@ const ListingDetail = () => {
                     {/* Contextual help distinguishing reciprocal vs points */}
                     {exchangeType === "reciprocal" && (
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Vous accueillez à votre tour — aucun point échangé.
+                        Vous accueillez à votre tour, aucun point échangé.
                       </p>
                     )}
                     {exchangeType === "points" && (
@@ -965,7 +965,7 @@ const ListingDetail = () => {
                     {blockingPeriods.map((b, i) => (
                       <p key={i} className="mt-0.5 text-xs">
                         {b.start_date} → {b.end_date}
-                        {b.reason ? ` — ${b.reason}` : ""}
+                        {b.reason ? `, ${b.reason}` : ""}
                       </p>
                     ))}
                   </div>

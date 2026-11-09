@@ -52,7 +52,7 @@ function AdjustDialog({ row }: { row: AdminPointRow }) {
       </DialogTrigger>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Ajuster les points — {row.display_name ?? row.user_id.slice(0, 8)}</DialogTitle>
+          <DialogTitle>Ajuster les points : {row.display_name ?? row.user_id.slice(0, 8)}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>

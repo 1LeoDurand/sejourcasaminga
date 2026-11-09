@@ -16,7 +16,7 @@
     "learnMore": "Saber más",
     "readArticle": "Leer el artículo",
     "viewAll": "Ver todo",
-    "signUpFree": "Regístrate — es gratis",
+    "signUpFree": "Regístrate, es gratis",
     "signIn": "Iniciar sesión",
     "signOut": "Cerrar sesión",
     "signUp": "Registrarse",
@@ -64,7 +64,7 @@
     "charter": "Carta de hospitalidad",
     "contact": "Contacto",
     "help": "Ayuda",
-    "copyright": "© 2026 Casa Minga — La casa de los bienes comunes. Hecho con cariño para los colectivos que comparten."
+    "copyright": "© 2026 Casa Minga · La casa de los bienes comunes. Hecho con cariño para los colectivos que comparten."
   },
   "home": {
     "heroTitle": "Intercambia tu casa.",
@@ -162,7 +162,7 @@
     "email": "Email",
     "password": "Contraseña",
     "login": "Iniciar sesión",
-    "signup": "Regístrate — es gratis",
+    "signup": "Regístrate, es gratis",
     "forgotPassword": "¿Has olvidado tu contraseña?",
     "noAccount": "¿Aún no tienes una cuenta?",
     "signupHere": "Regístrate",
@@ -225,7 +225,7 @@
     "earnPoints": "Gana puntos, intercambia más",
     "recentActivity": "Actividad reciente",
     "referFriend": "Invita a un amigo",
-    "referText": "Comparte tu código: ganas <strong>+50 pts</strong> y tu invitado <strong>+25 pts</strong> 🎁",
+    "referText": "Comparte tu código: ganas <strong>+50 pts</strong> y tu invitado <strong>+25 pts</strong>",
     "codeGenerating": "Generando código...",
     "successfulReferrals": "{{count}} invitación(es) con éxito",
     "addPlace": "Añadir un lugar",
@@ -285,7 +285,7 @@
     "notNow": "Ahora no",
     "start": "Empezar",
     "exploreFirst": "Explorar primero",
-    "bannerCompleteTitle": "Paso 2 — Enriquece el perfil de {{name}}",
+    "bannerCompleteTitle": "Paso 2: enriquece el perfil de {{name}}",
     "bannerCompleteText": "Valores, gobernanza, acogida… genera confianza y mejora los intercambios.",
     "bannerCompleteCta": "Completar el perfil",
     "bannerProposeTitle": "¿Quieres ofrecer una estancia en {{name}}?",
@@ -296,7 +296,7 @@
     "bannerFirstStayTitle": "Ofrece tu primera estancia",
     "bannerFirstStayText": "Eres miembro de un lugar: invita a la comunidad a venir a alojarse.",
     "bannerFirstStayCta": "Crear una ficha de estancia",
-    "greeting": "Hola {{name}} 👋",
+    "greeting": "Hola {{name}}",
     "profilePct": "Perfil {{pct}}% completo",
     "pendingActions": "Por gestionar",
     "receivedToHandle_one": "{{count}} solicitud recibida por gestionar",
@@ -304,11 +304,11 @@
     "sentPending_one": "{{count}} solicitud enviada pendiente",
     "sentPending_other": "{{count}} solicitudes enviadas pendientes",
     "follow": "Seguir",
-    "allCaughtUp": "Nada por gestionar por ahora 🎉",
+    "allCaughtUp": "Nada por gestionar por ahora",
     "recommendedForYou": "Recomendado para ti",
     "setPrefsText": "Indica tus preferencias para recibir recomendaciones a medida.",
     "setPrefsCta": "Indicar mis preferencias",
-    "noRecs": "Aún no hay recomendaciones — explora los hábitats."
+    "noRecs": "Aún no hay recomendaciones. Explora los hábitats."
   },
   "discover": {
     "title": "Encuentra una estancia",
@@ -504,7 +504,7 @@
     "access": "Acceso a los espacios comunes",
     "accessPlaceholder": "p. ej.: Jardín, cocina, lavandería",
     "interaction": "Nivel de interacción",
-    "interactionPlaceholder": "p. ej.: Opcional — aperitivo del viernes",
+    "interactionPlaceholder": "p. ej.: Opcional, aperitivo del viernes",
     "availability": "Disponibilidad",
     "availabilityPlaceholder": "p. ej.: Disponible en julio-agosto y fines de semana",
     "submit": "Publicar la estancia",
@@ -720,7 +720,7 @@
     "finalCtaExplore": "Explorar los lugares"
   },
   "about": {
-    "heroSubtitle": "Una «minga» es un trabajo colectivo en el que cada quien aporta un poco de sí para el bien común. De ahí viene nuestro nombre — y todo nuestro proyecto.",
+    "heroSubtitle": "Una «minga» es un trabajo colectivo en el que cada quien aporta un poco de sí para el bien común. De ahí viene nuestro nombre, y todo nuestro proyecto.",
     "reasonTitle": "Nuestra razón de ser",
     "reason1": "En todas partes, hay quienes eligen vivir de otra manera: en vivienda participativa, en ecoaldeas, en cooperativas o en pisos compartidos comprometidos. Estos lugares rebosan de experiencia, saberes y ganas de compartir, pero a menudo permanecen aislados entre sí.",
     "reason2": "Casa Minga conecta estos colectivos. La plataforma permite ofrecer una estancia en tu casa y ser acogido en otro lugar, sin dinero, con una lógica de intercambio y reciprocidad. No alquilas una habitación: abres tu puerta a alguien que comparte tu forma de ver el mundo.",
@@ -743,12 +743,12 @@
     "intro2": "Este vínculo no tiene nada de abstracto: se vive alrededor de una mesa, en un huerto compartido, durante una obra colectiva o una simple conversación junto al fuego. En esos momentos nacen las amistades, las ideas y a veces los proyectos que se propagan de un lugar a otro.",
     "pillarsTitle": "Los tres pilares",
     "pillar1Title": "Acoger, no alojar",
-    "pillar1Body": "Recibir a un viajero no es poner una habitación a disposición. Es compartir una comida, una velada, el día a día de un lugar — y dejar que ocurra un verdadero encuentro.",
+    "pillar1Body": "Recibir a un viajero no es poner una habitación a disposición. Es compartir una comida, una velada, el día a día de un lugar, y dejar que ocurra un verdadero encuentro.",
     "pillar2Title": "La reciprocidad antes que el dinero",
     "pillar2Body": "En Casa Minga nos acogemos sin pagar. Hoy anfitrión, mañana viajero: el intercambio circula, y eso es lo que crea una red de confianza entre colectivos.",
     "pillar3Title": "Entre pares que se entienden",
     "pillar3Body": "Quienes viven en ecoaldeas y viviendas participativas comparten preguntas comunes. Acogerse entre ellos es intercambiar prácticas, inspirarse y sentirse comprendido.",
-    "ctaText": "Esta hospitalidad se apoya en compromisos compartidos — descúbrelos en nuestra carta.",
+    "ctaText": "Esta hospitalidad se apoya en compromisos compartidos. Descúbrelos en nuestra carta.",
     "ctaCharter": "Leer la carta",
     "ctaExplore": "Explorar los hábitats"
   },
@@ -797,11 +797,11 @@
   "author": {
     "name": "Léo Durand",
     "role": "Fundador de Casa Minga",
-    "tagline": "Fundador de Casa Minga — escribe sobre la vida colectiva y otra forma de viajar.",
+    "tagline": "Fundador de Casa Minga, escribe sobre la vida colectiva y otra forma de viajar.",
     "metaDesc": "Léo Durand, fundador de Casa Minga: escribe sobre hábitat participativo, ecoaldeas y otra forma de viajar.",
     "linkAbout": "Más sobre Casa Minga",
     "linkContact": "Contactar",
-    "bio": "Léo Durand es el fundador de Casa Minga. Desde hace años le interesan otras formas de habitar y de viajar: hábitats participativos, ecoaldeas, viviendas compartidas duraderas y todas las formas de vida colectiva que buscan un equilibrio entre intimidad y lo común. Casa Minga nació de una convicción sencilla: se entienden mejor estos modos de vida encontrándolos desde dentro, alojándose con quienes los practican, que leyendo teorías a distancia.\n\nA través de los artículos y guías de esta biblioteca, intenta hacer accesibles temas a veces técnicos —estatutos jurídicos, financiación, gobernanza, materiales— sin perder de vista la experiencia humana que los sostiene. El tono quiere ser honesto: habla tanto de los logros como de los límites reales de estos proyectos. Cuando no escribe, viaja, fotografía los lugares y las personas que encuentra, y teje la red de ayuda mutua entre hábitats que Casa Minga quiere hacer crecer."
+    "bio": "Léo Durand es el fundador de Casa Minga. Desde hace años le interesan otras formas de habitar y de viajar: hábitats participativos, ecoaldeas, viviendas compartidas duraderas y todas las formas de vida colectiva que buscan un equilibrio entre intimidad y lo común. Casa Minga nació de una convicción sencilla: se entienden mejor estos modos de vida encontrándolos desde dentro, alojándose con quienes los practican, que leyendo teorías a distancia.\n\nA través de los artículos y guías de esta biblioteca, intenta hacer accesibles temas a veces técnicos (estatutos jurídicos, financiación, gobernanza, materiales) sin perder de vista la experiencia humana que los sostiene. El tono quiere ser honesto: habla tanto de los logros como de los límites reales de estos proyectos. Cuando no escribe, viaja, fotografía los lugares y las personas que encuentra, y teje la red de ayuda mutua entre hábitats que Casa Minga quiere hacer crecer."
   },
   "aide": {
     "title": "Centro de ayuda",
@@ -871,7 +871,7 @@
     "moreMonths": "Ver los meses siguientes",
     "seeStays": "Ver las estancias",
     "contact": "Contactar",
-    "noPayment": "Sin pago — el dinero nunca cambia de manos",
+    "noPayment": "Sin pago, el dinero nunca cambia de manos",
     "seeAllPhotos": "Ver las {{count}} fotos"
   },
   "memberProfile": {
@@ -967,13 +967,13 @@
     "strongTitle": "Este lugar ya existe en Casa Minga",
     "strongBody": "Únete o reivindícalo en vez de crear un duplicado. Si de verdad es otro lugar, cambia el nombre o la ciudad.",
     "mediumTitle": "Puede que ya exista un lugar similar",
-    "mediumBody": "Antes de crear un duplicado, comprueba si es el tuyo — puedes reivindicarlo para ser su gestor·a oficial.",
+    "mediumBody": "Antes de crear un duplicado, comprueba si es el tuyo: puedes reivindicarlo para ser su gestor·a oficial.",
     "claim": "Reivindicar",
     "view": "Ver",
-    "dismiss": "Ninguno de estos — es un lugar nuevo",
+    "dismiss": "Ninguno de estos: es un lugar nuevo",
     "noLocation": "—",
-    "cityHint_one": "Existe {{count}} otro lugar en {{city}} — comprueba que el tuyo no esté.",
-    "cityHint_other": "Existen {{count}} otros lugares en {{city}} — comprueba que el tuyo no esté.",
+    "cityHint_one": "Existe {{count}} otro lugar en {{city}}. Comprueba que el tuyo no esté.",
+    "cityHint_other": "Existen {{count}} otros lugares en {{city}}. Comprueba que el tuyo no esté.",
     "cityLink": "Ver lugares de {{city}}"
   },
   "placeGallery": {
@@ -981,7 +981,7 @@
     "close": "Cerrar",
     "prev": "Foto anterior",
     "next": "Foto siguiente",
-    "photoAlt": "{{name}} — foto {{index}}"
+    "photoAlt": "{{name}}, foto {{index}}"
   },
   "hostReview": {
     "cta": "Valorar a {{name}}",
@@ -1012,7 +1012,7 @@
     "earnAvailability": "Añadir disponibilidades",
     "earnReferral": "Recomendar a un amigo",
     "earnHosting": "Acoger una estancia pagada con puntos",
-    "giftNote": "Gastas puntos para ser acogido en una estancia pagada con puntos — el coste lo fija el anfitrión.",
+    "giftNote": "Gastas puntos para ser acogido en una estancia pagada con puntos: el coste lo fija el anfitrión.",
     "history": "Historial",
     "loading": "Cargando…",
     "emptyTitle": "Aún no hay movimientos",
@@ -1034,7 +1034,7 @@
     "allRegions": "Todas",
     "sortLabel": "Orden",
     "sortRecent": "Reciente",
-    "sortAlpha": "A–Z",
+    "sortAlpha": "A-Z",
     "emptyTitle": "Aún no hay favoritos",
     "emptyHint": "Explora los lugares y añade algunos a tus favoritos.",
     "discover": "Descubrir",
@@ -1086,7 +1086,7 @@
     "cost": "Coste:",
     "pointsValue_one": "{{count}} punto",
     "pointsValue_other": "{{count}} puntos",
-    "debited": "— descontados",
+    "debited": "(descontados)",
     "editDates": "Modificar las fechas",
     "cancelRequest": "Cancelar la solicitud",
     "unconfirm": "Desconfirmar",
@@ -1101,7 +1101,7 @@
     "toastCancelled": "Solicitud cancelada",
     "toastCompleted": "Estancia marcada como realizada",
     "reverted": "Solicitud puesta de nuevo en espera",
-    "revertedRefund": "Solicitud puesta de nuevo en espera — puntos reembolsados",
+    "revertedRefund": "Solicitud puesta de nuevo en espera, puntos reembolsados",
     "datesUpdated": "Fechas actualizadas"
   },
   "stayRequests": {
@@ -1116,7 +1116,7 @@
     "filterCancelled": "Canceladas",
     "filterCompleted": "Realizadas",
     "emptyTitle": "Aún no has solicitado ninguna estancia",
-    "emptyHint": "Encuentra un hábitat que te inspire y envía tu primera solicitud — así empieza la acogida.",
+    "emptyHint": "Encuentra un hábitat que te inspire y envía tu primera solicitud. Así empieza la acogida.",
     "discover": "Descubrir estancias",
     "noneInCategory": "Ninguna solicitud {{status}}.",
     "thisCategory": "en esta categoría",

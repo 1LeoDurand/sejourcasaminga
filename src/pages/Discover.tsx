@@ -61,8 +61,8 @@ const VALUE_THEMES = [
 type ThemeKey = (typeof VALUE_THEMES)[number]["key"];
 
 const SIZE_BUCKETS = [
-  { key: "sm", label: "1–5 personnes (petit)", min: 1, max: 5 },
-  { key: "md", label: "6–20 personnes (moyen)", min: 6, max: 20 },
+  { key: "sm", label: "1 à 5 personnes (petit)", min: 1, max: 5 },
+  { key: "md", label: "6 à 20 personnes (moyen)", min: 6, max: 20 },
   { key: "lg", label: "20+ personnes (grand)", min: 21, max: Infinity },
 ] as const;
 type SizeKey = (typeof SIZE_BUCKETS)[number]["key"];

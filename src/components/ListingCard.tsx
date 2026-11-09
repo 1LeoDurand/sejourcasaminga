@@ -75,7 +75,7 @@ const ListingCard = ({ listing }: Props) => {
   const reviewCount = listing.review_count ?? stats?.review_count ?? null;
 
   const dateRange = stats?.next_start && stats?.next_end
-    ? `${format(new Date(stats.next_start), "d MMM", { locale: fr })} – ${format(new Date(stats.next_end), "d MMM", { locale: fr })}`
+    ? `du ${format(new Date(stats.next_start), "d MMM", { locale: fr })} au ${format(new Date(stats.next_end), "d MMM", { locale: fr })}`
     : null;
 
   return (
@@ -97,7 +97,7 @@ const ListingCard = ({ listing }: Props) => {
                   <div className="aspect-[4/3] overflow-hidden">
                     <img
                       src={src}
-                      alt={`${listing.title} – photo ${i + 1}`}
+                      alt={`${listing.title}, photo ${i + 1}`}
                       className="h-full w-full object-cover"
                       loading="lazy"
                     />

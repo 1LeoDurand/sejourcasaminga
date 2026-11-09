@@ -117,7 +117,7 @@ export default function MergePlaceDialog({ open, onOpenChange, source }: Props) 
                 <p className="font-medium text-foreground">À supprimer (source)</p>
                 <p className="text-muted-foreground">
                   {source.name}
-                  {source.city ? ` — ${source.city}` : ""}
+                  {source.city ? `, ${source.city}` : ""}
                 </p>
               </div>
             </div>

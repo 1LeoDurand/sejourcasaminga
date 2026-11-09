@@ -426,7 +426,7 @@ const EditListing = () => {
             </div>
             <div>
               <Label>Niveau d'interaction</Label>
-              <Input value={form.interaction_level} onChange={(e) => set("interaction_level", e.target.value)} placeholder="ex: Optionnel — apéro du vendredi" />
+              <Input value={form.interaction_level} onChange={(e) => set("interaction_level", e.target.value)} placeholder="ex: Optionnel, apéro du vendredi" />
             </div>
             <div>
               <Label>Conditions particulières</Label>

@@ -165,7 +165,7 @@ const CalendarPage = () => {
           <div className="sticky top-16 z-30 rounded-xl border bg-card shadow-lg p-4 space-y-3 mb-6">
             <p className="text-sm font-medium text-foreground">Ajouter une période</p>
             <p className="text-xs text-muted-foreground">
-              {format(addingRange.start, "dd MMM yyyy", { locale: fr })} – {format(addingRange.end, "dd MMM yyyy", { locale: fr })}
+              du {format(addingRange.start, "dd MMM yyyy", { locale: fr })} au {format(addingRange.end, "dd MMM yyyy", { locale: fr })}
             </p>
             <div className="flex flex-wrap gap-2">
               {statusOptions.map((opt) => (
@@ -201,7 +201,7 @@ const CalendarPage = () => {
                 <div key={av.id} className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm ${opt?.color || ""}`}>
                   <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${opt?.dot || "bg-muted-foreground"}`} />
                   <span className="flex-1">
-                    {format(new Date(av.start_date), "dd MMM", { locale: fr })} – {format(new Date(av.end_date), "dd MMM yyyy", { locale: fr })}
+                    du {format(new Date(av.start_date), "dd MMM", { locale: fr })} au {format(new Date(av.end_date), "dd MMM yyyy", { locale: fr })}
                   </span>
                   <span className="text-xs opacity-70">{opt?.label}</span>
                   <button onClick={() => deleteAvailability.mutate(av.id)} className="text-destructive hover:bg-destructive/10 rounded p-1 ml-1">×</button>

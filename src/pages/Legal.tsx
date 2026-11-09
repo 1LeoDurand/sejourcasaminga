@@ -15,7 +15,7 @@ const EDITOR = {
   siret: "824 430 375 00025",
   rcs: "RCS Montpellier 824 430 375",
   tva: "FR75 824 430 375",
-  ape: "70.21Z — Conseil en relations publiques et communication",
+  ape: "70.21Z, Conseil en relations publiques et communication",
   email: "ecommunication@etik.com",
 };
 
@@ -36,10 +36,10 @@ function MentionsLegales() {
           Le site <strong>sejour.casaminga.com</strong> (« Casa Minga Séjours ») est édité par&nbsp;:
         </p>
         <ul>
-          <li><strong>{EDITOR.name}</strong> — {EDITOR.status}</li>
+          <li><strong>{EDITOR.name}</strong>, {EDITOR.status}</li>
           <li>Enseigne&nbsp;: {EDITOR.brand}</li>
           <li>Siège&nbsp;: {EDITOR.address}</li>
-          <li>SIREN&nbsp;: {EDITOR.siren} — SIRET&nbsp;: {EDITOR.siret}</li>
+          <li>SIREN&nbsp;: {EDITOR.siren}, SIRET&nbsp;: {EDITOR.siret}</li>
           <li>{EDITOR.rcs}</li>
           <li>N° TVA intracommunautaire&nbsp;: {EDITOR.tva}</li>
           <li>Code APE&nbsp;: {EDITOR.ape}</li>
@@ -220,9 +220,9 @@ function Confidentialite() {
       <section>
         <h2>Hébergement et sous-traitants</h2>
         <ul>
-          <li><strong>Infomaniak</strong> (Suisse) — hébergement du site.</li>
-          <li><strong>Supabase</strong> — base de données et authentification.</li>
-          <li><strong>Google Analytics</strong> — mesure d'audience.</li>
+          <li><strong>Infomaniak</strong> (Suisse)&nbsp;: hébergement du site.</li>
+          <li><strong>Supabase</strong>&nbsp;: base de données et authentification.</li>
+          <li><strong>Google Analytics</strong>&nbsp;: mesure d'audience.</li>
         </ul>
         <p>
           Ces prestataires n'utilisent vos données que pour les besoins du service. Certains

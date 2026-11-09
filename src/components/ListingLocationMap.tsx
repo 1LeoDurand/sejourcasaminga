@@ -134,7 +134,7 @@ export default function ListingLocationMap({
       {displayLabel && (
         <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" />
-          {displayLabel} — localisation approximative pour préserver la confidentialité de l'hôte.
+          {displayLabel} : localisation approximative pour préserver la confidentialité de l'hôte.
         </p>
       )}
     </div>

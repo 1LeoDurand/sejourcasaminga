@@ -124,7 +124,7 @@ const FeedbackButton = () => {
           <div className="mb-3">
             <h3 className="text-base font-semibold text-foreground">Un retour à partager ?</h3>
             <p className="text-xs text-muted-foreground mt-1">
-              Bug, question ou idée — on lit tout.
+              Bug, question ou idée : on lit tout.
             </p>
           </div>
 

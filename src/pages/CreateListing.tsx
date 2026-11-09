@@ -265,7 +265,7 @@ const CreateListing = () => {
           </div>
           <div>
             <Label htmlFor="interaction">Niveau d'interaction</Label>
-            <Input id="interaction" placeholder="ex: Optionnel — apéro du vendredi" value={interactionLevel} onChange={(e) => setInteractionLevel(e.target.value)} />
+            <Input id="interaction" placeholder="ex: Optionnel, apéro du vendredi" value={interactionLevel} onChange={(e) => setInteractionLevel(e.target.value)} />
           </div>
           <div>
             <Label htmlFor="availability">Disponibilité</Label>

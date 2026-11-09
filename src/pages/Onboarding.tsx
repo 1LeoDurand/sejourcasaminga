@@ -139,7 +139,7 @@ const Onboarding = () => {
         {step === "intro" && (
           <div className="space-y-6">
             <div className="text-center space-y-3">
-              <h1 className="text-3xl sm:text-4xl font-serif text-foreground">Bienvenue sur Casa Minga 👋</h1>
+              <h1 className="text-3xl sm:text-4xl font-serif text-foreground">Bienvenue sur Casa Minga</h1>
               <p className="text-muted-foreground text-base sm:text-lg">
                 Que souhaitez-vous faire en premier ?
               </p>

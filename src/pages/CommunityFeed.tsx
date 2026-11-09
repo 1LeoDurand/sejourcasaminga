@@ -284,7 +284,7 @@ const CommunityFeed = () => {
           <p className="mb-2 text-xs font-medium uppercase tracking-wider text-primary">Actualités Casa Minga</p>
           <h1 className="font-serif text-3xl text-foreground sm:text-4xl">Le fil de la communauté</h1>
           <p className="mt-3 text-muted-foreground">
-            Habitats qui rejoignent l'aventure, ateliers à venir et récits de séjour — tout ce qui anime Casa Minga, par ordre chronologique.
+            Habitats qui rejoignent l'aventure, ateliers à venir et récits de séjour : tout ce qui anime Casa Minga, par ordre chronologique.
           </p>
         </header>
 

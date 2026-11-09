@@ -414,7 +414,7 @@ const HabitatDetail = () => {
             {offerings.length > 0 && (
               <div className="mb-6">
                 <h2 className="mb-1 text-xl font-serif text-foreground">Ce que ce lieu propose</h2>
-                <p className="text-xs text-muted-foreground mb-3">Aperçu général — tous les services ne sont pas forcément actifs en permanence.</p>
+                <p className="text-xs text-muted-foreground mb-3">Aperçu général : tous les services ne sont pas forcément actifs en permanence.</p>
                 <CollapsibleBadges mobileLimit={4} useShortLabels>
                   {offerings.map((o) => (
                     <Badge key={o} variant="outline" className="border-primary/30 text-foreground" data-short-label={labelFromOptions(PLACE_OFFERINGS, o, true)}>
